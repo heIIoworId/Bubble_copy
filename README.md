@@ -1,1 +1,9 @@
-KAIST_CS482_2016_Team4
+# Blowing Bubble
+
+## Current Discussion
+
+## Contributors
+
+* Hun-Min Park
+* Sang-Gyun An
+* JongMin Jin
