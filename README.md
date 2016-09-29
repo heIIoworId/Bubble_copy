@@ -1,1 +1,1 @@
-"# kaist_cs482_2016_team4" 
+KAIST_CS482_2016_Team4
