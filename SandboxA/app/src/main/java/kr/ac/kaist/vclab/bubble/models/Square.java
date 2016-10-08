@@ -1,4 +1,4 @@
-package kr.ac.kaist.vclab.bubble;
+package kr.ac.kaist.vclab.bubble.models;
 
 import android.opengl.GLES20;
 
@@ -6,11 +6,14 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
+import kr.ac.kaist.vclab.bubble.MyGLRenderer;
+
 /**
- * Created by sjjeon on 16. 9. 20.
+ * Created by sjjeon on 16. 9. 21.
  */
 
-public class Cube {
+public class Square {
+
 
     private final int mProgram;
     private FloatBuffer mVertexBuffer;
@@ -33,109 +36,27 @@ public class Cube {
     private static final int VERTEX_STRIDE = COORDS_PER_VERTEX * 4;
 
     private static float vertices[] = {
-            // Front face
-            -1.0f, 1.0f, 1.0f,
-            -1.0f, -1.0f, 1.0f,
-            1.0f, 1.0f, 1.0f,
-            -1.0f, -1.0f, 1.0f,
-            1.0f, -1.0f, 1.0f,
-            1.0f, 1.0f, 1.0f,
-
-            // Right face
-            1.0f, 1.0f, 1.0f,
-            1.0f, -1.0f, 1.0f,
-            1.0f, 1.0f, -1.0f,
-            1.0f, -1.0f, 1.0f,
-            1.0f, -1.0f, -1.0f,
-            1.0f, 1.0f, -1.0f,
-
-            // Back face
-            1.0f, 1.0f, -1.0f,
-            1.0f, -1.0f, -1.0f,
-            -1.0f, 1.0f, -1.0f,
-            1.0f, -1.0f, -1.0f,
-            -1.0f, -1.0f, -1.0f,
-            -1.0f, 1.0f, -1.0f,
-
-            // Left face
-            -1.0f, 1.0f, -1.0f,
-            -1.0f, -1.0f, -1.0f,
-            -1.0f, 1.0f, 1.0f,
-            -1.0f, -1.0f, -1.0f,
-            -1.0f, -1.0f, 1.0f,
-            -1.0f, 1.0f, 1.0f,
-
-            // Top face
-            -1.0f, 1.0f, -1.0f,
-            -1.0f, 1.0f, 1.0f,
-            1.0f, 1.0f, -1.0f,
-            -1.0f, 1.0f, 1.0f,
-            1.0f, 1.0f, 1.0f,
-            1.0f, 1.0f, -1.0f,
-
-            // Bottom face
-            1.0f, -1.0f, -1.0f,
-            1.0f, -1.0f, 1.0f,
-            -1.0f, -1.0f, -1.0f,
-            1.0f, -1.0f, 1.0f,
-            -1.0f, -1.0f, 1.0f,
-            -1.0f, -1.0f, -1.0f,
+            -1.0f, 1.0f, 0.0f,
+            -1.0f, -1.0f, 0.0f,
+            1.0f, 1.0f, 0.0f,
+            -1.0f, -1.0f, 0.0f,
+            1.0f, -1.0f, 0.0f,
+            1.0f, 1.0f, 0.0f
     };
 
     private static float normals[] = {
-            // Front face
             0.0f, 0.0f, 1.0f,
             0.0f, 0.0f, 1.0f,
             0.0f, 0.0f, 1.0f,
             0.0f, 0.0f, 1.0f,
             0.0f, 0.0f, 1.0f,
             0.0f, 0.0f, 1.0f,
-
-            // Right face
-            1.0f, 0.0f, 0.0f,
-            1.0f, 0.0f, 0.0f,
-            1.0f, 0.0f, 0.0f,
-            1.0f, 0.0f, 0.0f,
-            1.0f, 0.0f, 0.0f,
-            1.0f, 0.0f, 0.0f,
-
-            // Back face
-            0.0f, 0.0f, -1.0f,
-            0.0f, 0.0f, -1.0f,
-            0.0f, 0.0f, -1.0f,
-            0.0f, 0.0f, -1.0f,
-            0.0f, 0.0f, -1.0f,
-            0.0f, 0.0f, -1.0f,
-
-            // Left face
-            -1.0f, 0.0f, 0.0f,
-            -1.0f, 0.0f, 0.0f,
-            -1.0f, 0.0f, 0.0f,
-            -1.0f, 0.0f, 0.0f,
-            -1.0f, 0.0f, 0.0f,
-            -1.0f, 0.0f, 0.0f,
-
-            // Top face
-            0.0f, 1.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,
-
-            // Bottom face
-            0.0f, -1.0f, 0.0f,
-            0.0f, -1.0f, 0.0f,
-            0.0f, -1.0f, 0.0f,
-            0.0f, -1.0f, 0.0f,
-            0.0f, -1.0f, 0.0f,
-            0.0f, -1.0f, 0.0f
     };
 
-    float color[] = { 0.2f, 0.709803922f, 0.898039216f };
+    public float color[] = { 1f, 1f, 1f };
 
 
-    public Cube() {
+    public Square() {
         ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
         byteBuf.order(ByteOrder.nativeOrder());
         mVertexBuffer = byteBuf.asFloatBuffer();
@@ -201,9 +122,8 @@ public class Cube {
                 GLES20.GL_FLOAT, false,
                 VERTEX_STRIDE, mNormalBuffer);
 
-        // Draw the cube
+        // Draw the square
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertices.length / 3);
-//        GLES20.glDrawArrays(GLES20.GL_LINE_LOOP, 0, vertices.length / 3);
 
         GLES20.glDisableVertexAttribArray(mPositionHandle);
         GLES20.glDisableVertexAttribArray(mNormalHandle);

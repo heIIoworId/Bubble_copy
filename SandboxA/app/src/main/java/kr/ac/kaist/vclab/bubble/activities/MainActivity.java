@@ -1,4 +1,4 @@
-package kr.ac.kaist.vclab.bubble;
+package kr.ac.kaist.vclab.bubble.activities;
 
 import android.app.Activity;
 import android.content.Context;
@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ToggleButton;
+
+import kr.ac.kaist.vclab.bubble.MyGLSurfaceView;
 
 /**
  * Created by sjjeon on 16. 9. 20.

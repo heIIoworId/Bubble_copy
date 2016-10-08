@@ -1,10 +1,12 @@
-package kr.ac.kaist.vclab.bubble;
+package kr.ac.kaist.vclab.bubble.models;
 
 import android.opengl.GLES20;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+
+import kr.ac.kaist.vclab.bubble.MyGLRenderer;
 
 /**
  * Created by sjjeon on 16. 9. 20.
@@ -2436,7 +2438,7 @@ public class Sphere {
             0.00000000000000f,0.00000000000000f,-4.00000000000000f,
             1.23606800000000f,0.00000000000000f,-3.80422800000000f,};
 
-    float color[] = { 0.2f, 0.709803922f, 0.898039216f };
+    public float[] color = { 0.2f, 0.709803922f, 0.898039216f };
 
 
     public Sphere() {
