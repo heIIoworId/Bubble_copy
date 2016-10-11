@@ -10,7 +10,6 @@ import android.widget.LinearLayout;
 import android.widget.ToggleButton;
 
 import kr.ac.kaist.vclab.bubble.MyGLSurfaceView;
-
 /**
  * Created by sjjeon on 16. 9. 20.
  */
@@ -23,7 +22,6 @@ public class MainActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
         MainActivity.context = getApplicationContext();
 
