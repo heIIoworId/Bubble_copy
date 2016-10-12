@@ -10,6 +10,10 @@ import java.io.IOException;
 public class SoundMeter {
     private MediaRecorder mRecorder = null;
 
+    public SoundMeter(){
+
+    };
+
     public void start() {
         if (mRecorder == null) {
             mRecorder = new MediaRecorder();
