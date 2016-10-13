@@ -5,6 +5,8 @@ import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 import org.apache.commons.io.IOUtils;
@@ -18,6 +20,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import kr.ac.kaist.vclab.bubble.activities.MainActivity;
+import kr.ac.kaist.vclab.bubble.events.SoundHandler;
 import kr.ac.kaist.vclab.bubble.models.Cube;
 import kr.ac.kaist.vclab.bubble.models.Sphere;
 import kr.ac.kaist.vclab.bubble.models.Square;
@@ -34,11 +37,14 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private Sphere mSphere;
     private Square mSquare;
 
+//    private MyHandler mHandler;
+    private SoundHandler soundHandler;
+
     public float [] mViewRotationMatrix = new float[16];
     public float [] mViewTranslationMatrix = new float[16];
 
     public float [] mCubeRotationMatrix = new float[16];
-    public float [] mCubeTranslationMatrix = new float[16];
+    public static float [] mCubeTranslationMatrix = new float[16];
 
     public float [] mSphereRotationMatrix = new float[16];
     public float [] mSphereTranslationMatrix = new float[16];
@@ -66,6 +72,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
+
+//        mHandler = new MyHandler();
+        soundHandler = new SoundHandler();
+        soundHandler.start();
 
         // Set the background frame color
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -100,6 +110,25 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.setIdentityM(mSphereRotationMatrix, 0);
         Matrix.setIdentityM(mSphereTranslationMatrix, 0);
         Matrix.translateM(mSphereTranslationMatrix, 0, 0, 0, 0);
+
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                while(true){
+//                    int vol = (int) soundHandler.getAmplitude();
+//                    System.out.println("vol: " + vol);
+//                    Message msg = mHandler.obtainMessage();
+//                    msg.what = 0;
+//                    msg.arg1 = vol;
+//                    mHandler.sendMessage(msg);
+//                    try {
+//                        Thread.sleep(800);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//        }).start();
     }
 
     private void normalMatrix(float[] dst, int dstOffset, float[] src, int srcOffset) {
@@ -115,6 +144,13 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onDrawFrame(GL10 unused) {
+
+        int vol = (int) soundHandler.getAmplitude();
+        System.out.println("vol: " + vol);
+        float goUp = ((float)vol)/200000f;
+        System.out.println("vol/100000: " + goUp);
+        Matrix.translateM(mCubeTranslationMatrix, 0, 0, goUp, 0);
+
 
         // Draw background color
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
@@ -273,5 +309,16 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
             throw new RuntimeException(glOperation + ": glError " + error);
         }
     }
+
+//    private class MyHandler extends Handler {
+//        public void handleMessage(Message msg) {
+//            super.handleMessage(msg);
+//            if(msg.what == 0){
+//                System.out.println("vol in handler: " + msg.arg1);
+////                System.out.println("x in renderer: " + myRenderer.mCubeTranslationMatrix[3]);
+////                Matrix.translateM(myRenderer.mCubeTranslationMatrix, 0, 0.05f, 0, 0);
+//            }
+//        }
+//    }
 
 }

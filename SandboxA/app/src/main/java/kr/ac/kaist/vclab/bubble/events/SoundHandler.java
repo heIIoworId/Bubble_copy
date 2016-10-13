@@ -1,4 +1,4 @@
-package kr.ac.kaist.vclab.bubble;
+package kr.ac.kaist.vclab.bubble.events;
 
 import android.media.MediaRecorder;
 import java.io.IOException;
@@ -7,11 +7,10 @@ import java.io.IOException;
  * Created by 84395 on 10/8/2016.
  */
 
-public class SoundMeter {
+public class SoundHandler {
     private MediaRecorder mRecorder = null;
 
-    public SoundMeter(){
-
+    public SoundHandler(){
     };
 
     public void start() {

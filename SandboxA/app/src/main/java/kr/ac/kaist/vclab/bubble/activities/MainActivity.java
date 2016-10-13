@@ -2,22 +2,19 @@ package kr.ac.kaist.vclab.bubble.activities;
 
 import android.app.Activity;
 import android.content.Context;
-import android.media.AudioFormat;
-import android.media.AudioRecord;
-import android.media.MediaRecorder;
+import android.opengl.Matrix;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.util.Log;
+import android.os.Handler;
+import android.os.Message;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ToggleButton;
 
-import java.io.IOException;
-
-import kr.ac.kaist.vclab.bubble.SoundMeter;
-import kr.ac.kaist.vclab.bubble.MyGLSurfaceView;
+import kr.ac.kaist.vclab.bubble.MyGLRenderer;
+import kr.ac.kaist.vclab.bubble.events.SoundHandler;
+import kr.ac.kaist.vclab.bubble.views.MyGLSurfaceView;
 /**
  * Created by sjjeon on 16. 9. 20.
  */
@@ -26,6 +23,9 @@ public class MainActivity extends Activity {
 
     public static Context context;
     private MyGLSurfaceView mGLView;
+    private MyGLRenderer myRenderer;
+//    private MyHandler mHandler;
+//    private SoundHandler soundMeter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,8 +36,36 @@ public class MainActivity extends Activity {
         // Create a GLSurfaceView instance and set it
         // as the ContentView for this Activity
         mGLView = new MyGLSurfaceView(this);
+        myRenderer = mGLView.getmRenderer();
+//        mHandler = new MyHandler();
+//        soundMeter = new SoundHandler();
+//        soundMeter.start();
 
-//        isBlowing();
+//        Matrix.translateM(myRenderer.mCubeTranslationMatrix, 0, 0.1f, 0, 0);
+        myRenderer.mCubeTranslationMatrix[3] = 0.5f;
+        System.out.println("moved x: "+ myRenderer.mCubeTranslationMatrix[3]);
+
+
+
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                while(true){
+//                    int vol = (int) soundMeter.getAmplitude();
+//                    System.out.println("vol: " + vol);
+//                    Message msg = mHandler.obtainMessage();
+//                    msg.what = 0;
+//                    msg.arg1 = vol;
+//                    mHandler.sendMessage(msg);
+//                    try {
+//                        Thread.sleep(800);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//        }).start();
+
 
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
@@ -104,112 +132,6 @@ public class MainActivity extends Activity {
         button.setTextOff(text);
     }
 
-
-    public boolean isBlowing()
-    {
-        boolean recorder=true;
-        int sampleRatio = 0;
-
-
-        for (int rate : new int[] {8000, 11025, 16000, 22050, 44100}) {  // add the rates you wish to check against
-            int bufferSize = AudioRecord.getMinBufferSize(rate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
-            if (bufferSize > 0) {
-                // buffer size is valid, Sample rate supported
-                sampleRatio = rate;
-            }
-        }
-
-        int minSize = AudioRecord.getMinBufferSize(8000, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
-        AudioRecord ar = new AudioRecord(MediaRecorder.AudioSource.MIC, 8000, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, minSize);
-        ar.release();
-
-        short[] buffer = new short[minSize];
-
-        ar.startRecording();
-        while(recorder)
-        {
-            ar.read(buffer, 0, minSize);
-            for (short s : buffer)
-            {
-                if (Math.abs(s) > 27000)   //DETECT VOLUME (IF I BLOW IN THE MIC)
-                {
-                    int blow_value=Math.abs(s);
-                    System.out.println("Blow Value="+blow_value);
-                    ar.stop();
-                    recorder=false;
-
-                    return true;
-
-                }
-
-            }
-        }
-        return false;
-    }
-//
-//    private static int[] mSampleRates = new int[] { 8000, 11025, 22050, 44100 };
-//    public AudioRecord findAudioRecord() {
-//        for (int rate : mSampleRates) {
-//            for (short audioFormat : new short[] { AudioFormat.ENCODING_PCM_8BIT, AudioFormat.ENCODING_PCM_16BIT }) {
-//                for (short channelConfig : new short[] { AudioFormat.CHANNEL_IN_MONO, AudioFormat.CHANNEL_IN_STEREO }) {
-//                    try {
-//                        Log.d(C.TAG, "Attempting rate " + rate + "Hz, bits: " + audioFormat + ", channel: "
-//                                + channelConfig);
-//                        int bufferSize = AudioRecord.getMinBufferSize(rate, channelConfig, audioFormat);
-//
-//                        if (bufferSize != AudioRecord.ERROR_BAD_VALUE) {
-//                            // check if we can instantiate and have a success
-//                            AudioRecord recorder = new AudioRecord(MediaRecorder.AudioSource.DEFAULT, rate, channelConfig, audioFormat, bufferSize);
-//
-//                            if (recorder.getState() == AudioRecord.STATE_INITIALIZED)
-//                                return recorder;
-//                        }
-//                    } catch (Exception e) {
-//                        Log.e(C.TAG, rate + "Exception, keep trying.",e);
-//                    }
-//                }
-//            }
-//        }
-//        return null;
-//    }
-
-//    public class SoundMeter {
-//
-//        private MediaRecorder mRecorder = null;
-//
-//        public void start() {
-//            if (mRecorder == null) {
-//                mRecorder = new MediaRecorder();
-//                mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-//                mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-//                mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-//                mRecorder.setOutputFile("/dev/null");
-//                try {
-//                    mRecorder.prepare();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//                mRecorder.start();
-//            }
-//        }
-//
-//        public void stop() {
-//            if (mRecorder != null) {
-//                mRecorder.stop();
-//                mRecorder.release();
-//                mRecorder = null;
-//            }
-//        }
-//
-//        public double getAmplitude() {
-//            if (mRecorder != null)
-//                return  mRecorder.getMaxAmplitude();
-//            else
-//                return 0;
-//
-//        }
-//    }
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -228,4 +150,15 @@ public class MainActivity extends Activity {
         // this is a good place to re-allocate them.
         mGLView.onResume();
     }
+
+//    private class MyHandler extends Handler {
+//        public void handleMessage(Message msg) {
+//            super.handleMessage(msg);
+//            if(msg.what == 0){
+//                System.out.println("vol in handler: " + msg.arg1);
+//                System.out.println("x in renderer: " + myRenderer.mCubeTranslationMatrix[3]);
+//                Matrix.translateM(myRenderer.mCubeTranslationMatrix, 0, 0.05f, 0, 0);
+//            }
+//        }
+//    }
 }

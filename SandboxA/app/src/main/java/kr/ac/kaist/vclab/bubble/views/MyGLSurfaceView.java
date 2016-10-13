@@ -1,9 +1,12 @@
-package kr.ac.kaist.vclab.bubble;
+package kr.ac.kaist.vclab.bubble.views;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
+import android.os.Message;
 import android.view.MotionEvent;
+
+import kr.ac.kaist.vclab.bubble.MyGLRenderer;
 
 /**
  * Created by sjjeon on 16. 9. 20.
@@ -11,7 +14,7 @@ import android.view.MotionEvent;
 
 public class MyGLSurfaceView extends GLSurfaceView {
 
-    private final MyGLRenderer mRenderer;
+    public static MyGLRenderer mRenderer;
 
     private float mPreviousX;
     private float mPreviousY;
@@ -33,6 +36,10 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
         // Render the view only when there is a change in the drawing data
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+    }
+
+    public MyGLRenderer getmRenderer(){
+        return mRenderer;
     }
 
     @Override
