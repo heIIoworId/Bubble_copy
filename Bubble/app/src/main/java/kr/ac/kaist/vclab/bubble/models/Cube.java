@@ -1,10 +1,12 @@
-package kr.ac.kaist.vclab.bubble;
+package kr.ac.kaist.vclab.bubble.models;
 
 import android.opengl.GLES20;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+
+import kr.ac.kaist.vclab.bubble.MyGLRenderer;
 
 /**
  * Created by sjjeon on 16. 9. 20.

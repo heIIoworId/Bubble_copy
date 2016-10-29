@@ -17,6 +17,11 @@ import java.util.Arrays;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import kr.ac.kaist.vclab.bubble.activities.MainActivity;
+import kr.ac.kaist.vclab.bubble.models.Cube;
+import kr.ac.kaist.vclab.bubble.models.Sphere;
+import kr.ac.kaist.vclab.bubble.models.Square;
+
 /**
  * Created by sjjeon on 16. 9. 20.
  */
