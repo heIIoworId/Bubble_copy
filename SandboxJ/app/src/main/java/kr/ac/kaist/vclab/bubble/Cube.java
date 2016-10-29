@@ -6,6 +6,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
+import kr.ac.kaist.vclab.bubble.Collision.BoxCollision;
+
 /**
  * Created by sjjeon on 16. 9. 20.
  */
@@ -32,6 +34,7 @@ public class Cube {
     private static final int COORDS_PER_VERTEX = 3;
     private static final int VERTEX_STRIDE = COORDS_PER_VERTEX * 4;
 
+    private BoxCollision boxCollision = new BoxCollision(new float[]{1,0,0}, new float[]{0,1,0}, new float[]{0,0,1});
     private static float vertices[] = {
             // Front face
             -1.0f, 1.0f, 1.0f,
@@ -207,5 +210,8 @@ public class Cube {
 
         GLES20.glDisableVertexAttribArray(mPositionHandle);
         GLES20.glDisableVertexAttribArray(mNormalHandle);
+    }
+    public BoxCollision getCollision(){
+        return boxCollision;
     }
 }

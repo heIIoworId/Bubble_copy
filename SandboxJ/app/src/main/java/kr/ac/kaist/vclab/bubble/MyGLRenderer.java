@@ -25,8 +25,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     private static final String TAG = "MyGLRenderer";
 
-    private Cube mCube;
-    private Sphere mSphere;
+    Cube mCube;
+    Sphere mSphere;
     private Square mSquare;
 
     public float [] mViewRotationMatrix = new float[16];
@@ -58,6 +58,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     private float[] mLight = new float[3];
     private float[] mLight2 = new float[3];
+    float scale = 0.4f;
 
     @Override
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
@@ -78,23 +79,25 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         // Initialize cube
         mCube = new Cube();
+        mCube.getCollision().scaleAxes(scale);
         mCube.color = new float[] {0.2f, 0.7f, 0.9f};
 
         // Initialize cube
         mSphere = new Sphere();
+        mSphere.getCollision().scaleRadius(scale);
         mSphere.color = new float[] {0.7f, 0.7f, 0.7f};
 
         // Initialize matrix
         Matrix.setIdentityM(mViewRotationMatrix, 0);
         Matrix.setIdentityM(mViewTranslationMatrix, 0);
-        Matrix.translateM(mViewTranslationMatrix, 0, 0, 0, -4f);
+        Matrix.translateM(mViewTranslationMatrix, 0, 0, 0, -6f);
 
         Matrix.setIdentityM(mCubeRotationMatrix, 0);
         Matrix.setIdentityM(mCubeTranslationMatrix, 0);
 
         Matrix.setIdentityM(mSphereRotationMatrix, 0);
         Matrix.setIdentityM(mSphereTranslationMatrix, 0);
-        Matrix.translateM(mSphereTranslationMatrix, 0, 0, 0, 0);
+        Matrix.translateM(mSphereTranslationMatrix, 0, 0, 3, 0);
     }
 
     private void normalMatrix(float[] dst, int dstOffset, float[] src, int srcOffset) {
@@ -134,7 +137,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.multiplyMM(mTempMatrix, 0, mCubeTranslationMatrix, 0, mCubeModelMatrix, 0);
         System.arraycopy(mTempMatrix, 0, mCubeModelMatrix, 0, 16);
 
-        float scale = 0.4f;
         Matrix.scaleM(mCubeModelMatrix, 0, scale, scale, scale);
 
         // Calculate Sphere ModelMatrix
@@ -159,6 +161,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mSquare.draw(mProjMatrix, mSquareModelViewMatrix, mSquareNormalMatrix, mLight, mLight2);
         mCube.draw(mProjMatrix, mCubeModelViewMatrix, mCubeNormalMatrix, mLight, mLight2);
         mSphere.draw(mProjMatrix, mSphereModelViewMatrix, mSphereNormalMatrix, mLight, mLight2);
+        mSphere.getCollision().move(mSphereModelMatrix);
+        mCube.getCollision().move(mCubeModelMatrix);
     }
 
     @Override

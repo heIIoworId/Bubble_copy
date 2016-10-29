@@ -6,6 +6,9 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
+import kr.ac.kaist.vclab.bubble.Collision.BoxCollision;
+import kr.ac.kaist.vclab.bubble.Collision.SphereCollision;
+
 /**
  * Created by sjjeon on 16. 9. 20.
  */
@@ -32,6 +35,7 @@ public class Sphere {
     private static final int COORDS_PER_VERTEX = 3;
     private static final int VERTEX_STRIDE = COORDS_PER_VERTEX * 4;
 
+    private SphereCollision sphereCollision = new SphereCollision(4.0f);
     private static float vertices[] = {
             0.00000000000000f,0.00000000000000f,4.00000000000000f,
             1.23606800000000f,0.00000000000000f,3.80422800000000f,
@@ -2507,10 +2511,13 @@ public class Sphere {
 
         // Draw the sphere
 
-        GLES20.glDrawArrays(GLES20.GL_LINES, 0, vertices.length / 3);
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertices.length / 3);
         GLES20.glLineWidth(2.0f);
 
         GLES20.glDisableVertexAttribArray(mPositionHandle);
         GLES20.glDisableVertexAttribArray(mNormalHandle);
+    }
+    public SphereCollision getCollision(){
+        return sphereCollision;
     }
 }
