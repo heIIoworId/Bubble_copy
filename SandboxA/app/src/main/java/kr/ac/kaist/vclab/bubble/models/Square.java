@@ -14,7 +14,6 @@ import kr.ac.kaist.vclab.bubble.MyGLRenderer;
 
 public class Square {
 
-
     private final int mProgram;
     private FloatBuffer mVertexBuffer;
     private FloatBuffer mNormalBuffer;
