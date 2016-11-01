@@ -132,7 +132,7 @@ public class Cube {
             0.0f, -1.0f, 0.0f
     };
 
-    float color[] = { 0.2f, 0.709803922f, 0.898039216f };
+    float color[] = {0.2f, 0.709803922f, 0.898039216f};
 
 
     public Cube() {
