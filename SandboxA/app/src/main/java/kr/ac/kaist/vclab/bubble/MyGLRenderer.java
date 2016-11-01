@@ -75,7 +75,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
 //        mHandler = new MyHandler();
         soundHandler = new SoundHandler();
-        soundHandler.start();
+        soundHandler.start(); // disable this when trying to run on desktop.
 
         // Set the background frame color
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);

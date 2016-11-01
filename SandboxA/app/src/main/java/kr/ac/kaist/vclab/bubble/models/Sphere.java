@@ -2454,7 +2454,6 @@ public class Sphere {
         mNormalBuffer.put(normals);
         mNormalBuffer.position(0);
 
-
         // prepare shaders and OpenGL program
         int vertexShader = MyGLRenderer.loadShaderFromFile(
                 GLES20.GL_VERTEX_SHADER, "basic-gl2.vshader");

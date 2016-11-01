@@ -15,12 +15,12 @@ public class World {
 
     };
 
-    public ArrayList<Particle> getParticles() {
-        return particles;
+    public void applyForce(){
+
     }
 
-    public void setParticles(ArrayList<Particle> particles) {
-        this.particles = particles;
+    public void display(){
+
     }
 
 
