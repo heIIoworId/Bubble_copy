@@ -2440,19 +2440,9 @@ public class Sphere {
 
     public float[] color = { 0.2f, 0.709803922f, 0.898039216f };
 
-
     public Sphere() {
-        ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
-        byteBuf.order(ByteOrder.nativeOrder());
-        mVertexBuffer = byteBuf.asFloatBuffer();
-        mVertexBuffer.put(vertices);
-        mVertexBuffer.position(0);
-
-        byteBuf = ByteBuffer.allocateDirect(normals.length * 4);
-        byteBuf.order(ByteOrder.nativeOrder());
-        mNormalBuffer = byteBuf.asFloatBuffer();
-        mNormalBuffer.put(normals);
-        mNormalBuffer.position(0);
+        updateVertices();
+        updateNormals();
 
         // prepare shaders and OpenGL program
         int vertexShader = MyGLRenderer.loadShaderFromFile(
@@ -2514,4 +2504,27 @@ public class Sphere {
         GLES20.glDisableVertexAttribArray(mPositionHandle);
         GLES20.glDisableVertexAttribArray(mNormalHandle);
     }
+
+    //FIXME
+    public void updateVertices(){
+        ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
+        byteBuf.order(ByteOrder.nativeOrder());
+        mVertexBuffer = byteBuf.asFloatBuffer();
+        mVertexBuffer.put(vertices);
+        mVertexBuffer.position(0);
+    }
+
+    //FIXME
+    public void updateNormals(){
+        ByteBuffer byteBuf = ByteBuffer.allocateDirect(normals.length * 4);
+        byteBuf.order(ByteOrder.nativeOrder());
+        mNormalBuffer = byteBuf.asFloatBuffer();
+        mNormalBuffer.put(normals);
+        mNormalBuffer.position(0);
+    }
+
+    public float[] getVertices(){
+        return vertices;
+    }
+
 }

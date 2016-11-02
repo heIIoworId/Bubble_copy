@@ -12,9 +12,12 @@ public class Particle {
     float velocity[];
     float acceleration[];
 
-    public Particle(){
+    public Particle(float x, float y, float z){
         mass = 1.0f;
         location = new float[3];
+        location[0] = x;
+        location[1] = y;
+        location[2] = z;
         velocity = new float[3];
         acceleration = new float[3];
     }

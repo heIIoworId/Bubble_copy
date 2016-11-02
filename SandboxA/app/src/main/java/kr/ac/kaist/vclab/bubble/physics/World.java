@@ -21,6 +21,9 @@ public class World {
     };
 
     public void applyForce(){
+        //FIXME
+        //dragging force should be included.
+
         for(int i=0; i<particles.size(); i++){
             particles.get(i).applyForce(gravity);
         };
@@ -28,4 +31,8 @@ public class World {
             springs.get(i).applyForce();
         }
     };
+
+    public void setParticles(ArrayList<Particle> _particles){
+        particles = _particles;
+    }
 }
