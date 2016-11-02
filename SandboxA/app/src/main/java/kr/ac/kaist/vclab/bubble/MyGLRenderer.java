@@ -71,11 +71,11 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private float[] mLight2 = new float[3];
 
     @Override
+    // Called when MyGLSurfaceView is created.
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
 
-//        mHandler = new MyHandler();
         soundHandler = new SoundHandler();
-        soundHandler.start(); // disable this when trying to run on desktop.
+//        soundHandler.start(); // disable this when trying to run on desktop.
 
         // Set the background frame color
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -86,6 +86,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         mLight = new float[] {2.0f, 3.0f, 14.0f};
         mLight2 = new float[] {-2.0f, -3.0f, -5.0f};
+
+        // Initailize world.
 
         // Initialize square
         mSquare = new Square();
@@ -143,14 +145,15 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     }
 
     @Override
+    //Called at every frame.
     public void onDrawFrame(GL10 unused) {
 
+        // Move bubble according to soundHandler
         int vol = (int) soundHandler.getAmplitude();
         System.out.println("vol: " + vol);
         float goUp = ((float)vol)/200000f;
         System.out.println("vol/100000: " + goUp);
         Matrix.translateM(mCubeTranslationMatrix, 0, 0, goUp, 0);
-
 
         // Draw background color
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);

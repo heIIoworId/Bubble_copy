@@ -15,13 +15,15 @@ public class World {
 
     };
 
+    public void update(){
+
+    };
+
     public void applyForce(){
 
-    }
+    };
 
     public void display(){
 
-    }
-
-
+    };
 }
