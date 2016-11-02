@@ -32,4 +32,8 @@ public class Particle {
         location[1] += velocity[1];
         location[2] += velocity[2];
     }
+
+    public float[] getLocation(){
+        return location;
+    }
 }

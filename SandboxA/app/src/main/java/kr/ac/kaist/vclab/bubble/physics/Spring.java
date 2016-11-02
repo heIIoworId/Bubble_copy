@@ -1,21 +1,34 @@
 package kr.ac.kaist.vclab.bubble.physics;
 
+import kr.ac.kaist.vclab.bubble.utils.VecOperator;
+
 /**
  * Created by mnswpr on 11/2/2016.
  */
 
 public class Spring {
-    float particleA[];
-    float particleB[];
+    Particle particleA;
+    Particle particleB;
     float length;
     float k;
 
-    public Spring(float[] _anchor, float _length, float _k){
-        anchor[0] = _anchor[0];
-        anchor[1] = _anchor[1];
-        anchor[2] = _anchor[2];
+    public Spring(Particle _particleA, Particle _particleB, float _length, float _k){
+        particleA = _particleA;
+        particleB = _particleB;
+        length = _length; // Default spring length;
+        k = _k; // Hook's spring coefficient.
+    }
 
-        length = _length;
-        k = _k;
+    public void applyForce(){
+        float forceA[] = new float[3];
+        float forceB[] = new float[3];
+
+        float[] pointA = particleA.getLocation();
+        float[] pointB = particleB.getLocation();
+        float stretch = VecOperator.distOfTwoPoints(pointA, pointB)-length;
+
+        forceA[] =
+
+
     }
 }
