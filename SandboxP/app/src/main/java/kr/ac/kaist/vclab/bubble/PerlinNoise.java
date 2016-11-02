@@ -4,6 +4,7 @@ package kr.ac.kaist.vclab.bubble;
  * Created by avantgarde on 2016-11-02.
  */
 
+/* https://en.wikipedia.org/wiki/Perlin_noise */
 public class PerlinNoise {
     static public double noise(double x, double y, double z) {
         int X = (int) Math.floor(x) & 255,                  // FIND UNIT CUBE THAT
