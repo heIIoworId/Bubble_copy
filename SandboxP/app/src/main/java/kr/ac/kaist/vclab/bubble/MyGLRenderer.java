@@ -1,5 +1,7 @@
 package kr.ac.kaist.vclab.bubble;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
@@ -218,5 +220,22 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         }
 
         return -1;
+    }
+
+    /* Load image from the given filename. */
+    public static Bitmap loadImage(String fileName) {
+        try {
+            Bitmap temp = BitmapFactory.decodeStream(MainActivity.context.getAssets().open(fileName));
+            android.graphics.Matrix matrix = new android.graphics.Matrix();
+            matrix.preScale(1.0f, -1.0f);
+            Bitmap image = Bitmap.createBitmap(temp, 0, 0, temp.getWidth(), temp.getHeight(), matrix, true);
+            temp.recycle();
+
+            return image;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

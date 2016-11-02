@@ -152,7 +152,6 @@ public class MapGenerator {
                 });
             }
 
-
             // left
             for (int j = 1; j <= dimZ; j++) {
                 // lower triangle
@@ -305,6 +304,16 @@ public class MapGenerator {
             return GLES20.GL_TRIANGLES;
         } else {
             return GLES20.GL_LINES;
+        }
+    }
+
+    public float[] getTextures() {
+        if (fill) {
+            // TODO : choose appropriate texture coordinates
+            return new float[]{};
+        }
+        else {
+            return new float[]{};
         }
     }
 
