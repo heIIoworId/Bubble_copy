@@ -1,5 +1,6 @@
 package kr.ac.kaist.vclab.bubble;
 
+import android.graphics.Bitmap;
 import android.opengl.GLES20;
 
 import java.nio.ByteBuffer;
@@ -10,10 +11,15 @@ import java.nio.FloatBuffer;
  * Created by avantgarde on 2016-11-02.
  */
 
+// TODO : apply texture mapping (only when fill options is true)
 public class MapSquare {
     private final int mProgram;
     private FloatBuffer mVertexBuffer;
     private FloatBuffer mNormalBuffer;
+    private FloatBuffer mTextureBuffer;
+
+    // bitmap (for texture)
+    private Bitmap bitmap;
 
     // attribute handles
     private int mPositionHandle;
@@ -39,6 +45,7 @@ public class MapSquare {
 
     private static float[] vertices = mGenerator.getVertices();
     private static float[] normals = mGenerator.getNormals();
+    private static float[] textures = mGenerator.getTextures();
     private static int mode = mGenerator.getMode();
 
     public float sizeX = mGenerator.sizeX;
@@ -47,7 +54,7 @@ public class MapSquare {
 
     float color[] = {0.33f, 0.42f, 0.18f};
 
-    public MapSquare() {
+    public MapSquare(Bitmap bitmap) {
         ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
         byteBuf.order(ByteOrder.nativeOrder());
         mVertexBuffer = byteBuf.asFloatBuffer();
@@ -60,7 +67,6 @@ public class MapSquare {
         mNormalBuffer.put(normals);
         mNormalBuffer.position(0);
 
-
         // prepare shaders and OpenGL program
         int vertexShader = MyGLRenderer.loadShaderFromFile(
                 GLES20.GL_VERTEX_SHADER, "basic-gl2.vshader");
@@ -71,6 +77,11 @@ public class MapSquare {
         GLES20.glAttachShader(mProgram, vertexShader);   // add the vertex shader to program
         GLES20.glAttachShader(mProgram, fragmentShader); // add the fragment shader to program
         GLES20.glLinkProgram(mProgram);                  // create OpenGL program executables
+    }
+
+    /* Constructor without texture. */
+    public MapSquare() {
+        this(null);
     }
 
     public void draw(float[] projMatrix,
