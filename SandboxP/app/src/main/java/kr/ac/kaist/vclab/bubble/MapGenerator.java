@@ -102,56 +102,75 @@ public class MapGenerator {
             });
 
             // front
-            buffer.add(new float[]{
-                    0, heightMap[0][dimZ], sizeZ,
-                    0, -sizeY, sizeZ,
-                    sizeX, -sizeY, sizeZ
-            });
+            for (int i = 0; i < dimX; i++) {
+                // lower triangle
+                buffer.add(new float[]{
+                        unit * i, heightMap[i][dimZ], sizeZ,
+                        unit * i, -sizeY, sizeZ,
+                        unit * (i + 1), -sizeY, sizeZ
+                });
 
-            buffer.add(new float[]{
-                    0, heightMap[0][dimZ], sizeZ,
-                    sizeX, -sizeY, sizeZ,
-                    sizeX, heightMap[dimX][dimZ], sizeZ
-            });
+                // upper triangle
+                buffer.add(new float[]{
+                        unit * i, heightMap[i][dimZ], sizeZ,
+                        unit * (i + 1), -sizeY, sizeZ,
+                        unit * (i + 1), heightMap[i + 1][dimZ], sizeZ
+                });
+            }
 
             // back
-            buffer.add(new float[]{
-                    0, heightMap[0][0], 0,
-                    sizeX, heightMap[dimX][0], 0,
-                    sizeX, -sizeY, 0
-            });
+            for (int i = 0; i < dimX; i++) {
+                // lower triangle
+                buffer.add(new float[]{
+                        unit * (i + 1), -sizeY, 0,
+                        unit * i, -sizeY, 0,
+                        unit * i, heightMap[i][0], 0
+                });
 
-            buffer.add(new float[]{
-                    0, heightMap[0][0], 0,
-                    sizeX, -sizeY, 0,
-                    0, -sizeY, 0
-            });
-
-            // left
-            buffer.add(new float[]{
-                    0, heightMap[0][dimZ], sizeZ,
-                    0, heightMap[0][0], 0,
-                    0, -sizeY, sizeZ
-            });
-
-            buffer.add(new float[]{
-                    0, -sizeY, sizeZ,
-                    0, heightMap[0][0], 0,
-                    0, -sizeY, 0
-            });
+                // upper triangle
+                buffer.add(new float[]{
+                        unit * (i + 1), heightMap[i + 1][0], 0,
+                        unit * (i + 1), -sizeY, 0,
+                        unit * i, heightMap[i][0], 0
+                });
+            }
 
             // right
-            buffer.add(new float[]{
-                    sizeX, heightMap[dimX][dimZ], sizeZ,
-                    sizeX, -sizeY, sizeZ,
-                    sizeX, heightMap[dimX][0], 0
-            });
+            for (int j = 1; j <= dimZ; j++) {
+                // lower triangle
+                buffer.add(new float[]{
+                        sizeX, heightMap[dimX][j], unit * j,
+                        sizeX, -sizeY, unit * j,
+                        sizeX, -sizeY, unit * (j - 1)
+                });
 
-            buffer.add(new float[]{
-                    sizeX, heightMap[dimX][0], 0,
-                    sizeX, -sizeY, sizeZ,
-                    sizeX, -sizeY, 0
-            });
+                // upper triangle
+                buffer.add(new float[]{
+                        sizeX, heightMap[dimX][j], unit * j,
+                        sizeX, -sizeY, unit * (j - 1),
+                        sizeX, heightMap[dimX][j - 1], unit * (j - 1)
+                });
+            }
+
+
+            // left
+            for (int j = 1; j <= dimZ; j++) {
+                // lower triangle
+                buffer.add(new float[]{
+                        0, -sizeY, unit * (j - 1),
+                        0, -sizeY, unit * j,
+                        0, heightMap[0][j], unit * j
+                });
+
+                // upper triangle
+                buffer.add(new float[]{
+                        0, heightMap[0][j - 1], unit * (j - 1),
+                        0, -sizeY, unit * (j - 1),
+                        0, heightMap[0][j], unit * j
+                });
+            }
+
+
 
             return listToArray(buffer, 9);
         } else {
@@ -245,23 +264,23 @@ public class MapGenerator {
             }
 
             // front
-            for (int i = 0; i < 2; i++) {
+            for (int i = 0; i < dimX * 6; i++) {
                 buffer.add(new float[]{0.0f, 0.0f, 1.0f});
             }
 
             // back
-            for (int i = 0; i < 2; i++) {
+            for (int i = 0; i < dimX * 6; i++) {
                 buffer.add(new float[]{0.0f, 0.0f, -1.0f});
             }
 
-            // left
-            for (int i = 0; i < 2; i++) {
-                buffer.add(new float[]{-1.0f, 0.0f, 0.0f});
+            // right
+            for (int i = 0; i < dimZ * 6; i++) {
+                buffer.add(new float[]{1.0f, 0.0f, 0.0f});
             }
 
-            // right
-            for (int i = 0; i < 2; i++) {
-                buffer.add(new float[]{1.0f, 0.0f, 0.0f});
+            // left
+            for (int i = 0; i < dimZ * 6; i++) {
+                buffer.add(new float[]{-1.0f, 0.0f, 0.0f});
             }
         } else {
             // top

@@ -34,7 +34,7 @@ public class MapSquare {
     private static MapGenerator mGenerator = new MapGenerator(
             10.0f, 1f, 10.0f, // size
             0.3f, // unit length
-            false // fill or not
+            true // fill or not
     );
 
     private static float[] vertices = mGenerator.getVertices();

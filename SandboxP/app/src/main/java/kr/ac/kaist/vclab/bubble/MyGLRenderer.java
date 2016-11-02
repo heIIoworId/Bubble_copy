@@ -82,7 +82,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // initialize rotation / translation matrix
         Matrix.setIdentityM(mViewRotationMatrix, 0);
         Matrix.setIdentityM(mViewTranslationMatrix, 0);
-        Matrix.translateM(mViewTranslationMatrix, 0, 0, 0, -7.0f);
+        Matrix.translateM(mViewTranslationMatrix, 0, 0, 0, -9.3f);
 
         Matrix.setIdentityM(mCubeRotationMatrix, 0);
         Matrix.setIdentityM(mCubeTranslationMatrix, 0);
@@ -129,7 +129,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         Matrix.translateM(
                 mMapModelMatrix, 0,
-                -mMap.sizeX / 2.0f, mMap.sizeY / 2.0f - 1.0f, -mMap.sizeZ / 2.0f
+                -mMap.sizeX / 2.0f, mMap.sizeY / 2.0f - 3.0f, -mMap.sizeZ / 2.0f
         );
 
         // calculate model-view matrix
