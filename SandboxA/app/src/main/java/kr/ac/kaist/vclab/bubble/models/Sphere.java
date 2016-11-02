@@ -2440,6 +2440,7 @@ public class Sphere {
 
     public float[] color = { 0.2f, 0.709803922f, 0.898039216f };
 
+
     public Sphere() {
         updateVertices();
         updateNormals();
@@ -2498,8 +2499,9 @@ public class Sphere {
 
         // Draw the sphere
 
+//        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertices.length / 3);
         GLES20.glDrawArrays(GLES20.GL_LINES, 0, vertices.length / 3);
-        GLES20.glLineWidth(2.0f);
+        GLES20.glLineWidth(3.0f);
 
         GLES20.glDisableVertexAttribArray(mPositionHandle);
         GLES20.glDisableVertexAttribArray(mNormalHandle);
