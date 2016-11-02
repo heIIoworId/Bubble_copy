@@ -24,6 +24,7 @@ import kr.ac.kaist.vclab.bubble.models.Cube;
 import kr.ac.kaist.vclab.bubble.models.Sphere;
 import kr.ac.kaist.vclab.bubble.models.Square;
 import kr.ac.kaist.vclab.bubble.physics.Particle;
+import kr.ac.kaist.vclab.bubble.physics.Spring;
 import kr.ac.kaist.vclab.bubble.physics.World;
 import kr.ac.kaist.vclab.bubble.utils.GeomOperator;
 
@@ -80,8 +81,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     // CALLED WHEN SURFACE IS CREATED AT FIRST.
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
 
-        soundHandler = new SoundHandler();
         //FIXME DISABLE THIS WHEN TRYING TO RUN ON DESKTOP.
+//        soundHandler = new SoundHandler();
 //        soundHandler.start();
 
         // Set the background frame color
@@ -101,9 +102,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         //INITIALIZE WORLD
         mWorld = new World();
-        ArrayList<Particle> particles = new ArrayList<>();
-        particles = GeomOperator.genParticles(mSphere.getVertices());
+        ArrayList<Particle> particles = GeomOperator.genParticles(mSphere.getVertices());
         mWorld.setParticles(particles);
+        ArrayList<Spring> springs = GeomOperator.genSprings(particles);
+        mWorld.setSprings(springs);
 
         // INITIALIZE LIGHTS
         mLight = new float[] {2.0f, 3.0f, 14.0f};
@@ -148,11 +150,12 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     public void onDrawFrame(GL10 unused) {
 
         // Move bubble according to soundHandler
-        int vol = (int) soundHandler.getAmplitude();
-        System.out.println("vol: " + vol);
-        float goUp = ((float)vol)/200000f;
-        System.out.println("vol/100000: " + goUp);
-        Matrix.translateM(mCubeTranslationMatrix, 0, 0, goUp, 0);
+        // FIXME WHEN SOUND HANDLER IS ACTIVATED
+//        int vol = (int) soundHandler.getAmplitude();
+//        System.out.println("vol: " + vol);
+//        float goUp = ((float)vol)/200000f;
+//        System.out.println("vol/100000: " + goUp);
+//        Matrix.translateM(mCubeTranslationMatrix, 0, 0, goUp, 0);
 
         // Draw background color
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
@@ -197,6 +200,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         normalMatrix(mCubeNormalMatrix, 0, mCubeModelViewMatrix, 0);
         normalMatrix(mSphereNormalMatrix, 0, mSphereModelViewMatrix, 0);
         normalMatrix(mSquareNormalMatrix, 0, mSquareModelViewMatrix, 0);
+
+        //UPDATE WORLD
+        mWorld.update();
 
         //Update vertices and normals of spheres
         mSphere.updateVertices();

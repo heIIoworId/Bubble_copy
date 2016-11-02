@@ -18,21 +18,29 @@ public class World {
     public World(){
         particles = new ArrayList<Particle>();
         springs = new ArrayList<Spring>();
-    };
+    }
 
-    public void applyForce(){
+    public void update(){
         //FIXME
         //dragging force should be included.
 
         for(int i=0; i<particles.size(); i++){
             particles.get(i).applyForce(gravity);
-        };
+        }
         for (int i=0; i<springs.size(); i++){
             springs.get(i).applyForce();
         }
-    };
+    }
+
+    public ArrayList<Particle> getParticles(){
+        return particles;
+    }
 
     public void setParticles(ArrayList<Particle> _particles){
         particles = _particles;
+    }
+
+    public void setSprings(ArrayList<Spring> _springs){
+        springs = _springs;
     }
 }

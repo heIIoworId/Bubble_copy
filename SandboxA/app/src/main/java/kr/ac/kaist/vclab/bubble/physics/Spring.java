@@ -9,14 +9,12 @@ import kr.ac.kaist.vclab.bubble.utils.VecOperator;
 public class Spring {
     Particle particleA;
     Particle particleB;
-    float length;
-    float k;
+    float length = 1.0f; //DEFAULT SPRING LENGTH
+    float k = 0.1f; // HOOKEAN COEFFICIENT
 
-    public Spring(Particle _particleA, Particle _particleB, float _length, float _k){
+    public Spring(Particle _particleA, Particle _particleB){
         particleA = _particleA;
         particleB = _particleB;
-        length = _length; // Default spring length;
-        k = _k; // Hook's spring coefficient.
     }
 
     public void applyForce(){
@@ -39,5 +37,15 @@ public class Spring {
 
         particleA.applyForce(forceA);
         particleB.applyForce(forceB);
+    }
+
+    public boolean isColocated(float[] locationA, float[] locationB) {
+        boolean result = false;
+            if(particleA.isColocated(locationA) && particleB.isColocated(locationB)){
+                result = true;
+            } else if(particleA.isColocated(locationB) && particleB.isColocated(locationA)){
+                result = true;
+            }
+        return result;
     }
 }
