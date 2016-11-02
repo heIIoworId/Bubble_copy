@@ -67,4 +67,18 @@ public class GeomOperator {
         }
         return springs;
     }
+
+    public static float[] genVertices(ArrayList<Particle> particles){
+        float[] vertices = new float[particles.size()*3];
+        int j = 0;
+        for(int i=0; i<particles.size(); i++){
+            Particle currParticle = particles.get(i);
+            float[] currLocation = currParticle.getLocation();
+            vertices[j++] = currLocation[0];
+//            System.out.println("currLocation[0]: " + currLocation[0]);
+            vertices[j++] = currLocation[1];
+            vertices[j++] = currLocation[2];
+        }
+        return vertices;
+    }
 }

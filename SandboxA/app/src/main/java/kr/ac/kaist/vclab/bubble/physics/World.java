@@ -21,12 +21,11 @@ public class World {
     }
 
     public void update(){
-        //FIXME
-        //dragging force should be included.
+        //FIXME dragging force and gravity should be included.
 
-        for(int i=0; i<particles.size(); i++){
-            particles.get(i).applyForce(gravity);
-        }
+//        for(int i=0; i<particles.size(); i++){
+//            particles.get(i).applyForce(gravity);
+//        }
         for (int i=0; i<springs.size(); i++){
             springs.get(i).applyForce();
         }

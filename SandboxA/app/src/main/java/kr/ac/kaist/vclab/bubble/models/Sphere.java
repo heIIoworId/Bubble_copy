@@ -2442,8 +2442,8 @@ public class Sphere {
 
 
     public Sphere() {
-        updateVertices();
-        updateNormals();
+        initVertexBuffer();
+        initNormalBuffer();
 
         // prepare shaders and OpenGL program
         int vertexShader = MyGLRenderer.loadShaderFromFile(
@@ -2507,8 +2507,18 @@ public class Sphere {
         GLES20.glDisableVertexAttribArray(mNormalHandle);
     }
 
-    //FIXME
-    public void updateVertices(){
+
+    public void setVertices(float[] _vertices) {
+        Sphere.vertices = _vertices;
+        initVertexBuffer();
+    }
+
+    //FIXME UPDATE NORMALS ACCORDING TO VERTICES
+    public void updateNormals(){
+
+    }
+
+    public void initVertexBuffer(){
         ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
         byteBuf.order(ByteOrder.nativeOrder());
         mVertexBuffer = byteBuf.asFloatBuffer();
@@ -2516,8 +2526,7 @@ public class Sphere {
         mVertexBuffer.position(0);
     }
 
-    //FIXME
-    public void updateNormals(){
+    public void initNormalBuffer(){
         ByteBuffer byteBuf = ByteBuffer.allocateDirect(normals.length * 4);
         byteBuf.order(ByteOrder.nativeOrder());
         mNormalBuffer = byteBuf.asFloatBuffer();

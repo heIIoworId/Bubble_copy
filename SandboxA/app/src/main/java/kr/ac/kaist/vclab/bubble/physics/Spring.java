@@ -9,8 +9,8 @@ import kr.ac.kaist.vclab.bubble.utils.VecOperator;
 public class Spring {
     Particle particleA;
     Particle particleB;
-    float length = 1.0f; //DEFAULT SPRING LENGTH
-    float k = 0.1f; // HOOKEAN COEFFICIENT
+    float length = 3.0f; //DEFAULT SPRING LENGTH
+    float k = 0.000001f; // HOOKEAN COEFFICIENT
 
     public Spring(Particle _particleA, Particle _particleB){
         particleA = _particleA;
@@ -22,17 +22,21 @@ public class Spring {
         float forceB[];
 
         float[] pointA = particleA.getLocation();
+//        System.out.println("pointA: " + pointA[0] + ", " + pointA[1] + ", " + pointA[2]);
         float[] pointB = particleB.getLocation();
         float stretch = VecOperator.getDistance(pointA, pointB)-length;
 
         forceA = VecOperator.sub(pointA, pointB);
+//        System.out.println("pointA: " + pointA[0] + ", " + pointA[1] + ", " + pointA[2]);
+        System.out.println("forceA: " + forceA[0] + ", " + forceA[1] + ", " + forceA[2]);
+
         forceA = VecOperator.normalize(forceA);
-        forceA = VecOperator.scale(forceA, k);
+        forceA = VecOperator.scale(forceA, k*(-1));
         forceA = VecOperator.scale(forceA, stretch);
 
         forceB = VecOperator.sub(pointB, pointA);
         forceB = VecOperator.normalize(forceB);
-        forceB = VecOperator.scale(forceB, k);
+        forceB = VecOperator.scale(forceB, k*(-1));
         forceB = VecOperator.scale(forceB, stretch);
 
         particleA.applyForce(forceA);
@@ -47,5 +51,9 @@ public class Spring {
                 result = true;
             }
         return result;
+    }
+
+    public Particle getParticleA(){
+        return particleA;
     }
 }

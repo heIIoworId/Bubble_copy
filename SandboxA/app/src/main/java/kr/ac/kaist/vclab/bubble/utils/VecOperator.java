@@ -22,7 +22,13 @@ public class VecOperator {
         result[0] = vector[0];
         result[1] = vector[1];
         result[2] = vector[2];
-        result = scale(result, 1/mag);
+        if(mag > 0 || mag < 0){
+            result = scale(result, 1/mag);
+        } else if(mag == 0){
+            result[0] = 0f;
+            result[1] = 0f;
+            result[2] = 0f;
+        }
 
         return result;
     }

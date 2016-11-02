@@ -107,6 +107,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         ArrayList<Spring> springs = GeomOperator.genSprings(particles);
         mWorld.setSprings(springs);
 
+
         // INITIALIZE LIGHTS
         mLight = new float[] {2.0f, 3.0f, 14.0f};
         mLight2 = new float[] {-2.0f, -3.0f, -5.0f};
@@ -201,18 +202,19 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         normalMatrix(mSphereNormalMatrix, 0, mSphereModelViewMatrix, 0);
         normalMatrix(mSquareNormalMatrix, 0, mSquareModelViewMatrix, 0);
 
-        //UPDATE WORLD
+        //UPDATE WORLD AND VERTICES OF SPHERE
         mWorld.update();
-
-        //Update vertices and normals of spheres
-        mSphere.updateVertices();
-        mSphere.updateNormals();
+        float updatedVertices[] = GeomOperator.genVertices(mWorld.getParticles());
+        System.out.println("updated vertices: "+updatedVertices[11]);
+        mSphere.setVertices(updatedVertices);
+        //FIXME UPDATE NORMALS OF SPHERE
 
         //Draw
-        //mSquare.draw(mProjMatrix, mSquareModelViewMatrix, mSquareNormalMatrix, mLight, mLight2);
+        mSquare.draw(mProjMatrix, mSquareModelViewMatrix, mSquareNormalMatrix, mLight, mLight2);
         //mCube.draw(mProjMatrix, mCubeModelViewMatrix, mCubeNormalMatrix, mLight, mLight2);
         mSphere.draw(mProjMatrix, mSphereModelViewMatrix, mSphereNormalMatrix, mLight, mLight2);
     }
+
 
     @Override
     // Adjust the viewport based on geometry changes,
