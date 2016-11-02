@@ -46,17 +46,27 @@ public class MapGenerator {
                 heightMap[i][j] = 0;
             }
         }
+
+        for (int i = 0; i <= this.dimX; i++) {
+            for (int j = 0; j <= this.dimZ; j++) {
+                double nx = i / (double) dimX - 0.5;
+                double nz = j / (double) dimZ - 0.5;
+
+                heightMap[i][j] = 4.0f * (
+                        (float) PerlinNoise.noise(nx * 3, nz * 3, 1)
+                                + 0.5f * (float) PerlinNoise.noise(nx * 6, nz * 6, 2)
+                                + 0.25f * (float) PerlinNoise.noise(nx * 12, nz * 12, 4)
+                );
+
+                if (heightMap[i][j] < 0) {
+                    heightMap[i][j] = 0;
+                }
+            }
+        }
     }
 
     public float[] getVertices() {
         List<float[]> buffer = new ArrayList<>();
-
-        // simple smooth surface for test
-        for (int i = 0; i <= dimX; i++) {
-            for (int j = 0; j <= dimZ; j++) {
-                heightMap[i][j] = (float) Math.sqrt(Math.sin(3.1415f / (2.0f * (i + j + 1))));
-            }
-        }
 
         if (fill) {
             // top

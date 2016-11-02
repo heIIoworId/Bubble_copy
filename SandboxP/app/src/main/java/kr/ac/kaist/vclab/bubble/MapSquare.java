@@ -32,9 +32,9 @@ public class MapSquare {
     private static final int VERTEX_STRIDE = COORDS_PER_VERTEX * 4;
 
     private static MapGenerator mGenerator = new MapGenerator(
-            4.0f, 0.3f, 3.0f, // size
-            0.1f, // unit length
-            true // fill or not
+            10.0f, 1f, 10.0f, // size
+            0.3f, // unit length
+            false // fill or not
     );
 
     private static float[] vertices = mGenerator.getVertices();
