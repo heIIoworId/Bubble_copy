@@ -1,14 +1,40 @@
 package kr.ac.kaist.vclab.bubble.utils;
 
-import android.opengl.Matrix;
 import  java.lang.Math;
-import java.util.Arrays;
 
 /**
  * Created by 84395 on 10/29/2016.
  */
 
 public class VecOperator {
+
+    public static float getMag(float[] vector){
+        float result;
+        result = (float)Math.sqrt(
+                (vector[0]*vector[0])+(vector[1]*vector[1])+(vector[2]*vector[2]));
+        return result;
+    }
+
+    public static float[] normalize(float[] vector){
+        float result[] = new float[3];
+        float mag = getMag(vector);
+
+        result[0] = vector[0];
+        result[1] = vector[1];
+        result[2] = vector[2];
+        result = scale(result, 1/mag);
+
+        return result;
+    }
+
+    public static float[] scale(float[] vector, float scale){
+        float result[] = new float[3];
+        result[0] = vector[0]*scale;
+        result[1] = vector[1]*scale;
+        result[2] = vector[2]*scale;
+        return result;
+    }
+
     public static float[] addVectors(float[] vectorA, float[] vectorB){
         float result[] = new float[3];
         result[0] = vectorA[0] + vectorB[0];
@@ -17,7 +43,7 @@ public class VecOperator {
         return result;
     }
 
-    public static float[] subVectors(float[] vectorA, float[] vectorB){
+    public static float[] sub(float[] vectorA, float[] vectorB){
         float result[] = new float[3];
         result[0] = vectorA[0] - vectorB[0];
         result[1] = vectorA[1] - vectorB[1];
@@ -25,7 +51,7 @@ public class VecOperator {
         return result;
     };
 
-    public static float distOfTwoPoints(float[] pointA, float[] pointB){
+    public static float getDistance(float[] pointA, float[] pointB){
         float dist=0;
 
         float distXa = pointA[0];

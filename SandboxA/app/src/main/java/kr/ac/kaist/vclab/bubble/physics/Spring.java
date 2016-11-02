@@ -20,15 +20,24 @@ public class Spring {
     }
 
     public void applyForce(){
-        float forceA[] = new float[3];
-        float forceB[] = new float[3];
+        float forceA[];
+        float forceB[];
 
         float[] pointA = particleA.getLocation();
         float[] pointB = particleB.getLocation();
-        float stretch = VecOperator.distOfTwoPoints(pointA, pointB)-length;
+        float stretch = VecOperator.getDistance(pointA, pointB)-length;
 
-        forceA[] =
+        forceA = VecOperator.sub(pointA, pointB);
+        forceA = VecOperator.normalize(forceA);
+        forceA = VecOperator.scale(forceA, k);
+        forceA = VecOperator.scale(forceA, stretch);
 
+        forceB = VecOperator.sub(pointB, pointA);
+        forceB = VecOperator.normalize(forceB);
+        forceB = VecOperator.scale(forceB, k);
+        forceB = VecOperator.scale(forceB, stretch);
 
+        particleA.applyForce(forceA);
+        particleB.applyForce(forceB);
     }
 }
