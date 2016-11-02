@@ -49,17 +49,17 @@ public class MapGenerator {
 
         for (int i = 0; i <= this.dimX; i++) {
             for (int j = 0; j <= this.dimZ; j++) {
-                double nx = i / (double) dimX - 0.5;
-                double nz = j / (double) dimZ - 0.5;
+                float nx = i / (float) dimX - 0.5f;
+                float nz = j / (float) dimZ - 0.5f;
 
                 heightMap[i][j] = 4.0f * (
-                        (float) PerlinNoise.noise(nx * 3, nz * 3, 1)
-                                + 0.5f * (float) PerlinNoise.noise(nx * 6, nz * 6, 2)
-                                + 0.25f * (float) PerlinNoise.noise(nx * 12, nz * 12, 4)
+                        PerlinNoise.noise(nx * 3, nz * 3, 1)
+                                + 0.5f * PerlinNoise.noise(nx * 6, nz * 6, 2)
+                                + 0.25f * PerlinNoise.noise(nx * 12, nz * 12, 4)
                 );
 
-                if (heightMap[i][j] < 0) {
-                    heightMap[i][j] = 0;
+                if (heightMap[i][j] < -sizeY) {
+                    heightMap[i][j] = -sizeY;
                 }
             }
         }
@@ -169,8 +169,6 @@ public class MapGenerator {
                         0, heightMap[0][j], unit * j
                 });
             }
-
-
 
             return listToArray(buffer, 9);
         } else {
