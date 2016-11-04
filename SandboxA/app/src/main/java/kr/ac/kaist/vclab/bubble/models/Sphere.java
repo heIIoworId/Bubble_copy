@@ -35,15 +35,15 @@ public class Sphere {
     private static final int VERTEX_STRIDE = COORDS_PER_VERTEX * 4;
 
     private static float vertices[] = {
-            0.00000000000000f,0.00000000000000f,4.00000000000000f,
-            1.23606800000000f,0.00000000000000f,3.80422800000000f,
-            1.17557200000000f,0.381968000000000f,3.80422800000000f,
-            0.00000000000000f,0.00000000000000f,4.00000000000000f,
-            1.17557200000000f,0.381968000000000f,3.80422800000000f,
-            0.00000000000000f,0.00000000000000f,4.00000000000000f,
-            1.23606800000000f,0.00000000000000f,3.80422800000000f,
-            2.35114000000000f,0.00000000000000f,3.23606800000000f,
-            2.23606800000000f,0.726544000000000f,3.23606800000000f,
+            0.00000000000000f,0.00000000000000f,4.00000000000000f,  //0 ~
+            1.23606800000000f,0.00000000000000f,3.80422800000000f,  //1
+            1.17557200000000f,0.381968000000000f,3.80422800000000f, //2
+            0.00000000000000f,0.00000000000000f,4.00000000000000f, //0 ~
+            1.17557200000000f,0.381968000000000f,3.80422800000000f, //2
+            0.00000000000000f,0.00000000000000f,4.00000000000000f, //3
+            1.23606800000000f,0.00000000000000f,3.80422800000000f, // 1 ~
+            2.35114000000000f,0.00000000000000f,3.23606800000000f, // 4
+            2.23606800000000f,0.726544000000000f,3.23606800000000f, //5
             1.23606800000000f,0.00000000000000f,3.80422800000000f,
             2.23606800000000f,0.726544000000000f,3.23606800000000f,
             1.17557200000000f,0.381968000000000f,3.80422800000000f,
@@ -2442,17 +2442,8 @@ public class Sphere {
 
 
     public Sphere() {
-        ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
-        byteBuf.order(ByteOrder.nativeOrder());
-        mVertexBuffer = byteBuf.asFloatBuffer();
-        mVertexBuffer.put(vertices);
-        mVertexBuffer.position(0);
-
-        byteBuf = ByteBuffer.allocateDirect(normals.length * 4);
-        byteBuf.order(ByteOrder.nativeOrder());
-        mNormalBuffer = byteBuf.asFloatBuffer();
-        mNormalBuffer.put(normals);
-        mNormalBuffer.position(0);
+        initVertexBuffer();
+        initNormalBuffer();
 
         // prepare shaders and OpenGL program
         int vertexShader = MyGLRenderer.loadShaderFromFile(
@@ -2508,10 +2499,43 @@ public class Sphere {
 
         // Draw the sphere
 
+//        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertices.length / 3);
         GLES20.glDrawArrays(GLES20.GL_LINES, 0, vertices.length / 3);
-        GLES20.glLineWidth(2.0f);
+        GLES20.glLineWidth(3.0f);
 
         GLES20.glDisableVertexAttribArray(mPositionHandle);
         GLES20.glDisableVertexAttribArray(mNormalHandle);
     }
+
+
+    public void setVertices(float[] _vertices) {
+        Sphere.vertices = _vertices;
+        initVertexBuffer();
+    }
+
+    //FIXME UPDATE NORMALS ACCORDING TO VERTICES
+    public void updateNormals(){
+
+    }
+
+    public void initVertexBuffer(){
+        ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
+        byteBuf.order(ByteOrder.nativeOrder());
+        mVertexBuffer = byteBuf.asFloatBuffer();
+        mVertexBuffer.put(vertices);
+        mVertexBuffer.position(0);
+    }
+
+    public void initNormalBuffer(){
+        ByteBuffer byteBuf = ByteBuffer.allocateDirect(normals.length * 4);
+        byteBuf.order(ByteOrder.nativeOrder());
+        mNormalBuffer = byteBuf.asFloatBuffer();
+        mNormalBuffer.put(normals);
+        mNormalBuffer.position(0);
+    }
+
+    public float[] getVertices(){
+        return vertices;
+    }
+
 }
