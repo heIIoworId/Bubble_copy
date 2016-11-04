@@ -11,7 +11,7 @@ import java.nio.FloatBuffer;
  * Created by avantgarde on 2016-11-02.
  */
 
-// TODO : apply texture mapping (only when fill options is true)
+// TODO : apply texture mapping (only when fill option is true)
 public class MapSquare {
     private final int mProgram;
     private FloatBuffer mVertexBuffer;
