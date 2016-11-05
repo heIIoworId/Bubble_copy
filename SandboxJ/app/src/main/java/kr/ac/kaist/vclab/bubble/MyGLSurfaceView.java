@@ -134,4 +134,19 @@ public class MyGLSurfaceView extends GLSurfaceView {
         return true;
     }
 
+    public void rotateByGyroSensor(float gyroX, float gyroY, float gyroZ){
+
+        float [] rotate = new float[16];
+        Matrix.setIdentityM(rotate, 0);
+
+        Matrix.rotateM(rotate, 0, -gyroX , 1 , 0 ,0);
+        Matrix.rotateM(rotate, 0, -gyroY, 0, 1 ,0);
+        Matrix.rotateM(rotate, 0, -gyroZ, 0, 0 ,1);
+
+        //mRenderer.mViewTranslationMatrix = Util.transformUsingAuxiliary(mRenderer.mViewRotationMatrix, mRenderer.mViewTranslationMatrix, rotate);
+
+        Matrix.multiplyMM(mRenderer.mViewRotationMatrix, 0 , rotate, 0,  mRenderer.mViewRotationMatrix, 0);
+        requestRender();
+    }
+
 }
