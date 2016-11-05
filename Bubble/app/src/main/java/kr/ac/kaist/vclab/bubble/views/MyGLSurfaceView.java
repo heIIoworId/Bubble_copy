@@ -5,6 +5,11 @@ import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.view.MotionEvent;
 
+import kr.ac.kaist.vclab.bubble.Collision.BoxCollision;
+import kr.ac.kaist.vclab.bubble.Collision.Intersect;
+import kr.ac.kaist.vclab.bubble.Collision.SphereCollision;
+import kr.ac.kaist.vclab.bubble.MyGLRenderer;
+
 /**
  * Created by sjjeon on 16. 9. 20.
  */
@@ -83,10 +88,31 @@ public class MyGLSurfaceView extends GLSurfaceView {
                         Matrix.rotateM(rot, 0, dx, 0, 1, 0);
                         Matrix.rotateM(rot, 0, dy, 1, 0, 0);
                         Matrix.multiplyMM(temp2, 0, rot, 0, mRenderer.mCubeRotationMatrix, 0);
+
+                        float[] temp = new float[16];
+                        Matrix.multiplyMM(temp, 0 , mRenderer.mCubeTranslationMatrix, 0, temp2,0);
+                        mRenderer.mCube.getCollision().move(temp);
+                        if(Intersect.intersect(mRenderer.mSphere.getCollision(),mRenderer.mCube.getCollision())){
+                            System.out.println("Collllllll!!!!!!!!!");
+                            break;
+                        }
                         System.arraycopy(temp2, 0, mRenderer.mCubeRotationMatrix, 0, 16);
                     } else if (count == 2) {
                         // Translate cube1
+                        SphereCollision s = mRenderer.mSphere.getCollision();
+                        BoxCollision b = mRenderer.mCube.getCollision();
+
+
                         Matrix.translateM(mRenderer.mCubeTranslationMatrix, 0, dx/ 100, -dy / 100, 0);
+                        float[] temp = new float[16];
+                        Matrix.multiplyMM(temp, 0 , mRenderer.mCubeTranslationMatrix, 0, mRenderer.mCubeRotationMatrix,0);
+                        mRenderer.mCube.getCollision().move(temp);
+                        if(Intersect.intersect(mRenderer.mSphere.getCollision(),mRenderer.mCube.getCollision())){
+                            System.out.println("Collllllll!!!!!!!!!");
+                            Matrix.translateM(mRenderer.mCubeTranslationMatrix, 0, -dx/ 100, dy / 100, 0);
+                            break;
+                        }
+
                     }
                     break;
 //                case 2:
@@ -113,4 +139,18 @@ public class MyGLSurfaceView extends GLSurfaceView {
         return true;
     }
 
+    public void rotateByGyroSensor(float gyroX, float gyroY, float gyroZ){
+
+        float [] rotate = new float[16];
+        Matrix.setIdentityM(rotate, 0);
+
+        Matrix.rotateM(rotate, 0, -gyroX , 1 , 0 ,0);
+        Matrix.rotateM(rotate, 0, -gyroY, 0, 1 ,0);
+        Matrix.rotateM(rotate, 0, -gyroZ, 0, 0 ,1);
+
+        //mRenderer.mViewTranslationMatrix = Util.transformUsingAuxiliary(mRenderer.mViewRotationMatrix, mRenderer.mViewTranslationMatrix, rotate);
+
+        Matrix.multiplyMM(mRenderer.mViewRotationMatrix, 0 , rotate, 0,  mRenderer.mViewRotationMatrix, 0);
+        requestRender();
+    }
 }

@@ -53,7 +53,7 @@ public class VecOperator {
         result[1] = vectorA[1] - vectorB[1];
         result[2] = vectorA[2] - vectorB[2];
         return result;
-    };
+    }
 
     public static float getDistance(float[] pointA, float[] pointB){
         float dist=0;
@@ -72,5 +72,24 @@ public class VecOperator {
 
         dist = (float)Math.sqrt(sqDistX + sqDistY + sqDistZ);
         return dist;
-    };
+    }
+
+    public static void cross(float[] p1, float[] p2, float[] result) {
+        result[0] = p1[1] * p2[2] - p2[1] * p1[2];
+        result[1] = p1[2] * p2[0] - p2[2] * p1[0];
+        result[2] = p1[0] * p2[1] - p2[0] * p1[1];
+    }
+
+    public static float dot(float[] p1, float[] p2) {
+        return p1[0] * p2[0] + p1[1] * p2[1] + p1[2] * p2[2];
+    }
+
+    public static float[] matLinear(float[] mat){
+        float[] translation = new float[16];
+        System.arraycopy(mat, 0, translation, 0, 16);
+        translation[12]=0;
+        translation[13]=0;
+        translation[14]=0;
+        return translation;
+    }
 }

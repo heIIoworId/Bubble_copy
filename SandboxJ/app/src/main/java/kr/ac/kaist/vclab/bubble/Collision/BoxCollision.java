@@ -78,7 +78,7 @@ public class BoxCollision extends Collision {
     public void scaleAxes(float scale){
         for(int i=0; i<16; i++){
             originAxis[i] *= scale;
-        }
+    }
     }
 
     public void scaleAxes(float[] scale){

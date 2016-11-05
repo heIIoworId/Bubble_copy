@@ -17,33 +17,33 @@ public class Intersect {
         //float[] axis3 = boxCollision.axis3;
         float[] axes = boxCollision.axes;
         float[] sphereCenter = sphereCollision.GetCenter();
-        float[] distance = new float[3];
-        float[] boxCenter = boxCollision.GetCenter();
-        for(int i=0; i<3; i++){
-            distance[i] = sphereCenter[i] - boxCenter[i];
-        }
-
-        float[] result = new float[]{0,0,0};
-
-        for(int i=0; i<3; i++){
-            float length;
-            float[] axis = new float[3];
-            axis[0] = axes[i];
-            axis[1] = axes[4+i];
-            axis[2] = axes[8+i];
-            System.out.println("dis : " + distance[0] + " " + distance[1] + " " + distance[2]);
-            System.out.println("axis : " + axis[0] + " " + axis[1] + " " + axis[2]);
-            length = MatOperator.size(axis);
-            axis = MatOperator.normalize(axis);
-
-            float dot = MatOperator.dot(distance, axis);
-            if (Math.abs(dot) > length && dot != 0){
-                dot *= length/Math.abs(dot);
+            float[] distance = new float[3];
+            float[] boxCenter = boxCollision.GetCenter();
+            for(int i=0; i<3; i++){
+                distance[i] = sphereCenter[i] - boxCenter[i];
             }
-            System.out.println(dot);
-            for(int j=0; j<3; j++){
-                result[j]+=axis[j] * dot;
-            }
+
+            float[] result = new float[]{0,0,0};
+
+            for(int i=0; i<3; i++){
+                float length;
+                float[] axis = new float[3];
+                axis[0] = axes[i];
+                axis[1] = axes[4+i];
+                axis[2] = axes[8+i];
+                System.out.println("dis : " + distance[0] + " " + distance[1] + " " + distance[2]);
+                System.out.println("axis : " + axis[0] + " " + axis[1] + " " + axis[2]);
+                length = MatOperator.size(axis);
+                axis = MatOperator.normalize(axis);
+
+                float dot = MatOperator.dot(distance, axis);
+                if (Math.abs(dot) > length && dot != 0){
+                    dot *= length/Math.abs(dot);
+                }
+                System.out.println(dot);
+                for(int j=0; j<3; j++){
+                    result[j]+=axis[j] * dot;
+                }
 
         }
         /*

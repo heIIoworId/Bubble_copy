@@ -1,23 +1,28 @@
 package kr.ac.kaist.vclab.bubble.models;
 
+import android.graphics.Bitmap;
 import android.opengl.GLES20;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
+import kr.ac.kaist.vclab.bubble.Generators.MapGenerator;
 import kr.ac.kaist.vclab.bubble.MyGLRenderer;
 
 /**
- * Created by sjjeon on 16. 9. 21.
+ * Created by avantgarde on 2016-11-02.
  */
 
-public class Square {
-
-
+// TODO : apply texture mapping (only when fill option is true)
+public class MapCube {
     private final int mProgram;
     private FloatBuffer mVertexBuffer;
     private FloatBuffer mNormalBuffer;
+    private FloatBuffer mTextureBuffer;
+
+    // bitmap (for texture)
+    private Bitmap bitmap;
 
     // attribute handles
     private int mPositionHandle;
@@ -35,28 +40,24 @@ public class Square {
     private static final int COORDS_PER_VERTEX = 3;
     private static final int VERTEX_STRIDE = COORDS_PER_VERTEX * 4;
 
-    private static float vertices[] = {
-            -1.0f, 1.0f, 0.0f,
-            -1.0f, -1.0f, 0.0f,
-            1.0f, 1.0f, 0.0f,
-            -1.0f, -1.0f, 0.0f,
-            1.0f, -1.0f, 0.0f,
-            1.0f, 1.0f, 0.0f
-    };
+    private static MapGenerator mGenerator = new MapGenerator(
+            10.0f, 1f, 10.0f, // size
+            0.3f, // unit length
+            true // fill or not
+    );
 
-    private static float normals[] = {
-            0.0f, 0.0f, 1.0f,
-            0.0f, 0.0f, 1.0f,
-            0.0f, 0.0f, 1.0f,
-            0.0f, 0.0f, 1.0f,
-            0.0f, 0.0f, 1.0f,
-            0.0f, 0.0f, 1.0f,
-    };
+    private static float[] vertices = mGenerator.getVertices();
+    private static float[] normals = mGenerator.getNormals();
+    private static float[] textures = mGenerator.getTextures();
+    private static int mode = mGenerator.getMode();
 
-    public float color[] = { 1f, 1f, 1f };
+    public float sizeX = mGenerator.sizeX;
+    public float sizeY = mGenerator.sizeY;
+    public float sizeZ = mGenerator.sizeZ;
 
+    float color[] = {0.33f, 0.42f, 0.18f};
 
-    public Square() {
+    public MapCube(Bitmap bitmap) {
         ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
         byteBuf.order(ByteOrder.nativeOrder());
         mVertexBuffer = byteBuf.asFloatBuffer();
@@ -69,7 +70,6 @@ public class Square {
         mNormalBuffer.put(normals);
         mNormalBuffer.position(0);
 
-
         // prepare shaders and OpenGL program
         int vertexShader = MyGLRenderer.loadShaderFromFile(
                 GLES20.GL_VERTEX_SHADER, "basic-gl2.vshader");
@@ -80,6 +80,11 @@ public class Square {
         GLES20.glAttachShader(mProgram, vertexShader);   // add the vertex shader to program
         GLES20.glAttachShader(mProgram, fragmentShader); // add the fragment shader to program
         GLES20.glLinkProgram(mProgram);                  // create OpenGL program executables
+    }
+
+    /* Constructor without texture. */
+    public MapCube() {
+        this(null);
     }
 
     public void draw(float[] projMatrix,
@@ -122,8 +127,8 @@ public class Square {
                 GLES20.GL_FLOAT, false,
                 VERTEX_STRIDE, mNormalBuffer);
 
-        // Draw the square
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertices.length / 3);
+        // Draw the cube
+        GLES20.glDrawArrays(mode, 0, vertices.length / 3);
 
         GLES20.glDisableVertexAttribArray(mPositionHandle);
         GLES20.glDisableVertexAttribArray(mNormalHandle);

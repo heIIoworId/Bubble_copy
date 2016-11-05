@@ -42,6 +42,7 @@ public class MatOperator {
 
         Matrix.transposeM(dst, dstOffset, temp, 0);
     }
+
     public static float[] normalize(float[] vector) {
         float length = size(vector);
         for (int i = 0; i < vector.length; i++) {
