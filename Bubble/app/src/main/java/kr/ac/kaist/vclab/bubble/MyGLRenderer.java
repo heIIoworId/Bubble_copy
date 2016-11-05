@@ -12,15 +12,21 @@ import org.apache.commons.io.IOUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import kr.ac.kaist.vclab.bubble.activities.MainActivity;
+import kr.ac.kaist.vclab.bubble.events.SoundHandler;
 import kr.ac.kaist.vclab.bubble.models.Cube;
 import kr.ac.kaist.vclab.bubble.models.Sphere;
 import kr.ac.kaist.vclab.bubble.models.Square;
+import kr.ac.kaist.vclab.bubble.physics.Particle;
+import kr.ac.kaist.vclab.bubble.physics.Spring;
+import kr.ac.kaist.vclab.bubble.physics.World;
+import kr.ac.kaist.vclab.bubble.utils.GeomOperator;
 
 /**
  * Created by sjjeon on 16. 9. 20.
@@ -30,15 +36,25 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     private static final String TAG = "MyGLRenderer";
 
+    // DECLARE MODELS
     private Cube mCube;
     private Sphere mSphere;
     private Square mSquare;
 
+    // DECLARE OTHERS
+    private World mWorld;
+    private SoundHandler soundHandler;
+
+    //DECLARE LIGHTS
+    private float[] mLight = new float[3];
+    private float[] mLight2 = new float[3];
+
+    // DECLARE MATRICES FOR 3D GRAPHICS
     public float [] mViewRotationMatrix = new float[16];
     public float [] mViewTranslationMatrix = new float[16];
 
     public float [] mCubeRotationMatrix = new float[16];
-    public float [] mCubeTranslationMatrix = new float[16];
+    public static float [] mCubeTranslationMatrix = new float[16];
 
     public float [] mSphereRotationMatrix = new float[16];
     public float [] mSphereTranslationMatrix = new float[16];
@@ -61,35 +77,43 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     private float[] mProjMatrix = new float[16];
 
-    private float[] mLight = new float[3];
-    private float[] mLight2 = new float[3];
-
     @Override
+    // CALLED WHEN SURFACE IS CREATED AT FIRST.
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
+
+        //FIXME DISABLE THIS WHEN TRYING TO RUN ON DESKTOP.
+//        soundHandler = new SoundHandler();
+//        soundHandler.start();
 
         // Set the background frame color
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         GLES20.glEnable(GLES20.GL_CULL_FACE);
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
 
-        resetViewMatrix();
-
-        mLight = new float[] {2.0f, 3.0f, 14.0f};
-        mLight2 = new float[] {-2.0f, -3.0f, -5.0f};
-
-        // Initialize square
+        // INITIALIZE MODELS
         mSquare = new Square();
         mSquare.color = new float[] {0.1f, 0.95f, 0.1f};
 
-        // Initialize cube
         mCube = new Cube();
         mCube.color = new float[] {0.2f, 0.7f, 0.9f};
 
-        // Initialize cube
         mSphere = new Sphere();
         mSphere.color = new float[] {0.7f, 0.7f, 0.7f};
 
-        // Initialize matrix
+        //INITIALIZE WORLD
+        mWorld = new World();
+        ArrayList<Particle> particles = GeomOperator.genParticles(mSphere.getVertices());
+        mWorld.setParticles(particles);
+        ArrayList<Spring> springs = GeomOperator.genSprings(particles);
+        mWorld.setSprings(springs);
+
+        // INITIALIZE LIGHTS
+        mLight = new float[] {2.0f, 3.0f, 14.0f};
+        mLight2 = new float[] {-2.0f, -3.0f, -5.0f};
+
+        // INITIALIZE MATRICES
+        resetViewMatrix();
+
         Matrix.setIdentityM(mViewRotationMatrix, 0);
         Matrix.setIdentityM(mViewTranslationMatrix, 0);
         Matrix.translateM(mViewTranslationMatrix, 0, 0, 0, -4f);
@@ -100,21 +124,38 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.setIdentityM(mSphereRotationMatrix, 0);
         Matrix.setIdentityM(mSphereTranslationMatrix, 0);
         Matrix.translateM(mSphereTranslationMatrix, 0, 0, 0, 0);
-    }
 
-    private void normalMatrix(float[] dst, int dstOffset, float[] src, int srcOffset) {
-        Matrix.invertM(dst, dstOffset, src, srcOffset);
-        dst[12] = 0;
-        dst[13] = 0;
-        dst[14] = 0;
-
-        float[] temp = Arrays.copyOf(dst, 16);
-
-        Matrix.transposeM(dst, dstOffset, temp, 0);
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                while(true){
+//                    int vol = (int) soundHandler.getAmplitude();
+//                    System.out.println("vol: " + vol);
+//                    Message msg = mHandler.obtainMessage();
+//                    msg.what = 0;
+//                    msg.arg1 = vol;
+//                    mHandler.sendMessage(msg);
+//                    try {
+//                        Thread.sleep(800);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//        }).start();
     }
 
     @Override
+    //Called at every frame.
     public void onDrawFrame(GL10 unused) {
+
+        // Move bubble according to soundHandler
+        // FIXME WHEN SOUND HANDLER IS ACTIVATED
+//        int vol = (int) soundHandler.getAmplitude();
+//        System.out.println("vol: " + vol);
+//        float goUp = ((float)vol)/200000f;
+//        System.out.println("vol/100000: " + goUp);
+//        Matrix.translateM(mCubeTranslationMatrix, 0, 0, goUp, 0);
 
         // Draw background color
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
@@ -160,16 +201,24 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         normalMatrix(mSphereNormalMatrix, 0, mSphereModelViewMatrix, 0);
         normalMatrix(mSquareNormalMatrix, 0, mSquareModelViewMatrix, 0);
 
-        // Draw
+        //UPDATE WORLD AND VERTICES OF SPHERE
+        mWorld.update();
+        float updatedVertices[] = GeomOperator.genVertices(mWorld.getParticles());
+        System.out.println("updated vertices: "+updatedVertices[11]);
+        mSphere.setVertices(updatedVertices);
+        //FIXME UPDATE NORMALS OF SPHERE
+
+        //Draw
         mSquare.draw(mProjMatrix, mSquareModelViewMatrix, mSquareNormalMatrix, mLight, mLight2);
-        mCube.draw(mProjMatrix, mCubeModelViewMatrix, mCubeNormalMatrix, mLight, mLight2);
+        //mCube.draw(mProjMatrix, mCubeModelViewMatrix, mCubeNormalMatrix, mLight, mLight2);
         mSphere.draw(mProjMatrix, mSphereModelViewMatrix, mSphereNormalMatrix, mLight, mLight2);
     }
 
+
     @Override
+    // Adjust the viewport based on geometry changes,
+    // such as screen rotation
     public void onSurfaceChanged(GL10 unused, int width, int height) {
-        // Adjust the viewport based on geometry changes,
-        // such as screen rotation
         GLES20.glViewport(0, 0, width, height);
 
         // Create a new perspective projection matrix. The height will stay the same
@@ -183,6 +232,17 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         final float far = 10.0f;
 
         Matrix.frustumM(mProjMatrix, 0, left, right, bottom, top, near, far);
+    }
+
+    private void normalMatrix(float[] dst, int dstOffset, float[] src, int srcOffset) {
+        Matrix.invertM(dst, dstOffset, src, srcOffset);
+        dst[12] = 0;
+        dst[13] = 0;
+        dst[14] = 0;
+
+        float[] temp = Arrays.copyOf(dst, 16);
+
+        Matrix.transposeM(dst, dstOffset, temp, 0);
     }
 
     private void resetViewMatrix() {

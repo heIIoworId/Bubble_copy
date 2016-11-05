@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 // A fundamental class to apply forces to particle.
 public class World {
+    //FIXME to be implemented
     private float gravity[] = {0f, -0.1f, 0f};
     private float dragCoeff = 0.1f;
 

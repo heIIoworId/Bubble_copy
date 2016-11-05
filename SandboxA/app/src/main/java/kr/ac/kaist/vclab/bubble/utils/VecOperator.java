@@ -41,7 +41,7 @@ public class VecOperator {
         return result;
     }
 
-    public static float[] addVectors(float[] vectorA, float[] vectorB){
+    public static float[] add(float[] vectorA, float[] vectorB){
         float result[] = new float[3];
         result[0] = vectorA[0] + vectorB[0];
         result[1] = vectorA[1] + vectorB[1];

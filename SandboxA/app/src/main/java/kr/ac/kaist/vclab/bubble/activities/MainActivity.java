@@ -37,15 +37,8 @@ public class MainActivity extends Activity {
         // as the ContentView for this Activity
         mGLView = new MyGLSurfaceView(this);
         myRenderer = mGLView.getmRenderer();
-//        mHandler = new MyHandler();
-//        soundMeter = new SoundHandler();
-//        soundMeter.start();
-
-//        Matrix.translateM(myRenderer.mCubeTranslationMatrix, 0, 0.1f, 0, 0);
         myRenderer.mCubeTranslationMatrix[3] = 0.5f;
         System.out.println("moved x: "+ myRenderer.mCubeTranslationMatrix[3]);
-
-
 
 //        new Thread(new Runnable() {
 //            @Override
@@ -150,15 +143,4 @@ public class MainActivity extends Activity {
         // this is a good place to re-allocate them.
         mGLView.onResume();
     }
-
-//    private class MyHandler extends Handler {
-//        public void handleMessage(Message msg) {
-//            super.handleMessage(msg);
-//            if(msg.what == 0){
-//                System.out.println("vol in handler: " + msg.arg1);
-//                System.out.println("x in renderer: " + myRenderer.mCubeTranslationMatrix[3]);
-//                Matrix.translateM(myRenderer.mCubeTranslationMatrix, 0, 0.05f, 0, 0);
-//            }
-//        }
-//    }
 }

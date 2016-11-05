@@ -5,8 +5,6 @@ import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.view.MotionEvent;
 
-import kr.ac.kaist.vclab.bubble.MyGLRenderer;
-
 /**
  * Created by sjjeon on 16. 9. 20.
  */

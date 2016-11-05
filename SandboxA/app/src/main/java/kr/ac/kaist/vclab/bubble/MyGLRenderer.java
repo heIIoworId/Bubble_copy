@@ -107,7 +107,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         ArrayList<Spring> springs = GeomOperator.genSprings(particles);
         mWorld.setSprings(springs);
 
-
         // INITIALIZE LIGHTS
         mLight = new float[] {2.0f, 3.0f, 14.0f};
         mLight2 = new float[] {-2.0f, -3.0f, -5.0f};
@@ -334,16 +333,5 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
             throw new RuntimeException(glOperation + ": glError " + error);
         }
     }
-
-//    private class MyHandler extends Handler {
-//        public void handleMessage(Message msg) {
-//            super.handleMessage(msg);
-//            if(msg.what == 0){
-//                System.out.println("vol in handler: " + msg.arg1);
-////                System.out.println("x in renderer: " + myRenderer.mCubeTranslationMatrix[3]);
-////                Matrix.translateM(myRenderer.mCubeTranslationMatrix, 0, 0.05f, 0, 0);
-//            }
-//        }
-//    }
 
 }
