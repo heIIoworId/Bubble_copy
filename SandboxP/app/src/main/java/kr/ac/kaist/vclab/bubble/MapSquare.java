@@ -38,8 +38,10 @@ public class MapSquare {
     private static final int VERTEX_STRIDE = COORDS_PER_VERTEX * 4;
 
     private static MapGenerator mGenerator = new MapGenerator(
-            10.0f, 1f, 10.0f, // size
+            10.0f, 1.0f, 10.0f, // size
             0.3f, // unit length
+            4.0f, // max height
+            -0.5f, // min height
             true // fill or not
     );
 
