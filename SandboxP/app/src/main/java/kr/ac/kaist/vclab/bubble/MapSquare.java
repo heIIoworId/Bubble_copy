@@ -42,6 +42,7 @@ public class MapSquare {
             0.3f, // unit length
             4.0f, // max height
             -0.5f, // min height
+            3.0f, // complexity
             true // fill or not
     );
 
