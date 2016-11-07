@@ -27,6 +27,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     // objects
     private Cube mCube;
     private MapSquare mMap;
+    private Rectangle mRec;
 
     // view matrix
     private float[] mViewMatrix = new float[16];
@@ -35,11 +36,13 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     public float[] mViewRotationMatrix = new float[16];
     public float[] mCubeRotationMatrix = new float[16];
     public float[] mMapRotationMatrix = new float[16];
+    public float[] mRecRotationMatrix = new float[16];
 
     // translation matrix (changed by touch events)
     public float[] mViewTranslationMatrix = new float[16];
     public float[] mCubeTranslationMatrix = new float[16];
     public float[] mMapTranslationMatrix = new float[16];
+    public float[] mRecTranslationMatrix = new float[16];
 
     // projection matrix
     private float[] mProjMatrix = new float[16];
@@ -47,14 +50,17 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     // model matrix
     private float[] mCubeModelMatrix = new float[16];
     private float[] mMapModelMatrix = new float[16];
+    private float[] mRecModelMatrix = new float[16];
 
     // model-view matrix
     private float[] mCubeModelViewMatrix = new float[16];
     private float[] mMapModelViewMatrix = new float[16];
+    private float[] mRecModelViewMatrix = new float[16];
 
     // normal matrix
     private float[] mCubeNormalMatrix = new float[16];
     private float[] mMapNormalMatrix = new float[16];
+    private float[] mRecNormalMatrix = new float[16];
 
     // temporary matrix for calculation
     private float[] mTempMatrix = new float[16];
@@ -74,12 +80,13 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         resetViewMatrix();
 
         // lights
-        mLight = new float[]{2.0f, 3.0f, 14.0f};
-        mLight2 = new float[]{-2.0f, -3.0f, -5.0f};
+        mLight = new float[]{5.0f, 10.0f, 6.0f};
+        mLight2 = new float[]{-4.0f, 7.0f, 8.0f};
 
         // objects
         mCube = new Cube();
         mMap = new MapSquare();
+        mRec = new Rectangle();
 
         // initialize rotation / translation matrix
         Matrix.setIdentityM(mViewRotationMatrix, 0);
@@ -93,6 +100,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.setIdentityM(mMapRotationMatrix, 0);
         Matrix.setIdentityM(mMapTranslationMatrix, 0);
         Matrix.translateM(mMapTranslationMatrix, 0, 0, 0, 0);
+
+        Matrix.setIdentityM(mRecRotationMatrix, 0);
+        Matrix.setIdentityM(mRecTranslationMatrix, 0);
+        Matrix.translateM(mRecTranslationMatrix, 0, 0, 0, 0);
     }
 
     @Override
@@ -134,17 +145,34 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                 -mMap.sizeX / 2.0f, mMap.sizeY / 2.0f - 3.0f, -mMap.sizeZ / 2.0f
         );
 
+        // calculate rec model matrix
+        Matrix.setIdentityM(mRecModelMatrix, 0);
+
+        Matrix.multiplyMM(mTempMatrix, 0, mRecRotationMatrix, 0, mRecModelMatrix, 0);
+        System.arraycopy(mTempMatrix, 0, mRecModelMatrix, 0, 16);
+
+        Matrix.multiplyMM(mTempMatrix, 0, mRecTranslationMatrix, 0, mRecModelMatrix, 0);
+        System.arraycopy(mTempMatrix, 0, mRecModelMatrix, 0, 16);
+
+        Matrix.translateM(
+                mRecModelMatrix, 0,
+                -mRec.sizeX / 2.0f, mMap.sizeY / 2.0f - 3.4f, -mRec.sizeZ / 2.0f
+        );
+
         // calculate model-view matrix
         Matrix.multiplyMM(mCubeModelViewMatrix, 0, mViewMatrix, 0, mCubeModelMatrix, 0);
         Matrix.multiplyMM(mMapModelViewMatrix, 0, mViewMatrix, 0, mMapModelMatrix, 0);
+        Matrix.multiplyMM(mRecModelViewMatrix, 0, mViewMatrix, 0, mRecModelMatrix, 0);
 
         // calculate normal matrix
         normalMatrix(mCubeNormalMatrix, 0, mCubeModelViewMatrix, 0);
         normalMatrix(mMapNormalMatrix, 0, mMapModelViewMatrix, 0);
+        normalMatrix(mRecNormalMatrix, 0, mRecModelViewMatrix, 0);
 
         // draw the objects
         mCube.draw(mProjMatrix, mCubeModelViewMatrix, mCubeNormalMatrix, mLight, mLight2);
         mMap.draw(mProjMatrix, mMapModelViewMatrix, mMapNormalMatrix, mLight, mLight2);
+        // mRec.draw(mProjMatrix, mRecModelViewMatrix, mRecNormalMatrix, mLight, mLight2);
     }
 
     @Override

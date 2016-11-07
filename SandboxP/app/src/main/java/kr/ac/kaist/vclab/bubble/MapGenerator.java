@@ -30,6 +30,8 @@ public class MapGenerator {
 
     public MapGenerator(float sizeX, float sizeY, float sizeZ, // size of the map
                         float unit, // dist. between points
+                        float maxHeight, // max height (not y value!)
+                        float minHeight, // min height (can be negative)
                         boolean fill) { // true : show all / false : show skeleton only
         this.unit = unit;
         this.fill = fill;
@@ -51,14 +53,14 @@ public class MapGenerator {
                 // TODO : randomize seed (in proper range)
                 float seed = 1.0f;
 
-                heightMap[i][j] = 4.0f * (
+                heightMap[i][j] = maxHeight * (2.0f / (float) Math.sqrt(3)) * (
                         PerlinNoise.noise(nx * 3, nz * 3, seed)
                                 + 0.5f * PerlinNoise.noise(nx * 6, nz * 6, 2.0f * seed)
                                 + 0.25f * PerlinNoise.noise(nx * 12, nz * 12, 4.0f * seed)
                 );
 
-                if (heightMap[i][j] < -sizeY) {
-                    heightMap[i][j] = -sizeY;
+                if (heightMap[i][j] < minHeight) {
+                    heightMap[i][j] = minHeight;
                 }
             }
         }

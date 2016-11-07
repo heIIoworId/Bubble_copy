@@ -63,6 +63,8 @@ public class MyGLSurfaceView extends GLSurfaceView {
                 case "map":
                     Matrix.multiplyMM(mTemp2Matrix, 0, mTempMatrix, 0, mRenderer.mMapRotationMatrix, 0);
                     System.arraycopy(mTemp2Matrix, 0, mRenderer.mMapRotationMatrix, 0, 16);
+                    Matrix.multiplyMM(mTemp2Matrix, 0, mTempMatrix, 0, mRenderer.mRecRotationMatrix, 0);
+                    System.arraycopy(mTemp2Matrix, 0, mRenderer.mRecRotationMatrix, 0, 16);
                     break;
             }
 
