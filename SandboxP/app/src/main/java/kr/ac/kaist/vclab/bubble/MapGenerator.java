@@ -25,6 +25,8 @@ public class MapGenerator {
     // height map (2D array of y values)
     float[][] heightMap;
 
+    float normalRate;
+
     // flag for filling the faces
     boolean fill;
 
@@ -33,6 +35,7 @@ public class MapGenerator {
                         float maxHeight, // max height (not y value!)
                         float minHeight, // min height (can be negative)
                         float complexity, // complexity
+                        float normalRate, // normal -> normal * normalRate + (0, 1, 0) * (1 - normalRate)
                         boolean fill) { // true : show all / false : show skeleton only
         this.unit = unit;
         this.fill = fill;
@@ -43,6 +46,8 @@ public class MapGenerator {
         this.sizeX = this.dimX * this.unit;
         this.sizeZ = this.dimZ * this.unit;
         this.sizeY = sizeY;
+
+        this.normalRate = normalRate;
 
         heightMap = new float[this.dimX + 1][this.dimZ + 1];
 
@@ -290,6 +295,16 @@ public class MapGenerator {
             // left
             for (int i = 0; i < dimZ * 6; i++) {
                 buffer.add(new float[]{-1.0f, 0.0f, 0.0f});
+            }
+
+            // normal -> normal * normalRate + (0, 1, 0) * (1 - normalRate)
+            for (int i = 0; i < buffer.size(); i++) {
+                float[] normal = buffer.get(i);
+                buffer.set(i, new float[]{
+                        normal[0] * normalRate,
+                        normal[1] * normalRate + (1.0f - normalRate),
+                        normal[2] * normalRate
+                });
             }
         } else {
             // top
