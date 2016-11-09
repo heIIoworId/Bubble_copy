@@ -13,5 +13,7 @@ void main() {
   float diffuse = max(0.0, dot(normal, tolight));
   diffuse += max(0.0, dot(normal, tolight2));
   vec3 intensity = uColor * diffuse;
-  gl_FragColor = vec4(intensity, 1.0);
+  vec4 haze = vec4(1.0, 0.5, 0.0, 1.0);
+  float ratio = 1 + vPosition.z/19.14159265358979;
+  gl_FragColor = ratio * vec4(intensity, 1.0) + (1 - ratio) * haze;
 }

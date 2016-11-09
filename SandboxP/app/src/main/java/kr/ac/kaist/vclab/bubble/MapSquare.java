@@ -38,11 +38,12 @@ public class MapSquare {
     private static final int VERTEX_STRIDE = COORDS_PER_VERTEX * 4;
 
     private static MapGenerator mGenerator = new MapGenerator(
-            10.0f, 1.0f, 10.0f, // size
+            15.0f, 1.0f, 15.0f, // size
             0.3f, // unit length
-            4.0f, // max height
+            8.0f, // max height
             -0.5f, // min height
-            3.0f, // complexity
+            3.2f, // complexity
+            1.0f, // normalRate
             true // fill or not
     );
 
@@ -74,7 +75,7 @@ public class MapSquare {
         int vertexShader = MyGLRenderer.loadShaderFromFile(
                 GLES20.GL_VERTEX_SHADER, "basic-gl2.vshader");
         int fragmentShader = MyGLRenderer.loadShaderFromFile(
-                GLES20.GL_FRAGMENT_SHADER, "diffuse-gl2.fshader");
+                GLES20.GL_FRAGMENT_SHADER, "diffuse-haze-gl2.fshader");
 
         mProgram = GLES20.glCreateProgram();             // create empty OpenGL Program
         GLES20.glAttachShader(mProgram, vertexShader);   // add the vertex shader to program

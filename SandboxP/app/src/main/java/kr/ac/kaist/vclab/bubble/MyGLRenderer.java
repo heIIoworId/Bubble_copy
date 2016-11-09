@@ -91,7 +91,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // initialize rotation / translation matrix
         Matrix.setIdentityM(mViewRotationMatrix, 0);
         Matrix.setIdentityM(mViewTranslationMatrix, 0);
-        Matrix.translateM(mViewTranslationMatrix, 0, 0, 0, -9.3f);
+        Matrix.translateM(mViewTranslationMatrix, 0, 0, 0, -12.3f);
 
         Matrix.setIdentityM(mCubeRotationMatrix, 0);
         Matrix.setIdentityM(mCubeTranslationMatrix, 0);
@@ -172,7 +172,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // draw the objects
         mCube.draw(mProjMatrix, mCubeModelViewMatrix, mCubeNormalMatrix, mLight, mLight2);
         mMap.draw(mProjMatrix, mMapModelViewMatrix, mMapNormalMatrix, mLight, mLight2);
-        // mRec.draw(mProjMatrix, mRecModelViewMatrix, mRecNormalMatrix, mLight, mLight2);
+        mRec.draw(mProjMatrix, mRecModelViewMatrix, mRecNormalMatrix, mLight, mLight2);
     }
 
     @Override
@@ -207,7 +207,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private void resetViewMatrix() {
         Matrix.setLookAtM(
                 mViewMatrix, 0,
-                0.0f, 0.0f, 4.0f, // eye position
+                0.0f, -2.0f, -1.0f, // eye position
                 0.0f, 0.0f, -1.0f, // looking direction
                 0.0f, 1.0f, 0.0f // up vector
         );
