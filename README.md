@@ -4,12 +4,15 @@
 * 161105 어떤 쉐이딩을 써야 journey같은 분위기가 나오는 지 물어보기.
 
 ## 다음 발표 준비
+
 ### 훈민 
 * map texture mapping 구현해보기
 * 나무 모델 만드는 코드 작성
+
 ### 상균
 * 버블 모델 다시 만들기 (vertice 연결 다시 해야함)
 * world gravity, dargging force 구현하기
+
 ### 종민
 * cube map 코드 자바로 옮기고, 알파 블랜딩 먹여보기
 * 현재 glview에서 불리는 cube랑 sphere를 renderer로 옮기기
