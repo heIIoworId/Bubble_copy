@@ -13,6 +13,7 @@
 * 버블 모델 다시 만들기 (vertice 연결 다시 해야함)
 * world gravity, dargging force 구현하기
 * 물방울을 따라다니는 카메라 코딩(뷰메트릭스 실시간으로 변경)
+* 버블 deforming, blowing을 animation으로 만들기
 
 ### 종민
 * cube map 코드 자바로 옮기고, 알파 블랜딩 먹여보기
