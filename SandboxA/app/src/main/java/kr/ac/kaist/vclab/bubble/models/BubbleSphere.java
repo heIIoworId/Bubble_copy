@@ -1,10 +1,12 @@
 package kr.ac.kaist.vclab.bubble.models;
 
 import android.opengl.GLES20;
+import android.util.FloatMath;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
 
 import kr.ac.kaist.vclab.bubble.MyGLRenderer;
 
@@ -26,39 +28,38 @@ public class BubbleSphere {
     private int mProjMatrixHandle;
     private int mModelViewMatrixHandle;
     private int mNormalMatrixHandle;
-    // matrix for affine transformation of normal vector from model frame --> eye frame
+    // MATRIX FOR AFFINE TRANSFORMATION OF NORMAL VECTOR FROM MODEL FRAME --> EYE FRAME
 
     private int mLightHandle;
     private int mLight2Handle;
     private int mColorHandle;
 
     private static final int COORDS_PER_VERTEX = 3;
-    private static final int VERTEX_STRIDE = COORDS_PER_VERTEX * 4;
-
-
-    private float[] origin;
-    private float radius;
-    private int res;
+    private static final int VERTEX_STRIDE = COORDS_PER_VERTEX * 4; // MEANING 4 BYTES PER VERTEX
 
     private static float vertices[];
     private static float normals[];
     public float[] color = { 0.2f, 0.709803922f, 0.898039216f };
 
 
-    public BubbleSphere(float[] _origin, float _radius, int _res){
-        this.origin = _origin;
-        this.radius = _radius;
-        this.res = _res;
 
-        updateVertices();
-        updateNormals();
+    public BubbleSphere(float radius, int stacks, int slices){
 
-        // prepare shaders and OpenGL program
+        vertices = new float[(stacks + 1) * (slices + 1) * COORDS_PER_VERTEX];
+        normals = new float[(stacks + 1) * (slices + 1) * COORDS_PER_VERTEX];
+
+        calcVertices(radius, stacks, slices);
+        calcNormals();
+        initVertexBuffer();
+        initNormalBuffer();
+
+        // INITIATE VERTEX SHADER AND FRAGMENT SHADER
         int vertexShader = MyGLRenderer.loadShaderFromFile(
                 GLES20.GL_VERTEX_SHADER, "basic-gl2.vshader");
         int fragmentShader = MyGLRenderer.loadShaderFromFile(
                 GLES20.GL_FRAGMENT_SHADER, "diffuse-gl2.fshader");
 
+        // INITIATE OpenGL PROGRAM
         mProgram = GLES20.glCreateProgram();             // create empty OpenGL Program
         GLES20.glAttachShader(mProgram, vertexShader);   // add the vertex shader to program
         GLES20.glAttachShader(mProgram, fragmentShader); // add the fragment shader to program
@@ -105,7 +106,7 @@ public class BubbleSphere {
                 GLES20.GL_FLOAT, false,
                 VERTEX_STRIDE, mNormalBuffer);
 
-        // Draw the sphere
+        // DRAW THE SPHERE
         GLES20.glDrawArrays(GLES20.GL_LINES, 0, vertices.length / 3);
         GLES20.glLineWidth(2.0f);
 
@@ -113,9 +114,74 @@ public class BubbleSphere {
         GLES20.glDisableVertexAttribArray(mNormalHandle);
     }
 
-    private void updateVertices(){
-        //implement code to define vertices
+    private void calcVertices(float radius, int stacks, int slices){
+//        int vertexCount = (stacks + 1)*(slices + 1);
 
+        ArrayList<Float> verticesAL = new ArrayList<>();
+        ArrayList<Float> normalsAL = new ArrayList<>();
+        ArrayList<Float> textureCoordAL = new ArrayList<>();
+        ArrayList<Short> indexAl = new ArrayList<>();
+
+        for (int stackNum = 0; stackNum < stacks + 1; stackNum++){
+            for (int sliceNum = 0; sliceNum < slices + 1; sliceNum++){
+
+                // STACK-WISE ANGLE
+                float theta = (float) (stackNum*Math.PI / stacks);
+                // SLICE-WISE ANGLE
+                float phi= (float) (sliceNum * 2 * Math.PI / slices);
+
+                float sinTheta = (float) Math.sin((double) theta);
+                float sinPhi = (float) Math.sin((double) phi);
+                float cosTheta = (float) Math.cos((double) theta);
+                float cosPhi = (float) Math.cos((double) phi);
+
+                float normalX = cosPhi * sinTheta;
+                float normalY = cosTheta;
+                float normalZ = sinPhi * sinTheta;
+
+                float x = radius * normalX;
+                float y = radius * normalY;
+                float z = radius * normalZ;
+
+                //FIXME U?
+                float u = 1f - ((float) sliceNum / (float) slices);
+                float v = (float) stackNum / (float) stacks;
+
+                verticesAL.add(x);
+                verticesAL.add(y);
+                verticesAL.add(z);
+
+                normalsAL.add(normalX);
+                normalsAL.add(normalY);
+                normalsAL.add(normalZ);
+
+                textureCoordAL.add(u);
+                textureCoordAL.add(v);
+            }
+        }
+
+        //FIXME ?
+        for(int stackNum = 0; stackNum < stacks; stackNum++){
+            for (int sliceNum = 0; sliceNum < slices; sliceNum++){
+                int second = (sliceNum * (stacks + 1)) + stackNum;
+                int first = second + stacks + 1;
+
+                indexAl.add((short) first);
+                indexAl.add((short) second);
+                indexAl.add((short) (first + 1));
+
+                indexAl.add((short) second);
+                indexAl.add((short) (second + 1));
+                indexAl.add((short) (first + 1));
+            }
+        }
+    }
+
+    private void calcNormals(){
+
+    }
+
+    private void initVertexBuffer(){
         ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
         byteBuf.order(ByteOrder.nativeOrder());
         mVertexBuffer = byteBuf.asFloatBuffer();
@@ -123,14 +189,11 @@ public class BubbleSphere {
         mVertexBuffer.position(0);
     }
 
-    private void updateNormals(){
-        //implement code to define normals
-
+    private void initNormalBuffer(){
         ByteBuffer byteBuf = ByteBuffer.allocateDirect(normals.length * 4);
         byteBuf.order(ByteOrder.nativeOrder());
         mNormalBuffer = byteBuf.asFloatBuffer();
         mNormalBuffer.put(normals);
         mNormalBuffer.position(0);
     }
-
 }
