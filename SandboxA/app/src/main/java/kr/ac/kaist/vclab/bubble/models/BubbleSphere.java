@@ -119,6 +119,8 @@ public class BubbleSphere {
 
         ArrayList<Float> verticesAL = new ArrayList<>();
         ArrayList<Float> normalsAL = new ArrayList<>();
+        ArrayList<Float> textureCoordAL = new ArrayList<>();
+        ArrayList<Short> indexAl = new ArrayList<>();
 
         for (int stackNum = 0; stackNum < stacks + 1; stackNum++){
             for (int sliceNum = 0; sliceNum < slices + 1; sliceNum++){
@@ -153,9 +155,24 @@ public class BubbleSphere {
                 normalsAL.add(normalY);
                 normalsAL.add(normalZ);
 
-                //FIXME
+                textureCoordAL.add(u);
+                textureCoordAL.add(v);
+            }
+        }
 
+        //FIXME ?
+        for(int stackNum = 0; stackNum < stacks; stackNum++){
+            for (int sliceNum = 0; sliceNum < slices; sliceNum++){
+                int second = (sliceNum * (stacks + 1)) + stackNum;
+                int first = second + stacks + 1;
 
+                indexAl.add((short) first);
+                indexAl.add((short) second);
+                indexAl.add((short) (first + 1));
+
+                indexAl.add((short) second);
+                indexAl.add((short) (second + 1));
+                indexAl.add((short) (first + 1));
             }
         }
     }
