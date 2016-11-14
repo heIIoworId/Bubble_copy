@@ -12,6 +12,7 @@
 * (시간나면) 산을 피해서 목적지 까지 줄줄이 놓여있는 아이템 (충돌시 사라짐)
 
 ### 상균
+* sound pressure --> 물방울의 움직임으로 바꾸기
 * 버블 모델 다시 만들기 (vertice 연결 다시 해야함)
 * world gravity, dargging force 구현하기
 * 버블 deforming, blowing을 animation으로 만들기
@@ -32,7 +33,6 @@
 ### 상균
 * 버블의 이동 trajectory를 가시화
 * 시간이 지나면 버블 죽게하기? 
-* sound pressure --> 물방울의 움직임으로 바꾸기
 
 ### 미정
 * 아이템 모델 만들기
