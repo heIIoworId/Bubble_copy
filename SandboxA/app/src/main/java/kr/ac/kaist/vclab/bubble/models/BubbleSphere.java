@@ -6,6 +6,7 @@ import android.util.FloatMath;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.nio.ShortBuffer;
 import java.util.ArrayList;
 
 import kr.ac.kaist.vclab.bubble.MyGLRenderer;
@@ -19,6 +20,8 @@ public class BubbleSphere {
     private final int mProgram;
     private FloatBuffer mVertexBuffer;
     private FloatBuffer mNormalBuffer;
+    private FloatBuffer mTextureCoordBuffer;
+    private ShortBuffer mIndexBuffer;
 
     // attribute handles
     private int mPositionHandle;
@@ -39,19 +42,25 @@ public class BubbleSphere {
 
     private static float vertices[];
     private static float normals[];
+    private static short indexes[];
+    private static float textureCoords[];
     public float[] color = { 0.2f, 0.709803922f, 0.898039216f };
-
-
 
     public BubbleSphere(float radius, int stacks, int slices){
 
-        vertices = new float[(stacks + 1) * (slices + 1) * COORDS_PER_VERTEX];
-        normals = new float[(stacks + 1) * (slices + 1) * COORDS_PER_VERTEX];
+        int vertexCount = (stacks + 1) * (slices + 1);
+        vertices = new float[vertexCount * COORDS_PER_VERTEX];
+        normals = new float[vertexCount * COORDS_PER_VERTEX];
+        indexes = new short[vertexCount];
+        textureCoords = new float[vertexCount * 2];
 
         calcVertices(radius, stacks, slices);
         calcNormals();
+
         initVertexBuffer();
         initNormalBuffer();
+        initTextureCoordBuffer();
+        initIndexBuffer();
 
         // INITIATE VERTEX SHADER AND FRAGMENT SHADER
         int vertexShader = MyGLRenderer.loadShaderFromFile(
@@ -115,12 +124,11 @@ public class BubbleSphere {
     }
 
     private void calcVertices(float radius, int stacks, int slices){
-//        int vertexCount = (stacks + 1)*(slices + 1);
 
         ArrayList<Float> verticesAL = new ArrayList<>();
         ArrayList<Float> normalsAL = new ArrayList<>();
-        ArrayList<Float> textureCoordAL = new ArrayList<>();
-        ArrayList<Short> indexAl = new ArrayList<>();
+        ArrayList<Float> textureCoordsAL = new ArrayList<>();
+        ArrayList<Short> indexesAl = new ArrayList<>();
 
         for (int stackNum = 0; stackNum < stacks + 1; stackNum++){
             for (int sliceNum = 0; sliceNum < slices + 1; sliceNum++){
@@ -155,28 +163,51 @@ public class BubbleSphere {
                 normalsAL.add(normalY);
                 normalsAL.add(normalZ);
 
-                textureCoordAL.add(u);
-                textureCoordAL.add(v);
+                textureCoordsAL.add(u);
+                textureCoordsAL.add(v);
             }
         }
 
         //FIXME ?
         for(int stackNum = 0; stackNum < stacks; stackNum++){
             for (int sliceNum = 0; sliceNum < slices; sliceNum++){
+
                 int second = (sliceNum * (stacks + 1)) + stackNum;
                 int first = second + stacks + 1;
 
-                indexAl.add((short) first);
-                indexAl.add((short) second);
-                indexAl.add((short) (first + 1));
+                indexesAl.add((short) first);
+                indexesAl.add((short) second);
+                indexesAl.add((short) (first + 1));
 
-                indexAl.add((short) second);
-                indexAl.add((short) (second + 1));
-                indexAl.add((short) (first + 1));
+                indexesAl.add((short) second);
+                indexesAl.add((short) (second + 1));
+                indexesAl.add((short) (first + 1));
             }
+        }
+
+        // CONVERT ARRAY LIST TO ARRAY
+        int i = 0;
+        for (Float f : verticesAL){
+            vertices[i++] = f;
+        }
+
+        i = 0;
+        for (Float f : normalsAL){
+            normals[i++] = f;
+        }
+
+        i = 0;
+        for (Short s : indexesAl){
+            indexes[i++] = s;
+        }
+
+        i = 0;
+        for (Float f: textureCoordsAL){
+            textureCoords[i++] = f;
         }
     }
 
+    // FIXME DON'T KNOW HOW TO IMPLEMENT
     private void calcNormals(){
 
     }
@@ -195,5 +226,21 @@ public class BubbleSphere {
         mNormalBuffer = byteBuf.asFloatBuffer();
         mNormalBuffer.put(normals);
         mNormalBuffer.position(0);
+    }
+
+    private void initTextureCoordBuffer(){
+        ByteBuffer byteBuf = ByteBuffer.allocateDirect(textureCoords.length * 4);
+        byteBuf.order(ByteOrder.nativeOrder());
+        mTextureCoordBuffer = byteBuf.asFloatBuffer();
+        mTextureCoordBuffer.put(textureCoords);
+        mTextureCoordBuffer.position(0);
+    }
+
+    private void initIndexBuffer(){
+        ByteBuffer byteBuf = ByteBuffer.allocateDirect(indexes.length * 2);
+        byteBuf.order(ByteOrder.nativeOrder());
+        mIndexBuffer = byteBuf.asShortBuffer();
+        mIndexBuffer.put(indexes);
+        mIndexBuffer.position(0);
     }
 }
