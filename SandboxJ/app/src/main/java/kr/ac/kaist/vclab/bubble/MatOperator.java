@@ -42,7 +42,6 @@ public class MatOperator {
 
         Matrix.transposeM(dst, dstOffset, temp, 0);
     }
-
     public static float[] normalize(float[] vector) {
         float length = size(vector);
         for (int i = 0; i < vector.length; i++) {
@@ -60,11 +59,19 @@ public class MatOperator {
     }
 
     public static float[] matLinear(float[] mat){
-        float[] translation = new float[16];
-        System.arraycopy(mat, 0, translation, 0, 16);
-        translation[12]=0;
-        translation[13]=0;
-        translation[14]=0;
-        return translation;
+        float[] transformation = new float[16];
+        System.arraycopy(mat, 0, transformation, 0, 16);
+        transformation[12]=0;
+        transformation[13]=0;
+        transformation[14]=0;
+        return transformation;
+    }
+    public static float[] matTranslation(float[] mat){
+        float[] transformation = new float[16];
+        Matrix.setIdentityM(transformation, 0);
+        transformation[12]=mat[12];
+        transformation[13]=mat[13];
+        transformation[14]=mat[14];
+        return transformation;
     }
 }

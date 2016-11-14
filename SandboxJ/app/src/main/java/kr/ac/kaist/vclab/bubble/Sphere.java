@@ -2459,9 +2459,9 @@ public class Sphere {
 
         // prepare shaders and OpenGL program
         int vertexShader = MyGLRenderer.loadShaderFromFile(
-                GLES20.GL_VERTEX_SHADER, "basic-gl2.vshader");
+                GLES20.GL_VERTEX_SHADER, "texture2-gl2.vshader");
         int fragmentShader = MyGLRenderer.loadShaderFromFile(
-                GLES20.GL_FRAGMENT_SHADER, "diffuse-gl2.fshader");
+                GLES20.GL_FRAGMENT_SHADER, "texture2-gl2.fshader");
 
         mProgram = GLES20.glCreateProgram();             // create empty OpenGL Program
         GLES20.glAttachShader(mProgram, vertexShader);   // add the vertex shader to program
@@ -2473,8 +2473,11 @@ public class Sphere {
                      float[] modelViewMatrix,
                      float[] normalMatrix,
                      float[] light,
-                     float[] light2) {
+                     float[] light2,
+                     int[] cubeTex) {
         GLES20.glUseProgram(mProgram);
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_CUBE_MAP, cubeTex[0]);
 
         // uniforms
         mProjMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uProjMatrix");
@@ -2483,6 +2486,7 @@ public class Sphere {
         mColorHandle = GLES20.glGetUniformLocation(mProgram, "uColor");
         mLightHandle = GLES20.glGetUniformLocation(mProgram, "uLight");
         mLight2Handle = GLES20.glGetUniformLocation(mProgram, "uLight2");
+        int mEnvHandle = GLES20.glGetUniformLocation(mProgram, "cubemap");
 
         GLES20.glUniformMatrix4fv(mProjMatrixHandle, 1, false, projMatrix, 0);
         GLES20.glUniformMatrix4fv(mModelViewMatrixHandle, 1, false, modelViewMatrix, 0);
@@ -2491,6 +2495,7 @@ public class Sphere {
         GLES20.glUniform3fv(mColorHandle, 1, color, 0);
         GLES20.glUniform3fv(mLightHandle, 1, light, 0);
         GLES20.glUniform3fv(mLight2Handle, 1, light2, 0);
+        GLES20.glUniform1i(mEnvHandle, 1);
 
         // attributes
         mPositionHandle = GLES20.glGetAttribLocation(mProgram, "aPosition");

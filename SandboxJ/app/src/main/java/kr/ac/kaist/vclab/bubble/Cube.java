@@ -1,6 +1,7 @@
 package kr.ac.kaist.vclab.bubble;
 
 import android.opengl.GLES20;
+import android.opengl.GLUtils;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -17,15 +18,19 @@ public class Cube {
     private final int mProgram;
     private FloatBuffer mVertexBuffer;
     private FloatBuffer mNormalBuffer;
+    private FloatBuffer mTextureBuffer;
+
 
     // attribute handles
     private int mPositionHandle;
     private int mNormalHandle;
+    private int mTextureHandle;
 
     // uniform handles
     private int mProjMatrixHandle;
     private int mModelViewMatrixHandle;
     private int mNormalMatrixHandle;
+    private int mSampleHandle;
 
     private int mLightHandle;
     private int mLight2Handle;
@@ -34,6 +39,7 @@ public class Cube {
     private static final int COORDS_PER_VERTEX = 3;
     private static final int VERTEX_STRIDE = COORDS_PER_VERTEX * 4;
 
+   // private Texture mTexture = new Texture();
     private BoxCollision boxCollision = new BoxCollision(new float[]{1,0,0}, new float[]{0,1,0}, new float[]{0,0,1});
     private static float vertices[] = {
             // Front face
@@ -135,6 +141,59 @@ public class Cube {
             0.0f, -1.0f, 0.0f
     };
 
+
+
+    private static float texcoord[] = {
+            // Front face
+            0.0f, 1.0f, 0.0f,
+            0.0f, 0.0f, 0.0f,
+            1.0f, 1.0f, 0.0f,
+            0.0f, 0.0f, 0.0f,
+            1.0f, 0.0f, 0.0f,
+            1.0f, 1.0f, 0.0f,
+
+            // Right face
+            0.0f, 1.0f, 0.0f,
+            0.0f, 0.0f, 0.0f,
+            1.0f, 1.0f, 0.0f,
+            0.0f, 0.0f, 0.0f,
+            1.0f, 0.0f, 0.0f,
+            1.0f, 1.0f, 0.0f,
+
+            // Back face
+            0.0f, 1.0f, 0.0f,
+            0.0f, 0.0f, 0.0f,
+            1.0f, 1.0f, 0.0f,
+            0.0f, 0.0f, 0.0f,
+            1.0f, 0.0f, 0.0f,
+            1.0f, 1.0f, 0.0f,
+
+            // Left face
+            0.0f, 1.0f, 0.0f,
+            0.0f, 0.0f, 0.0f,
+            1.0f, 1.0f, 0.0f,
+            0.0f, 0.0f, 0.0f,
+            1.0f, 0.0f, 0.0f,
+            1.0f, 1.0f, 0.0f,
+
+            // Top face
+            0.0f, 1.0f, 0.0f,
+            0.0f, 0.0f, 0.0f,
+            1.0f, 1.0f, 0.0f,
+            0.0f, 0.0f, 0.0f,
+            1.0f, 0.0f, 0.0f,
+            1.0f, 1.0f, 0.0f,
+
+            // Bottom face
+            0.0f, 1.0f, 0.0f,
+            0.0f, 0.0f, 0.0f,
+            1.0f, 1.0f, 0.0f,
+            0.0f, 0.0f, 0.0f,
+            1.0f, 0.0f, 0.0f,
+            1.0f, 1.0f, 0.0f,
+
+    };
+
     float color[] = { 0.2f, 0.709803922f, 0.898039216f };
 
 
@@ -151,26 +210,46 @@ public class Cube {
         mNormalBuffer.put(normals);
         mNormalBuffer.position(0);
 
+        byteBuf = ByteBuffer.allocateDirect(texcoord.length * 4);
+        byteBuf.order(ByteOrder.nativeOrder());
+        mTextureBuffer = byteBuf.asFloatBuffer();
+        mTextureBuffer.put(texcoord);
+        mTextureBuffer.position(0);
 
         // prepare shaders and OpenGL program
         int vertexShader = MyGLRenderer.loadShaderFromFile(
-                GLES20.GL_VERTEX_SHADER, "basic-gl2.vshader");
+                GLES20.GL_VERTEX_SHADER, "texture2-gl2.vshader");
         int fragmentShader = MyGLRenderer.loadShaderFromFile(
-                GLES20.GL_FRAGMENT_SHADER, "diffuse-gl2.fshader");
+                GLES20.GL_FRAGMENT_SHADER, "texture2-gl2.fshader");
 
         mProgram = GLES20.glCreateProgram();             // create empty OpenGL Program
         GLES20.glAttachShader(mProgram, vertexShader);   // add the vertex shader to program
         GLES20.glAttachShader(mProgram, fragmentShader); // add the fragment shader to program
         GLES20.glLinkProgram(mProgram);                  // create OpenGL program executables
+
+
+        //texture
+        int[] textureHandles = new int[1];
+        GLES20.glGenTextures(1, textureHandles, 0);
+        int texture0 = textureHandles[0];
+
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texture0);
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, MyGLRenderer.loadImage("water/water.png"), 0);
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
+
+
     }
 
     public void draw(float[] projMatrix,
                      float[] modelViewMatrix,
                      float[] normalMatrix,
                      float[] light,
-                     float[] light2) {
+                     float[] light2,
+                     int[] cubeTex) {
         GLES20.glUseProgram(mProgram);
-
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_CUBE_MAP, cubeTex[0]);
         // uniforms
         mProjMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uProjMatrix");
         mModelViewMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uModelViewMatrix");
@@ -178,6 +257,8 @@ public class Cube {
         mColorHandle = GLES20.glGetUniformLocation(mProgram, "uColor");
         mLightHandle = GLES20.glGetUniformLocation(mProgram, "uLight");
         mLight2Handle = GLES20.glGetUniformLocation(mProgram, "uLight2");
+        mSampleHandle = GLES20.glGetUniformLocation(mProgram, "sampler");
+        int mEnvHandle = GLES20.glGetUniformLocation(mProgram, "cubemap");
 
         GLES20.glUniformMatrix4fv(mProjMatrixHandle, 1, false, projMatrix, 0);
         GLES20.glUniformMatrix4fv(mModelViewMatrixHandle, 1, false, modelViewMatrix, 0);
@@ -187,12 +268,18 @@ public class Cube {
         GLES20.glUniform3fv(mLightHandle, 1, light, 0);
         GLES20.glUniform3fv(mLight2Handle, 1, light2, 0);
 
+        GLES20.glUniform1i(mSampleHandle, 0);
+        GLES20.glUniform1i(mEnvHandle, 1);
+
+
         // attributes
         mPositionHandle = GLES20.glGetAttribLocation(mProgram, "aPosition");
         mNormalHandle = GLES20.glGetAttribLocation(mProgram, "aNormal");
+        mTextureHandle = GLES20.glGetAttribLocation(mProgram, "aTex_Coord");
 
         GLES20.glEnableVertexAttribArray(mPositionHandle);
         GLES20.glEnableVertexAttribArray(mNormalHandle);
+        GLES20.glEnableVertexAttribArray(mTextureHandle);
 
         GLES20.glVertexAttribPointer(
                 mPositionHandle, COORDS_PER_VERTEX,
@@ -203,6 +290,14 @@ public class Cube {
                 mNormalHandle, COORDS_PER_VERTEX,
                 GLES20.GL_FLOAT, false,
                 VERTEX_STRIDE, mNormalBuffer);
+       // mTexture.setTexture();
+
+        GLES20.glVertexAttribPointer(
+                mTextureHandle, COORDS_PER_VERTEX,
+                GLES20.GL_FLOAT, false,
+                VERTEX_STRIDE, mTextureBuffer);
+
+
 
         // Draw the cube
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertices.length / 3);
@@ -210,6 +305,8 @@ public class Cube {
 
         GLES20.glDisableVertexAttribArray(mPositionHandle);
         GLES20.glDisableVertexAttribArray(mNormalHandle);
+        GLES20.glDisableVertexAttribArray(mTextureHandle);
+
     }
     public BoxCollision getCollision(){
         return boxCollision;

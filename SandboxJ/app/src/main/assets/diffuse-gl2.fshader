@@ -14,5 +14,5 @@ void main() {
   diffuse += max(0.0, dot(normal, tolight2));
   vec3 intensity = uColor * diffuse;
 
-  gl_FragColor = vec4(intensity, 1.0);
+  gl_FragColor = vec4(intensity, 0.3);
 }
