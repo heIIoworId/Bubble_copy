@@ -138,18 +138,8 @@ public class Cube {
 
 
     public Cube() {
-        ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
-        byteBuf.order(ByteOrder.nativeOrder());
-        mVertexBuffer = byteBuf.asFloatBuffer();
-        mVertexBuffer.put(vertices);
-        mVertexBuffer.position(0);
-
-        byteBuf = ByteBuffer.allocateDirect(normals.length * 4);
-        byteBuf.order(ByteOrder.nativeOrder());
-        mNormalBuffer = byteBuf.asFloatBuffer();
-        mNormalBuffer.put(normals);
-        mNormalBuffer.position(0);
-
+        initVertexBuffer();
+        initNormalBuffer();
 
         // prepare shaders and OpenGL program
         int vertexShader = MyGLRenderer.loadShaderFromFile(
@@ -204,10 +194,38 @@ public class Cube {
                 VERTEX_STRIDE, mNormalBuffer);
 
         // Draw the cube
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertices.length / 3);
-//        GLES20.glDrawArrays(GLES20.GL_LINE_LOOP, 0, vertices.length / 3);
+//        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertices.length / 3);
+        GLES20.glDrawArrays(GLES20.GL_LINE_LOOP, 0, vertices.length / 3);
+        GLES20.glLineWidth(3.0f);
 
         GLES20.glDisableVertexAttribArray(mPositionHandle);
         GLES20.glDisableVertexAttribArray(mNormalHandle);
     }
+
+    public float[] getVertices() {
+        return vertices;
+    }
+
+    public void setVertices(float[] updatedVertices) {
+        vertices = updatedVertices;
+        initVertexBuffer();
+    }
+
+    public void initVertexBuffer(){
+        ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
+        byteBuf.order(ByteOrder.nativeOrder());
+        mVertexBuffer = byteBuf.asFloatBuffer();
+        mVertexBuffer.put(vertices);
+        mVertexBuffer.position(0);
+    }
+
+    public void initNormalBuffer(){
+        ByteBuffer byteBuf = ByteBuffer.allocateDirect(normals.length * 4);
+        byteBuf.order(ByteOrder.nativeOrder());
+        mNormalBuffer = byteBuf.asFloatBuffer();
+        mNormalBuffer.put(normals);
+        mNormalBuffer.position(0);
+    }
+
+
 }

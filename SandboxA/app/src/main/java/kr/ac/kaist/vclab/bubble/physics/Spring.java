@@ -9,8 +9,8 @@ import kr.ac.kaist.vclab.bubble.utils.VecOperator;
 public class Spring {
     Particle particleA;
     Particle particleB;
-    float length = 3.0f; //DEFAULT SPRING LENGTH
-    float k = 0.000001f; // HOOKEAN COEFFICIENT
+    float length = 2.0f; //DEFAULT SPRING LENGTH
+    float k = 0.00001f; // HOOKEAN COEFFICIENT
 
     public Spring(Particle _particleA, Particle _particleB){
         particleA = _particleA;
@@ -27,7 +27,6 @@ public class Spring {
         float stretch = VecOperator.getDistance(pointA, pointB)-length;
 
         forceA = VecOperator.sub(pointA, pointB);
-//        System.out.println("pointA: " + pointA[0] + ", " + pointA[1] + ", " + pointA[2]);
         System.out.println("forceA: " + forceA[0] + ", " + forceA[1] + ", " + forceA[2]);
 
         forceA = VecOperator.normalize(forceA);
