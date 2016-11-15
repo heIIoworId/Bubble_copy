@@ -103,8 +103,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         //INITIALIZE WORLD
         mWorld = new World();
 //        ArrayList<Particle> particles = GeomOperator.genParticles(mSphere.getVertices());
-        // FIXME JUST TESTING ON CUBE
-        ArrayList<Particle> particles = GeomOperator.genParticles(mCube.getVertices());
+        ArrayList<Particle> particles = GeomOperator.genParticles(mSphere.getVertices());
         mWorld.setParticles(particles);
         ArrayList<Spring> springs = GeomOperator.genSprings(particles);
         mWorld.setSprings(springs);
@@ -207,16 +206,14 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mWorld.update();
         float updatedVertices[] = GeomOperator.genVertices(mWorld.getParticles());
         System.out.println("updated vertices: "+updatedVertices[11]);
-        // FIXME COMMENTED OUT FOR TESTING
-//        mSphere.setVertices(updatedVertices);
-        mCube.setVertices(updatedVertices);
+        mSphere.setVertices(updatedVertices);
+//        mCube.setVertices(updatedVertices);
         //FIXME UPDATE NORMALS OF SPHERE
 
         //Draw
         mSquare.draw(mProjMatrix, mSquareModelViewMatrix, mSquareNormalMatrix, mLight, mLight2);
         mCube.draw(mProjMatrix, mCubeModelViewMatrix, mCubeNormalMatrix, mLight, mLight2);
-        // FIXME COMMENTED OUT FOR TESTING
-        //mSphere.draw(mProjMatrix, mSphereModelViewMatrix, mSphereNormalMatrix, mLight, mLight2);
+        mSphere.draw(mProjMatrix, mSphereModelViewMatrix, mSphereNormalMatrix, mLight, mLight2);
     }
 
 

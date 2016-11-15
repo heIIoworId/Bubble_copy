@@ -12,6 +12,7 @@ public class World {
     //FIXME to be implemented
     private float gravity[] = {0f, -0.1f, 0f};
     private float dragCoeff = 0.1f;
+    private float damping = 0.95f;
 
     ArrayList<Particle> particles;
     ArrayList<Spring> springs;
@@ -38,6 +39,9 @@ public class World {
 
     public void setParticles(ArrayList<Particle> _particles){
         particles = _particles;
+        for(int i = 0; i<particles.size(); i++){
+            particles.get(i).setDamping(damping);
+        }
     }
 
     public void setSprings(ArrayList<Spring> _springs){
