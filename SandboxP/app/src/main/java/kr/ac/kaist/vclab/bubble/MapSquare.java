@@ -84,9 +84,9 @@ public class MapSquare {
 
         // prepare shaders and OpenGL program
         int vertexShader = MyGLRenderer.loadShaderFromFile(
-                GLES20.GL_VERTEX_SHADER, "map.vshader");
+                GLES20.GL_VERTEX_SHADER, "map-vshader.glsl");
         int fragmentShader = MyGLRenderer.loadShaderFromFile(
-                GLES20.GL_FRAGMENT_SHADER, "map.fshader");
+                GLES20.GL_FRAGMENT_SHADER, "map-fshader.glsl");
 
         mProgram = GLES20.glCreateProgram();             // create empty OpenGL Program
         GLES20.glAttachShader(mProgram, vertexShader);   // add the vertex shader to program
