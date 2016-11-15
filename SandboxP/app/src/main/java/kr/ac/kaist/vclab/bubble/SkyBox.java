@@ -145,17 +145,53 @@ public class SkyBox {
         };
 
         textureCoors = new float[]{
+                // front
                 1 / 4.0f, 2 / 3.0f, 0,
                 2 / 4.0f, 1 / 3.0f, 0,
                 1 / 4.0f, 1 / 3.0f, 0,
                 1 / 4.0f, 2 / 3.0f, 0,
                 2 / 4.0f, 2 / 3.0f, 0,
                 2 / 4.0f, 1 / 3.0f, 0,
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+
+                // back
+                1.0f, 2 / 3.0f, 0,
+                1.0f, 1 / 3.0f, 0,
+                3 / 4.0f, 2 / 3.0f, 0,
+                1.0f, 1 / 3.0f, 0,
+                3 / 4.0f, 1 / 3.0f, 0,
+                3 / 4.0f, 2 / 3.0f, 0,
+
+                // right
+                2 / 4.0f, 2 / 3.0f, 0,
+                3 / 4.0f, 2 / 3.0f, 0,
+                2 / 4.0f, 1 / 3.0f, 0,
+                3 / 4.0f, 2 / 3.0f, 0,
+                3 / 4.0f, 1 / 3.0f, 0,
+                2 / 4.0f, 1 / 3.0f, 0,
+
+                // left
+                1 / 4.0f, 2 / 3.0f, 0,
+                0, 1 / 3.0f, 0,
+                0, 2 / 3.0f, 0,
+                1 / 4.0f, 2 / 3.0f, 0,
+                1 / 4.0f, 1 / 3.0f, 0,
+                0, 1 / 3.0f, 0,
+
+                // top
+                1 / 4.0f, 2 / 3.0f, 0,
+                1 / 4.0f, 1.0f, 0,
+                2 / 4.0f, 1.0f, 0,
+                2 / 4.0f, 2 / 3.0f, 0,
+                1 / 4.0f, 2 / 3.0f, 0,
+                2 / 4.0f, 1.0f, 0,
+
+                // bottom
+                1 / 4.0f, 0, 0,
+                1 / 4.0f, 1 / 3.0f, 0,
+                2 / 4.0f, 1 / 3.0f, 0,
+                1 / 4.0f, 0, 0,
+                2 / 4.0f, 1 / 3.0f, 0,
+                2 / 4.0f, 0, 0
         };
 
         ByteBuffer byteBuf1 = ByteBuffer.allocateDirect(vertices.length * 4);
@@ -193,7 +229,7 @@ public class SkyBox {
 
         GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandles[0]);
-        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, MyGLRenderer.loadImage("bluesky.jpg"), 0);
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, MyGLRenderer.loadImage("reflectsky.jpg"), 0);
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
     }

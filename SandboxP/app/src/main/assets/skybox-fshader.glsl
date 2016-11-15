@@ -12,13 +12,15 @@ void main() {
     vec3 tolight2 = normalize(uLight2 - vPosition);
     vec3 normal = normalize(vNormal);
 
-    float diffuse = max(0.0, dot(normal, tolight));
-    diffuse += max(0.0, dot(normal, tolight2));
-    //vec3 intensity = uColor * diffuse;
-
     // texture
     vec4 textureColor = texture2D(uTextureUnit, vTextureCoor);
-    vec3 intensity = textureColor.xyz * diffuse;
+    vec3 intensity = textureColor.xyz;
 
-    gl_FragColor = vec4(intensity, 1.0);
+    // haze
+    vec4 haze = vec4(0.5, 0.5, 0.5, 1.0);
+    // float ratio = 1 + vPosition.z/85;
+    // FIXME : Currently haze effect is not proper for skybox...
+    float ratio = 1;
+
+    gl_FragColor = ratio * vec4(intensity, 1.0) + (1 - ratio) * haze;
 }

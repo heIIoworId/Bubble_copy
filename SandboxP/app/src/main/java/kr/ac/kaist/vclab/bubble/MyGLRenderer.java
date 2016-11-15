@@ -218,7 +218,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                 mProjMatrix, 0,
                 -ratio, ratio, // left, right
                 -1.0f, 1.0f, // bottom, top
-                1.0f, 50.0f // near, far
+                1.0f, 60.0f // near, far
         );
     }
 
