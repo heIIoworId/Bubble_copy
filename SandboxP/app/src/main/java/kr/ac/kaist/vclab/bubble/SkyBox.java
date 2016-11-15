@@ -31,110 +31,114 @@ public class SkyBox {
     private static final int COORDS_PER_VERTEX = 3;
     private static final int VERTEX_STRIDE = COORDS_PER_VERTEX * 4;
 
-    private static float vertices[] = {
-            // Front face
-            -1.0f, 1.0f, 1.0f,
-            -1.0f, -1.0f, 1.0f,
-            1.0f, 1.0f, 1.0f,
-            -1.0f, -1.0f, 1.0f,
-            1.0f, -1.0f, 1.0f,
-            1.0f, 1.0f, 1.0f,
+    private static float[] vertices;
+    private static float[] normals;
 
-            // Right face
-            1.0f, 1.0f, 1.0f,
-            1.0f, -1.0f, 1.0f,
-            1.0f, 1.0f, -1.0f,
-            1.0f, -1.0f, 1.0f,
-            1.0f, -1.0f, -1.0f,
-            1.0f, 1.0f, -1.0f,
-
-            // Back face
-            1.0f, 1.0f, -1.0f,
-            1.0f, -1.0f, -1.0f,
-            -1.0f, 1.0f, -1.0f,
-            1.0f, -1.0f, -1.0f,
-            -1.0f, -1.0f, -1.0f,
-            -1.0f, 1.0f, -1.0f,
-
-            // Left face
-            -1.0f, 1.0f, -1.0f,
-            -1.0f, -1.0f, -1.0f,
-            -1.0f, 1.0f, 1.0f,
-            -1.0f, -1.0f, -1.0f,
-            -1.0f, -1.0f, 1.0f,
-            -1.0f, 1.0f, 1.0f,
-
-            // Top face
-            -1.0f, 1.0f, -1.0f,
-            -1.0f, 1.0f, 1.0f,
-            1.0f, 1.0f, -1.0f,
-            -1.0f, 1.0f, 1.0f,
-            1.0f, 1.0f, 1.0f,
-            1.0f, 1.0f, -1.0f,
-
-            // Bottom face
-            1.0f, -1.0f, -1.0f,
-            1.0f, -1.0f, 1.0f,
-            -1.0f, -1.0f, -1.0f,
-            1.0f, -1.0f, 1.0f,
-            -1.0f, -1.0f, 1.0f,
-            -1.0f, -1.0f, -1.0f,
-    };
-
-    private static float normals[] = {
-            // Front face
-            0.0f, 0.0f, 1.0f,
-            0.0f, 0.0f, 1.0f,
-            0.0f, 0.0f, 1.0f,
-            0.0f, 0.0f, 1.0f,
-            0.0f, 0.0f, 1.0f,
-            0.0f, 0.0f, 1.0f,
-
-            // Right face
-            1.0f, 0.0f, 0.0f,
-            1.0f, 0.0f, 0.0f,
-            1.0f, 0.0f, 0.0f,
-            1.0f, 0.0f, 0.0f,
-            1.0f, 0.0f, 0.0f,
-            1.0f, 0.0f, 0.0f,
-
-            // Back face
-            0.0f, 0.0f, -1.0f,
-            0.0f, 0.0f, -1.0f,
-            0.0f, 0.0f, -1.0f,
-            0.0f, 0.0f, -1.0f,
-            0.0f, 0.0f, -1.0f,
-            0.0f, 0.0f, -1.0f,
-
-            // Left face
-            -1.0f, 0.0f, 0.0f,
-            -1.0f, 0.0f, 0.0f,
-            -1.0f, 0.0f, 0.0f,
-            -1.0f, 0.0f, 0.0f,
-            -1.0f, 0.0f, 0.0f,
-            -1.0f, 0.0f, 0.0f,
-
-            // Top face
-            0.0f, 1.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,
-
-            // Bottom face
-            0.0f, -1.0f, 0.0f,
-            0.0f, -1.0f, 0.0f,
-            0.0f, -1.0f, 0.0f,
-            0.0f, -1.0f, 0.0f,
-            0.0f, -1.0f, 0.0f,
-            0.0f, -1.0f, 0.0f
-    };
-
-    float color[] = {0.2f, 0.709803922f, 0.898039216f};
+    float color[] = {0.0f, 0.5f, 0.0f};
 
 
-    public SkyBox() {
+    public SkyBox(float sizeX, float sizeY, float sizeZ) {
+        vertices = new float[]{
+                // front
+                0, sizeY, sizeZ,
+                sizeX, 0, sizeZ,
+                0, 0, sizeZ,
+                0, sizeY, sizeZ,
+                sizeX, sizeY, sizeZ,
+                sizeX, 0, sizeZ,
+
+                // back
+                0, sizeY, 0,
+                0, 0, 0,
+                sizeX, sizeY, 0,
+                0, 0, 0,
+                sizeX, 0, 0,
+                sizeX, sizeY, 0,
+
+                // right
+                sizeX, sizeY, sizeZ,
+                sizeX, sizeY, 0,
+                sizeX, 0, sizeZ,
+                sizeX, sizeY, 0,
+                sizeX, 0, 0,
+                sizeX, 0, sizeZ,
+
+                // left
+                0, sizeY, sizeZ,
+                0, 0, 0,
+                0, sizeY, 0,
+                0, sizeY, sizeZ,
+                0, 0, sizeZ,
+                0, 0, 0,
+
+                // top
+                0, sizeY, sizeZ,
+                0, sizeY, 0,
+                sizeX, sizeY, 0,
+                sizeX, sizeY, sizeZ,
+                0, sizeY, sizeZ,
+                sizeX, sizeY, 0,
+
+                // bottom
+                0, 0, 0,
+                0, 0, sizeZ,
+                sizeX, 0, sizeZ,
+                0, 0, 0,
+                sizeX, 0, sizeZ,
+                sizeX, 0, 0
+        };
+
+        normals = new float[]{
+                // front
+                0.0f, 0.0f, -1.0f,
+                0.0f, 0.0f, -1.0f,
+                0.0f, 0.0f, -1.0f,
+                0.0f, 0.0f, -1.0f,
+                0.0f, 0.0f, -1.0f,
+                0.0f, 0.0f, -1.0f,
+
+                // back
+                0.0f, 0.0f, 1.0f,
+                0.0f, 0.0f, 1.0f,
+                0.0f, 0.0f, 1.0f,
+                0.0f, 0.0f, 1.0f,
+                0.0f, 0.0f, 1.0f,
+                0.0f, 0.0f, 1.0f,
+
+                // right
+                -1.0f, 0.0f, 0.0f,
+                -1.0f, 0.0f, 0.0f,
+                -1.0f, 0.0f, 0.0f,
+                -1.0f, 0.0f, 0.0f,
+                -1.0f, 0.0f, 0.0f,
+                -1.0f, 0.0f, 0.0f,
+
+                // left
+                1.0f, 0.0f, 0.0f,
+                1.0f, 0.0f, 0.0f,
+                1.0f, 0.0f, 0.0f,
+                1.0f, 0.0f, 0.0f,
+                1.0f, 0.0f, 0.0f,
+                1.0f, 0.0f, 0.0f,
+
+                // top
+                0.0f, -1.0f, 0.0f,
+                0.0f, -1.0f, 0.0f,
+                0.0f, -1.0f, 0.0f,
+                0.0f, -1.0f, 0.0f,
+                0.0f, -1.0f, 0.0f,
+                0.0f, -1.0f, 0.0f,
+
+                // bottom
+                0.0f, 1.0f, 0.0f,
+                0.0f, 1.0f, 0.0f,
+                0.0f, 1.0f, 0.0f,
+                0.0f, 1.0f, 0.0f,
+                0.0f, 1.0f, 0.0f,
+                0.0f, 1.0f, 0.0f
+        };
+
+
         ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
         byteBuf.order(ByteOrder.nativeOrder());
         mVertexBuffer = byteBuf.asFloatBuffer();
@@ -150,9 +154,9 @@ public class SkyBox {
 
         // prepare shaders and OpenGL program
         int vertexShader = MyGLRenderer.loadShaderFromFile(
-                GLES20.GL_VERTEX_SHADER, "basic-gl2.vshader");
+                GLES20.GL_VERTEX_SHADER, "skybox-vshader.glsl");
         int fragmentShader = MyGLRenderer.loadShaderFromFile(
-                GLES20.GL_FRAGMENT_SHADER, "diffuse-gl2.fshader");
+                GLES20.GL_FRAGMENT_SHADER, "skybox-fshader.glsl");
 
         mProgram = GLES20.glCreateProgram();             // create empty OpenGL Program
         GLES20.glAttachShader(mProgram, vertexShader);   // add the vertex shader to program
@@ -200,9 +204,8 @@ public class SkyBox {
                 GLES20.GL_FLOAT, false,
                 VERTEX_STRIDE, mNormalBuffer);
 
-        // Draw the cube
+        // Draw the box
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertices.length / 3);
-//        GLES20.glDrawArrays(GLES20.GL_LINE_LOOP, 0, vertices.length / 3);
 
         GLES20.glDisableVertexAttribArray(mPositionHandle);
         GLES20.glDisableVertexAttribArray(mNormalHandle);
