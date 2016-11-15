@@ -115,21 +115,19 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // initialize rotation / translation matrix
         Matrix.setIdentityM(mViewRotationMatrix, 0);
         Matrix.setIdentityM(mViewTranslationMatrix, 0);
-        Matrix.translateM(mViewTranslationMatrix, 0, 0, 0, -20.3f);
+        Matrix.translateM(mViewTranslationMatrix, 0, 0, -4.0f, -22.0f);
 
         Matrix.setIdentityM(mCubeRotationMatrix, 0);
         Matrix.setIdentityM(mCubeTranslationMatrix, 0);
-        Matrix.translateM(mCubeTranslationMatrix, 0, 0, 3.0f, 2.0f);
+        Matrix.translateM(mCubeTranslationMatrix, 0, 3.0f, 3.0f, 2.0f);
 
         Matrix.setIdentityM(mMapRotationMatrix, 0);
         Matrix.setIdentityM(mMapTranslationMatrix, 0);
-        Matrix.translateM(mMapTranslationMatrix, 0,
-                -mapSizeX / 2.0f, mapSizeY / 2.0f - 3.0f, -mapSizeZ / 2.0f);
+        Matrix.translateM(mMapTranslationMatrix, 0, -10.0f, -5.0f, -10.0f);
 
         Matrix.setIdentityM(mSeaRotationMatrix, 0);
         Matrix.setIdentityM(mSeaTranslationMatrix, 0);
-        Matrix.translateM(mSeaTranslationMatrix, 0,
-                -mapSizeX / 2.0f, mapSizeY / 2.0f - 3.0f, -mapSizeZ / 2.0f);
+        Matrix.translateM(mSeaTranslationMatrix, 0, -10.0f, -5.0f, -10.0f);
 
         Matrix.setIdentityM(mSkyRotationMatrix, 0);
         Matrix.setIdentityM(mSkyTranslationMatrix, 0);
