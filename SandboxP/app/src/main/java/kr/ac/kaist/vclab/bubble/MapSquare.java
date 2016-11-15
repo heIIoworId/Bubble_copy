@@ -31,6 +31,7 @@ public class MapSquare {
     private int mColorHandle;
 
     private int mTextureHandle;
+    private int mTextureCoorHandle;
 
     private static final int COORDS_PER_VERTEX = 3;
     private static final int VERTEX_STRIDE = COORDS_PER_VERTEX * 4;
@@ -133,11 +134,11 @@ public class MapSquare {
         // attributes
         mPositionHandle = GLES20.glGetAttribLocation(mProgram, "aPosition");
         mNormalHandle = GLES20.glGetAttribLocation(mProgram, "aNormal");
-        mTextureHandle = GLES20.glGetAttribLocation(mProgram, "aTextureCoor");
+        mTextureCoorHandle = GLES20.glGetAttribLocation(mProgram, "aTextureCoor");
 
         GLES20.glEnableVertexAttribArray(mPositionHandle);
         GLES20.glEnableVertexAttribArray(mNormalHandle);
-        GLES20.glEnableVertexAttribArray(mTextureHandle);
+        GLES20.glEnableVertexAttribArray(mTextureCoorHandle);
 
         GLES20.glVertexAttribPointer(
                 mPositionHandle, COORDS_PER_VERTEX,
@@ -150,7 +151,7 @@ public class MapSquare {
                 VERTEX_STRIDE, mNormalBuffer);
 
         GLES20.glVertexAttribPointer(
-                mTextureHandle, COORDS_PER_VERTEX,
+                mTextureCoorHandle, COORDS_PER_VERTEX,
                 GLES20.GL_FLOAT, false,
                 VERTEX_STRIDE, mTextureCoorBuffer
         );
@@ -163,6 +164,6 @@ public class MapSquare {
 
         GLES20.glDisableVertexAttribArray(mPositionHandle);
         GLES20.glDisableVertexAttribArray(mNormalHandle);
-        GLES20.glDisableVertexAttribArray(mTextureHandle);
+        GLES20.glDisableVertexAttribArray(mTextureCoorHandle);
     }
 }
