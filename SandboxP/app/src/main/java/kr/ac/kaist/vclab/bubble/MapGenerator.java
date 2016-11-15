@@ -352,10 +352,110 @@ public class MapGenerator {
         }
     }
 
-    public float[] getTextures() {
+    public float[] getTextureCoors() {
+        List<float[]> buffer = new ArrayList<>();
+
         if (fill) {
-            // TODO : choose appropriate texture coordinates
-            return new float[]{};
+            for (int i = 0; i < dimX; i++) {
+                for (int j = 0; j < dimZ; j++) {
+                    // lower triangle
+                    buffer.add(new float[]{
+                            unit * i / sizeX, unit * j / sizeZ, 0,
+                            unit * i / sizeX, unit * (j + 1) / sizeZ, 0,
+                            unit * (i + 1) / sizeX, unit * (j + 1) / sizeZ, 0
+                    });
+
+                    // upper triangle
+                    buffer.add(new float[]{
+                            unit * i / sizeX, unit * j / sizeZ, 0,
+                            unit * (i + 1) / sizeX, unit * (j + 1) / sizeZ, 0,
+                            unit * (i + 1) / sizeX, unit * j / sizeZ, 0
+                    });
+                }
+            }
+
+            // bottom
+            buffer.add(new float[]{
+                    0, 0, 0,
+                    0, 0, 0,
+                    0, 0, 0
+            });
+
+            buffer.add(new float[]{
+                    0, 0, 0,
+                    0, 0, 0,
+                    0, 0, 0
+            });
+
+            // front
+            for (int i = 0; i < dimX; i++) {
+                // lower triangle
+                buffer.add(new float[]{
+                        0, 0, 0,
+                        0, 0, 0,
+                        0, 0, 0
+                });
+
+                // upper triangle
+                buffer.add(new float[]{
+                        0, 0, 0,
+                        0, 0, 0,
+                        0, 0, 0
+                });
+            }
+
+            // back
+            for (int i = 0; i < dimX; i++) {
+                // lower triangle
+                buffer.add(new float[]{
+                        0, 0, 0,
+                        0, 0, 0,
+                        0, 0, 0
+                });
+
+                // upper triangle
+                buffer.add(new float[]{
+                        0, 0, 0,
+                        0, 0, 0,
+                        0, 0, 0
+                });
+            }
+
+            // right
+            for (int j = 1; j <= dimZ; j++) {
+                // lower triangle
+                buffer.add(new float[]{
+                        0, 0, 0,
+                        0, 0, 0,
+                        0, 0, 0
+                });
+
+                // upper triangle
+                buffer.add(new float[]{
+                        0, 0, 0,
+                        0, 0, 0,
+                        0, 0, 0
+                });
+            }
+
+            // left
+            for (int j = 1; j <= dimZ; j++) {
+                // lower triangle
+                buffer.add(new float[]{
+                        0, 0, 0,
+                        0, 0, 0,
+                        0, 0, 0
+                });
+
+                // upper triangle
+                buffer.add(new float[]{
+                        0, 0, 0,
+                        0, 0, 0,
+                        0, 0, 0
+                });
+            }
+
+            return listToArray(buffer, 9);
         } else {
             return new float[]{};
         }

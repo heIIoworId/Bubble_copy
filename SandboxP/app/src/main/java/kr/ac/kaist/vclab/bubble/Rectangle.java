@@ -11,8 +11,8 @@ import java.nio.FloatBuffer;
  */
 
 public class Rectangle {
-    public static float sizeX = 15.0f;
-    public static float sizeZ = 15.0f;
+    public static float sizeX = 25.0f;
+    public static float sizeZ = 25.0f;
 
     private final int mProgram;
     private FloatBuffer mVertexBuffer;
