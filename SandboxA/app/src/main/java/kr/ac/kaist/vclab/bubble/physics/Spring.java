@@ -9,7 +9,9 @@ import kr.ac.kaist.vclab.bubble.utils.VecOperator;
 public class Spring {
     Particle particleA;
     Particle particleB;
-    float length = 2.0f; //DEFAULT SPRING LENGTH
+    float restLength = 1f; //DEFAULT SPRING LENGTH
+    float minLength = 0.5f;
+    float maxLength = 50.0f;
     float k = 0.00001f; // HOOKEAN COEFFICIENT
 
     public Spring(Particle _particleA, Particle _particleB){
@@ -22,24 +24,38 @@ public class Spring {
         float forceB[];
 
         float[] pointA = particleA.getLocation();
-//        System.out.println("pointA: " + pointA[0] + ", " + pointA[1] + ", " + pointA[2]);
         float[] pointB = particleB.getLocation();
-        float stretch = VecOperator.getDistance(pointA, pointB)-length;
+        float springLength = VecOperator.getDistance(pointA, pointB);
 
-        forceA = VecOperator.sub(pointA, pointB);
-        System.out.println("forceA: " + forceA[0] + ", " + forceA[1] + ", " + forceA[2]);
+        if(springLength < minLength){
+            springLength = minLength;
+            float zeroVelocity[] = {0f,0f,0f};
+            particleA.setVelocity(zeroVelocity);
+            particleB.setVelocity(zeroVelocity);
 
-        forceA = VecOperator.normalize(forceA);
-        forceA = VecOperator.scale(forceA, k*(-1));
-        forceA = VecOperator.scale(forceA, stretch);
+        } else if(springLength > maxLength){
+            springLength = maxLength;
+            float zeroVelocity[] = {0f,0f,0f};
+            particleA.setVelocity(zeroVelocity);
+            particleB.setVelocity(zeroVelocity);
+        } else {
+            float stretch = springLength- restLength;
 
-        forceB = VecOperator.sub(pointB, pointA);
-        forceB = VecOperator.normalize(forceB);
-        forceB = VecOperator.scale(forceB, k*(-1));
-        forceB = VecOperator.scale(forceB, stretch);
+            forceA = VecOperator.sub(pointA, pointB);
+            System.out.println("forceA: " + forceA[0] + ", " + forceA[1] + ", " + forceA[2]);
 
-        particleA.applyForce(forceA);
-        particleB.applyForce(forceB);
+            forceA = VecOperator.normalize(forceA);
+            forceA = VecOperator.scale(forceA, k*(-1));
+            forceA = VecOperator.scale(forceA, stretch);
+
+            forceB = VecOperator.sub(pointB, pointA);
+            forceB = VecOperator.normalize(forceB);
+            forceB = VecOperator.scale(forceB, k*(-1));
+            forceB = VecOperator.scale(forceB, stretch);
+
+            particleA.applyForce(forceA);
+            particleB.applyForce(forceB);
+        }
     }
 
     public boolean isColocated(float[] locationA, float[] locationB) {
@@ -50,6 +66,14 @@ public class Spring {
                 result = true;
             }
         return result;
+    }
+
+    public float getSpringLength(){
+        float length;
+        float[] pointA = particleA.getLocation();
+        float[] pointB = particleB.getLocation();
+        length = VecOperator.getDistance(pointA, pointB);
+        return length;
     }
 
     public Particle getParticleA(){

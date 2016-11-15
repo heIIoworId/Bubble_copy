@@ -1,5 +1,7 @@
 package kr.ac.kaist.vclab.bubble.physics;
 
+import kr.ac.kaist.vclab.bubble.utils.VecOperator;
+
 /**
  * Created by 84395 on 10/29/2016.
  */
@@ -11,6 +13,7 @@ public class Particle {
     private float location[];
     private float velocity[];
     private float acceleration[];
+    private float damping;
 
     public Particle(float x, float y, float z){
         mass = 1.0f;
@@ -20,6 +23,7 @@ public class Particle {
         location[2] = z;
         velocity = new float[3];
         acceleration = new float[3];
+        damping = 1f;
     }
 
     public Particle(float[] _location){
@@ -27,24 +31,37 @@ public class Particle {
         location = _location;
         velocity = new float[3];
         acceleration = new float[3];
+        damping = 1f;
     }
 
     public void applyForce(float[] force){
-        acceleration[0] = force[0]/mass;
-        acceleration[1] = force[1]/mass;
-        acceleration[2] = force[2]/mass;
+//        acceleration[0] = force[0]/mass;
+//        acceleration[1] = force[1]/mass;
+//        acceleration[2] = force[2]/mass;
+//
+//        velocity[0] += acceleration[0];
+//        velocity[1] += acceleration[1];
+//        velocity[2] += acceleration[2];
 
-        velocity[0] += acceleration[0];
-        velocity[1] += acceleration[1];
-        velocity[2] += acceleration[2];
+//        location[0] += velocity[0];
+//        location[1] += velocity[1];
+//        location[2] += velocity[2];
 
-        location[0] += velocity[0];
-        location[1] += velocity[1];
-        location[2] += velocity[2];
+        float reverseMass = 1.0f/mass;
+        acceleration = VecOperator.scale(force, reverseMass);
+        velocity = VecOperator.add(velocity, acceleration);
+        // FIXME IT MALFUNCTION!!!
+//        velocity = VecOperator.scale(velocity, damping);
+        location = VecOperator.add(location, velocity);
+        acceleration = VecOperator.scale(acceleration, 0f);
     }
 
     public float[] getLocation(){
         return location;
+    }
+
+    public void setDamping(float _damping){
+        damping = _damping;
     }
 
     public boolean isColocated(float[] _location) {
@@ -53,5 +70,9 @@ public class Particle {
             result = true;
         }
         return result;
+    }
+
+    public void setVelocity(float[] _velocity){
+        velocity = _velocity;
     }
 }
