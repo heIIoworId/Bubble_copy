@@ -24,10 +24,20 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     // background color
     private float[] bgColor = new float[]{0.7f, 0.8f, 0.9f, 1.0f};
 
+    // presets
+    private float mapSizeX = 20.0f;
+    private float mapSizeY = 3.0f;
+    private float mapSizeZ = 20.0f;
+    private float mapUnitLength = 0.3f;
+    private float mapMaxHeight = 11.0f;
+    private float mapMinHeight = -2.0f;
+    private float mapComplexity = 3.0f;
+
     // objects
     private Cube mCube;
     private MapSquare mMap;
     private SeaRectangle mSea;
+    private SkyBox mSky;
 
     // view matrix
     private float[] mViewMatrix = new float[16];
@@ -37,12 +47,14 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     public float[] mCubeRotationMatrix = new float[16];
     public float[] mMapRotationMatrix = new float[16];
     public float[] mSeaRotationMatrix = new float[16];
+    public float[] mSkyRotationMatrix = new float[16];
 
     // translation matrix (changed by touch events)
     public float[] mViewTranslationMatrix = new float[16];
     public float[] mCubeTranslationMatrix = new float[16];
     public float[] mMapTranslationMatrix = new float[16];
     public float[] mSeaTranslationMatrix = new float[16];
+    public float[] mSkyTranslationMatrix = new float[16];
 
     // projection matrix
     private float[] mProjMatrix = new float[16];
@@ -51,16 +63,19 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private float[] mCubeModelMatrix = new float[16];
     private float[] mMapModelMatrix = new float[16];
     private float[] mSeaModelMatrix = new float[16];
+    private float[] mSkyModelMatrix = new float[16];
 
     // model-view matrix
     private float[] mCubeModelViewMatrix = new float[16];
     private float[] mMapModelViewMatrix = new float[16];
     private float[] mSeaModelViewMatrix = new float[16];
+    private float[] mSkyModelViewMatrix = new float[16];
 
     // normal matrix
     private float[] mCubeNormalMatrix = new float[16];
     private float[] mMapNormalMatrix = new float[16];
     private float[] mSeaNormalMatrix = new float[16];
+    private float[] mSkyNormalMatrix = new float[16];
 
     // temporary matrix for calculation
     private float[] mTempMatrix = new float[16];
@@ -82,8 +97,18 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         // objects
         mCube = new Cube();
-        mMap = new MapSquare();
-        mSea = new SeaRectangle();
+
+        mMap = new MapSquare(
+                mapSizeX, mapSizeY, mapSizeZ,
+                mapUnitLength,
+                mapMaxHeight, mapMinHeight,
+                mapComplexity,
+                1.0f, true
+        );
+
+        mSea = new SeaRectangle(
+                mapSizeX, mapSizeZ
+        );
 
         // initialize rotation / translation matrix
         Matrix.setIdentityM(mViewRotationMatrix, 0);
@@ -139,7 +164,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         Matrix.translateM(
                 mMapModelMatrix, 0,
-                -mMap.sizeX / 2.0f, mMap.sizeY / 2.0f - 3.0f, -mMap.sizeZ / 2.0f
+                -mapSizeX / 2.0f, mapSizeY / 2.0f - 3.0f, -mapSizeZ / 2.0f
         );
 
         // calculate rec model matrix
@@ -153,7 +178,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         Matrix.translateM(
                 mSeaModelMatrix, 0,
-                -mSea.sizeX / 2.0f, mMap.sizeY / 2.0f - 3.4f, -mSea.sizeZ / 2.0f
+                -mapSizeX / 2.0f, mapSizeY / 2.0f - 3.4f, -mapSizeZ / 2.0f
         );
 
         // calculate model-view matrix

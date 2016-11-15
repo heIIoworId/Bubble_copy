@@ -11,9 +11,6 @@ import java.nio.FloatBuffer;
  */
 
 public class SeaRectangle {
-    public static float sizeX = 25.0f;
-    public static float sizeZ = 25.0f;
-
     private final int mProgram;
     private FloatBuffer mVertexBuffer;
     private FloatBuffer mNormalBuffer;
@@ -34,28 +31,32 @@ public class SeaRectangle {
     private static final int COORDS_PER_VERTEX = 3;
     private static final int VERTEX_STRIDE = COORDS_PER_VERTEX * 4;
 
-    private static float vertices[] = {
-            0.0f, 0.0f, 0.0f,
-            0.0f, 0.0f, sizeZ,
-            sizeX, 0.0f, sizeZ,
-            0.0f, 0.0f, 0.0f,
-            sizeX, 0.0f, sizeZ,
-            sizeX, 0.0f, 0.0f
-    };
+    private static float[] vertices;
 
-    private static float normals[] = {
-            0.0f, 1.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,
-            0.0f, 1.0f, 0.0f
-    };
+    private static float[] normals;
 
-    float color[] = {0.0f, 0.0f, 1.0f};
+    float[] color = {0.0f, 0.0f, 1.0f};
 
 
-    public SeaRectangle() {
+    public SeaRectangle(float sizeX, float sizeZ) {
+        vertices = new float[]{
+                0.0f, 0.0f, 0.0f,
+                0.0f, 0.0f, sizeZ,
+                sizeX, 0.0f, sizeZ,
+                0.0f, 0.0f, 0.0f,
+                sizeX, 0.0f, sizeZ,
+                sizeX, 0.0f, 0.0f
+        };
+
+        normals = new float[]{
+                0.0f, 1.0f, 0.0f,
+                0.0f, 1.0f, 0.0f,
+                0.0f, 1.0f, 0.0f,
+                0.0f, 1.0f, 0.0f,
+                0.0f, 1.0f, 0.0f,
+                0.0f, 1.0f, 0.0f
+        };
+
         ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
         byteBuf.order(ByteOrder.nativeOrder());
         mVertexBuffer = byteBuf.asFloatBuffer();

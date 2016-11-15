@@ -1,6 +1,5 @@
 package kr.ac.kaist.vclab.bubble;
 
-import android.graphics.Bitmap;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 
@@ -17,9 +16,6 @@ public class MapSquare {
     private FloatBuffer mVertexBuffer;
     private FloatBuffer mNormalBuffer;
     private FloatBuffer mTextureCoorBuffer;
-
-    // bitmap (for texture)
-    private Bitmap bitmap;
 
     // attribute handles
     private int mPositionHandle;
@@ -39,29 +35,36 @@ public class MapSquare {
     private static final int COORDS_PER_VERTEX = 3;
     private static final int VERTEX_STRIDE = COORDS_PER_VERTEX * 4;
 
-    private static MapGenerator mGenerator = new MapGenerator(
-            25.0f, 3.0f, 25.0f, // size
-            0.3f, // unit length
-            11.0f, // max height
-            -2.0f, // min height
-            3.0f, // complexity
-            1.0f, // normalRate
-            true // fill or not
-    );
+    private static MapGenerator mGenerator; // map generator instance
 
-    private static float[] vertices = mGenerator.getVertices();
-    private static float[] normals = mGenerator.getNormals();
-    private static float[] textureCoors = mGenerator.getTextureCoors();
-    private static int mode = mGenerator.getMode();
-
-    public float sizeX = mGenerator.sizeX;
-    public float sizeY = mGenerator.sizeY;
-    public float sizeZ = mGenerator.sizeZ;
+    private static float[] vertices;
+    private static float[] normals;
+    private static float[] textureCoors;
+    private static int mode;
 
     float color[] = {0.33f, 0.42f, 0.18f};
 
-    public MapSquare(Bitmap bitmap) {
-        assert vertices.length == textureCoors.length;
+    public MapSquare(float sizeX, float sizeY, float sizeZ, // map size
+                     float unit, // dist. between points (=> resolution)
+                     float maxHeight, // max height
+                     float minHeight, // min height
+                     float complexity, // complexity
+                     float normalRate, // normal adjustment
+                     boolean fill) { // false if you want to see the skeleton only
+        mGenerator = new MapGenerator(
+                sizeX, sizeY, sizeZ,
+                unit,
+                maxHeight,
+                minHeight,
+                complexity,
+                normalRate,
+                fill
+        );
+
+        vertices = mGenerator.getVertices();
+        normals = mGenerator.getNormals();
+        textureCoors = mGenerator.getTextureCoors();
+        mode = mGenerator.getMode();
 
         ByteBuffer byteBuf1 = ByteBuffer.allocateDirect(vertices.length * 4);
         byteBuf1.order(ByteOrder.nativeOrder());
@@ -80,7 +83,6 @@ public class MapSquare {
         mTextureCoorBuffer = byteBuf3.asFloatBuffer();
         mTextureCoorBuffer.put(textureCoors);
         mTextureCoorBuffer.position(0);
-
 
         // prepare shaders and OpenGL program
         int vertexShader = MyGLRenderer.loadShaderFromFile(
@@ -102,11 +104,6 @@ public class MapSquare {
         GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, MyGLRenderer.loadImage("terrain.jpg"), 0);
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
-    }
-
-    /* Constructor without texture. */
-    public MapSquare() {
-        this(null);
     }
 
     public void draw(float[] projMatrix,
