@@ -91,8 +91,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
         // background frame color
         GLES20.glClearColor(bgColor[0], bgColor[1], bgColor[2], bgColor[3]);
-        GLES20.glEnable(GLES20.GL_CULL_FACE);
-        GLES20.glEnable(GLES20.GL_DEPTH_TEST);
 
         // lights
         mLight = new float[]{5.0f, 10.0f, 6.0f};
@@ -200,10 +198,20 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         normalMatrix(mSkyNormalMatrix, 0, mSkyModelViewMatrix, 0);
 
         // draw the objects
+        GLES20.glEnable(GLES20.GL_CULL_FACE);
+        GLES20.glEnable(GLES20.GL_DEPTH_TEST);
         mCube.draw(mProjMatrix, mCubeModelViewMatrix, mCubeNormalMatrix, mLight, mLight2);
         mMap.draw(mProjMatrix, mMapModelViewMatrix, mMapNormalMatrix, mLight, mLight2);
-        mSea.draw(mProjMatrix, mSeaModelViewMatrix, mSeaNormalMatrix, mLight, mLight2);
         mSky.draw(mProjMatrix, mSkyModelViewMatrix, mSkyNormalMatrix, mLight, mLight2);
+        mSea.draw(mProjMatrix, mSeaModelViewMatrix, mSeaNormalMatrix, mLight, mLight2);
+        GLES20.glDisable(GLES20.GL_CULL_FACE);
+        GLES20.glDisable(GLES20.GL_DEPTH_TEST);
+
+        // GLES20.glEnable(GLES20.GL_BLEND);
+        // GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_COLOR);
+        // mSea.draw(mProjMatrix, mSeaModelViewMatrix, mSeaNormalMatrix, mLight, mLight2);
+        // GLES20.glBlendFunc(GLES20.GL_ONE, GLES20.GL_ZERO);
+        // GLES20.glDisable(GLES20.GL_BLEND);
     }
 
     @Override
