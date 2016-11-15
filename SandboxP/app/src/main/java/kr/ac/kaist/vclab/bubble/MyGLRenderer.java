@@ -76,9 +76,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         GLES20.glEnable(GLES20.GL_CULL_FACE);
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
 
-        // (re)set view matrix
-        resetViewMatrix();
-
         // lights
         mLight = new float[]{5.0f, 10.0f, 6.0f};
         mLight2 = new float[]{-4.0f, 7.0f, 8.0f};
@@ -91,7 +88,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // initialize rotation / translation matrix
         Matrix.setIdentityM(mViewRotationMatrix, 0);
         Matrix.setIdentityM(mViewTranslationMatrix, 0);
-        Matrix.translateM(mViewTranslationMatrix, 0, 0, 0, -12.3f);
+        Matrix.translateM(mViewTranslationMatrix, 0, 0, 0, -20.3f);
 
         Matrix.setIdentityM(mCubeRotationMatrix, 0);
         Matrix.setIdentityM(mCubeTranslationMatrix, 0);
@@ -187,7 +184,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                 mProjMatrix, 0,
                 -ratio, ratio, // left, right
                 -1.0f, 1.0f, // bottom, top
-                1.0f, 20.0f // near, far
+                1.0f, 30.0f // near, far
         );
     }
 
@@ -207,7 +204,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private void resetViewMatrix() {
         Matrix.setLookAtM(
                 mViewMatrix, 0,
-                0.0f, -2.0f, -1.0f, // eye position
+                0.0f, -2.0f, -5.0f, // eye position
                 0.0f, 0.0f, -1.0f, // looking direction
                 0.0f, 1.0f, 0.0f // up vector
         );
