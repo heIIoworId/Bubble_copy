@@ -457,7 +457,37 @@ public class MapGenerator {
 
             return listToArray(buffer, 9);
         } else {
-            return new float[]{};
+            // top
+            for (int i = 0; i <= dimX; i++) {
+                for (int j = 0; j <= dimZ; j++) {
+                    // rows
+                    if (i != dimX) {
+                        buffer.add(new float[]{0, 0, 0, 0, 0, 0});
+                    }
+
+                    // columns
+                    if (j != dimZ) {
+                        buffer.add(new float[]{0, 0, 0, 0, 0, 0});
+                    }
+
+                    // diagonals
+                    if ((i != dimX) && (j != dimZ)) {
+                        buffer.add(new float[]{0, 0, 0, 0, 0, 0});
+                    }
+                }
+            }
+
+            // bottom
+            for (int i = 0; i < 4; i++) {
+                buffer.add(new float[]{0, 0, 0, 0, 0, 0});
+            }
+
+            // sides
+            for (int i = 0; i < 4; i++) {
+                buffer.add(new float[]{0, 0, 0, 0, 0, 0});
+            }
+
+            return listToArray(buffer, 6);
         }
     }
 
