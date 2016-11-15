@@ -42,9 +42,9 @@ public class MapSquare {
     private static MapGenerator mGenerator = new MapGenerator(
             25.0f, 3.0f, 25.0f, // size
             0.3f, // unit length
-            12.0f, // max height
+            11.0f, // max height
             -2.0f, // min height
-            3.3f, // complexity
+            3.0f, // complexity
             1.0f, // normalRate
             true // fill or not
     );
