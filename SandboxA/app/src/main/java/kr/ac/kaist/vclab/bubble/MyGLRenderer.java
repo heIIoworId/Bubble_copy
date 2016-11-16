@@ -49,8 +49,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private ArrayList<Spring> mSprings;
     private Blower mBlower;
     private Particle mBubbleCore;
-    // FIXME soundHandler COMMENTED OUT
-//    private SoundHandler soundHandler;
 
     //DECLARE LIGHTS
     private float[] mLight = new float[3];
@@ -95,11 +93,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     // CALLED WHEN SURFACE IS CREATED AT FIRST.
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
 
-        //FIXME soundHandler COMMENTED OUT
-        //INITIALIZE AND START SOUND HANDLER
-//        soundHandler = new SoundHandler();
-//        soundHandler.start();
-
         // Set the background frame color
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         GLES20.glEnable(GLES20.GL_CULL_FACE);
@@ -123,17 +116,17 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mParticles = GeomOperator.genParticles(mBubble.getVertices());
         mSprings = GeomOperator.genSprings(mParticles);
         mBubbleCore = new Particle(new float[]{0f, 0f, 0f});
-        // FIXME BLOWER COMMENTED OUT
-        mBlower = new Blower();
-        mBlower.setBubbleCore(mBubbleCore);
+        // FIXME BLOWER OUT
+//        mBlower = new Blower();
+//        mBlower.setBubbleCore(mBubbleCore);
 
 
         mWorld = new World();
         mWorld.setParticles(mParticles);
         mWorld.setSprings(mSprings);
         mWorld.setBubbleCore(mBubbleCore);
-        // FIXME BLOWER COMMENTED OUT
-        mWorld.setBlower(mBlower);
+        // FIXME BLOWER OUT
+//        mWorld.setBlower(mBlower);
 
         // INIT LIGHTS
         mLight = new float[] {2.0f, 3.0f, 14.0f};
@@ -242,14 +235,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mBlower.setBlowingDir(mViewRotationMatrix);
         mWorld.applyForce();
         float updatedVertices[] = GeomOperator.genVertices(mWorld.getParticles());
-
-        // FIXME SoundHandler COMMENTED OUT
-        // Move bubble according to soundHandler
-//        int vol = (int) soundHandler.getAmplitude();
-//        System.out.println("vol: " + vol);
-//        float goUp = ((float)vol)/200000f;
-//        System.out.println("vol/100000: " + goUp);
-//        Matrix.translateM(mCubeTranslationMatrix, 0, 0, goUp, 0);
 
         // UPDATE VERTICES OF SPHERE
 //        mSphere.setVertices(updatedVertices);

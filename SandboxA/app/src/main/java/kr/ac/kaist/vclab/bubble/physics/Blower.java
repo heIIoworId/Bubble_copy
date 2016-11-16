@@ -3,8 +3,6 @@ package kr.ac.kaist.vclab.bubble.physics;
 import android.opengl.Matrix;
 
 import kr.ac.kaist.vclab.bubble.events.SoundHandler;
-import kr.ac.kaist.vclab.bubble.utils.GLHelper;
-import kr.ac.kaist.vclab.bubble.utils.SystemHelper;
 import kr.ac.kaist.vclab.bubble.utils.VecOperator;
 
 /**
@@ -40,7 +38,7 @@ public class Blower {
     }
 
     public void applyForce(){
-        float amplitude = (float) (soundHandler.getAmplitude()/400000f);
+        float amplitude = (float) (soundHandler.getAmplitude()/4000000f);
         float blowForce[] = VecOperator.scale(blowingDir, amplitude);
         bubbleCore.applyForce(blowForce);
     }

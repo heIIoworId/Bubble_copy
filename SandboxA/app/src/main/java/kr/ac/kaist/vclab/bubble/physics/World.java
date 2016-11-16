@@ -12,7 +12,7 @@ import kr.ac.kaist.vclab.bubble.utils.SystemHelper;
 // A fundamental class to apply forces to particle.
 public class World {
 
-    private float gravity[] = {0f, -0.0003f, 0f};
+    private float gravity[] = {0f, -0.0005f, 0f};
     private float damping1 = 1.0f;
     private float damping2 = 0.9f;
 
@@ -38,10 +38,9 @@ public class World {
         for (int i=0; i<springs.size(); i++){
             springs.get(i).applyForce();
         }
-        // FIXME TEMP GRAVITY OUT
-//        bubbleCore.applyForce(gravity);
-        // FIXME BLOWER COMMENTED OUT
-        blower.applyForce();
+        bubbleCore.applyForce(gravity);
+        // FIXME BLOWER OUT
+//        blower.applyForce();
     }
 
     public ArrayList<Particle> getParticles(){

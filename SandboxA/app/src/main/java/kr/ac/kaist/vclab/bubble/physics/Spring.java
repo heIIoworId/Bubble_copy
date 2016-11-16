@@ -27,7 +27,6 @@ public class Spring {
         float[] pointB = particleB.getLocation();
         float springLength = VecOperator.getDistance(pointA, pointB);
 
-        // FIXME NOT WORKING
         if(springLength < minLength){
             springLength = minLength;
             float zeroVelocity[] = {0f,0f,0f};
