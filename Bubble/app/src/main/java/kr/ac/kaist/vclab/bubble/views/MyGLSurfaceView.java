@@ -40,7 +40,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     }
 
-    public MyGLRenderer getmRenderer(){
+    public MyGLRenderer getmRenderer() {
         return mRenderer;
     }
 
@@ -77,7 +77,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
                         System.arraycopy(temp2, 0, mRenderer.mViewRotationMatrix, 0, 16);
                     } else if (count == 2) {
                         // Translate world
-                        Matrix.translateM(mRenderer.mViewTranslationMatrix, 0, dx/ 100, -dy / 100, 0);
+                        Matrix.translateM(mRenderer.mViewTranslationMatrix, 0, dx / 100, -dy / 100, 0);
                     }
                     break;
                 case 1:
@@ -90,10 +90,10 @@ public class MyGLSurfaceView extends GLSurfaceView {
                         Matrix.multiplyMM(temp2, 0, rot, 0, mRenderer.mCubeRotationMatrix, 0);
 
                         float[] temp = new float[16];
-                        Matrix.multiplyMM(temp, 0 , mRenderer.mCubeTranslationMatrix, 0, temp2,0);
+                        Matrix.multiplyMM(temp, 0, mRenderer.mCubeTranslationMatrix, 0, temp2, 0);
                         mRenderer.mCube.getCollision().move(temp);
-                        if(Intersect.intersect(mRenderer.mSphere.getCollision(),mRenderer.mCube.getCollision())){
-                            System.out.println("Collllllll!!!!!!!!!");
+                        if (Intersect.intersect(mRenderer.mSphere.getCollision(), mRenderer.mCube.getCollision())) {
+                            // System.out.println("Collllllll!!!!!!!!!");
                             break;
                         }
                         System.arraycopy(temp2, 0, mRenderer.mCubeRotationMatrix, 0, 16);
@@ -103,13 +103,13 @@ public class MyGLSurfaceView extends GLSurfaceView {
                         BoxCollision b = mRenderer.mCube.getCollision();
 
 
-                        Matrix.translateM(mRenderer.mCubeTranslationMatrix, 0, dx/ 100, -dy / 100, 0);
+                        Matrix.translateM(mRenderer.mCubeTranslationMatrix, 0, dx / 100, -dy / 100, 0);
                         float[] temp = new float[16];
-                        Matrix.multiplyMM(temp, 0 , mRenderer.mCubeTranslationMatrix, 0, mRenderer.mCubeRotationMatrix,0);
+                        Matrix.multiplyMM(temp, 0, mRenderer.mCubeTranslationMatrix, 0, mRenderer.mCubeRotationMatrix, 0);
                         mRenderer.mCube.getCollision().move(temp);
-                        if(Intersect.intersect(mRenderer.mSphere.getCollision(),mRenderer.mCube.getCollision())){
-                            System.out.println("Collllllll!!!!!!!!!");
-                            Matrix.translateM(mRenderer.mCubeTranslationMatrix, 0, -dx/ 100, dy / 100, 0);
+                        if (Intersect.intersect(mRenderer.mSphere.getCollision(), mRenderer.mCube.getCollision())) {
+                            // System.out.println("Collllllll!!!!!!!!!");
+                            Matrix.translateM(mRenderer.mCubeTranslationMatrix, 0, -dx / 100, dy / 100, 0);
                             break;
                         }
 
@@ -139,18 +139,18 @@ public class MyGLSurfaceView extends GLSurfaceView {
         return true;
     }
 
-    public void rotateByGyroSensor(float gyroX, float gyroY, float gyroZ){
+    public void rotateByGyroSensor(float gyroX, float gyroY, float gyroZ) {
 
-        float [] rotate = new float[16];
+        float[] rotate = new float[16];
         Matrix.setIdentityM(rotate, 0);
 
-        Matrix.rotateM(rotate, 0, -gyroX , 1 , 0 ,0);
-        Matrix.rotateM(rotate, 0, -gyroY, 0, 1 ,0);
-        Matrix.rotateM(rotate, 0, -gyroZ, 0, 0 ,1);
+        Matrix.rotateM(rotate, 0, -gyroX, 1, 0, 0);
+        Matrix.rotateM(rotate, 0, -gyroY, 0, 1, 0);
+        Matrix.rotateM(rotate, 0, -gyroZ, 0, 0, 1);
 
         //mRenderer.mViewTranslationMatrix = Util.transformUsingAuxiliary(mRenderer.mViewRotationMatrix, mRenderer.mViewTranslationMatrix, rotate);
 
-        Matrix.multiplyMM(mRenderer.mViewRotationMatrix, 0 , rotate, 0,  mRenderer.mViewRotationMatrix, 0);
+        Matrix.multiplyMM(mRenderer.mViewRotationMatrix, 0, rotate, 0, mRenderer.mViewRotationMatrix, 0);
         requestRender();
     }
 }

@@ -11,8 +11,10 @@ import java.io.IOException;
 public class SoundHandler {
     private MediaRecorder mRecorder = null;
 
-    public SoundHandler(){
-    };
+    public SoundHandler() {
+    }
+
+    ;
 
     public void start() {
         if (mRecorder == null) {
@@ -40,7 +42,7 @@ public class SoundHandler {
 
     public double getAmplitude() {
         if (mRecorder != null)
-            return  mRecorder.getMaxAmplitude();
+            return mRecorder.getMaxAmplitude();
         else
             return 0;
 

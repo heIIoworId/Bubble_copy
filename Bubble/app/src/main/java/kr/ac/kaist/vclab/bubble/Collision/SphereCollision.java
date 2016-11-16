@@ -7,39 +7,39 @@ package kr.ac.kaist.vclab.bubble.Collision;
 public class SphereCollision extends Collision {
     private float radius;
 
-    public SphereCollision(float radius){
-        originalCenter = new float[]{0,0,0,1};
-        center = new float[]{0,0,0,1};
+    public SphereCollision(float radius) {
+        originalCenter = new float[]{0, 0, 0, 1};
+        center = new float[]{0, 0, 0, 1};
 
         this.radius = radius;
         //this.originalCenter = pos;
     }
 
-    public SphereCollision(float[] pos, float radius){
+    public SphereCollision(float[] pos, float radius) {
         originalCenter = pos;
         center = pos;
 
         this.radius = radius;
     }
 
-    public float GetRadius(){
+    public float GetRadius() {
         return radius;
     }
 
-    public void scaleRadius(float scale){
-        if(scale > 0) {
+    public void scaleRadius(float scale) {
+        if (scale > 0) {
             radius *= scale;
         }
-        System.out.println(radius + " scale");
+
+        // System.out.println(radius + " scale");
     }
 
-    boolean IsCollided(BoxCollision target){
+    boolean IsCollided(BoxCollision target) {
         return Intersect.intersect(this, target);
     }
 
 
-
-    boolean IsCollided(SphereCollision target){
+    boolean IsCollided(SphereCollision target) {
         return Intersect.intersect(this, target);
     }
 }

@@ -12,7 +12,7 @@ public class Particle {
     private float velocity[];
     private float acceleration[];
 
-    public Particle(float x, float y, float z){
+    public Particle(float x, float y, float z) {
         mass = 1.0f;
         location = new float[3];
         location[0] = x;
@@ -22,17 +22,17 @@ public class Particle {
         acceleration = new float[3];
     }
 
-    public Particle(float[] _location){
+    public Particle(float[] _location) {
         mass = 1.0f;
         location = _location;
         velocity = new float[3];
         acceleration = new float[3];
     }
 
-    public void applyForce(float[] force){
-        acceleration[0] = force[0]/mass;
-        acceleration[1] = force[1]/mass;
-        acceleration[2] = force[2]/mass;
+    public void applyForce(float[] force) {
+        acceleration[0] = force[0] / mass;
+        acceleration[1] = force[1] / mass;
+        acceleration[2] = force[2] / mass;
 
         velocity[0] += acceleration[0];
         velocity[1] += acceleration[1];
@@ -43,13 +43,13 @@ public class Particle {
         location[2] += velocity[2];
     }
 
-    public float[] getLocation(){
+    public float[] getLocation() {
         return location;
     }
 
     public boolean isColocated(float[] _location) {
         boolean result = false;
-        if(location[0]==_location[0] && location[1]==_location[1] && location[2]==_location[2]){
+        if (location[0] == _location[0] && location[1] == _location[1] && location[2] == _location[2]) {
             result = true;
         }
         return result;

@@ -1,4 +1,4 @@
-package kr.ac.kaist.vclab.bubble.utils;
+package kr.ac.kaist.vclab.bubble;
 
 /**
  * Created by avantgarde on 2016-11-02.

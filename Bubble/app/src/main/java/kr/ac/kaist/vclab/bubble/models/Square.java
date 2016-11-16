@@ -53,7 +53,7 @@ public class Square {
             0.0f, 0.0f, 1.0f,
     };
 
-    public float color[] = { 1f, 1f, 1f };
+    public float color[] = {1f, 1f, 1f};
 
 
     public Square() {
