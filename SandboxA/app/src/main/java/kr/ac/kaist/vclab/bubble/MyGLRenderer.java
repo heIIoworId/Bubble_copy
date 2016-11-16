@@ -81,7 +81,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     // CALLED WHEN SURFACE IS CREATED AT FIRST.
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
 
-        //FIXME DISABLE THIS WHEN TRYING TO RUN ON DESKTOP.
+        //FIXME DISABLE THIS WHEN TRYING TO RUN ON DESKTOP
+        //INITIALIZE AND START SOUND HANDLER
 //        soundHandler = new SoundHandler();
 //        soundHandler.start();
 
@@ -149,15 +150,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     @Override
     //Called at every frame.
     public void onDrawFrame(GL10 unused) {
-
-        // Move bubble according to soundHandler
-        // FIXME WHEN SOUND HANDLER IS ACTIVATED
-//        int vol = (int) soundHandler.getAmplitude();
-//        System.out.println("vol: " + vol);
-//        float goUp = ((float)vol)/200000f;
-//        System.out.println("vol/100000: " + goUp);
-//        Matrix.translateM(mCubeTranslationMatrix, 0, 0, goUp, 0);
-
         // Draw background color
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
@@ -203,10 +195,23 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         normalMatrix(mSquareNormalMatrix, 0, mSquareModelViewMatrix, 0);
 
         //UPDATE WORLD AND VERTICES OF SPHERE
-        mWorld.update();
+        mWorld.applyForce();
         float updatedVertices[] = GeomOperator.genVertices(mWorld.getParticles());
-        System.out.println("updated vertices: "+updatedVertices[11]);
+
+
+        // FIXME WHEN SOUND HANDLER IS ACTIVATED
+        // Move bubble according to soundHandler
+//        int vol = (int) soundHandler.getAmplitude();
+//        System.out.println("vol: " + vol);
+//        float goUp = ((float)vol)/200000f;
+//        System.out.println("vol/100000: " + goUp);
+//        Matrix.translateM(mCubeTranslationMatrix, 0, 0, goUp, 0);
+
+        // UPDATE VERTICES OF SPHERE
         mSphere.setVertices(updatedVertices);
+        // FIXME LOG
+        System.out.println("updated vertices: " +
+                updatedVertices[0] + ", " + updatedVertices[1] + ", " + updatedVertices[2]);
 //        mCube.setVertices(updatedVertices);
         //FIXME UPDATE NORMALS OF SPHERE
 

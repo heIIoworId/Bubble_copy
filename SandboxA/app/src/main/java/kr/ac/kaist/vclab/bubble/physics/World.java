@@ -9,10 +9,9 @@ import java.util.ArrayList;
 
 // A fundamental class to apply forces to particle.
 public class World {
-    //FIXME to be implemented
+    //FIXME IMPLEMENTING GRAVITY FORCE APPLICATION
     private float gravity[] = {0f, -0.1f, 0f};
-    private float dragCoeff = 0.1f;
-    private float damping = 0.95f;
+    private float damping = 1.0f;
 
     ArrayList<Particle> particles;
     ArrayList<Spring> springs;
@@ -22,7 +21,7 @@ public class World {
         springs = new ArrayList<Spring>();
     }
 
-    public void update(){
+    public void applyForce(){
         //FIXME dragging force and gravity should be included.
 
 //        for(int i=0; i<particles.size(); i++){

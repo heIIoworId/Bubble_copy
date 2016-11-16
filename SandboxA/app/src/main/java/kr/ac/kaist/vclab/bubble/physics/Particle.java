@@ -35,23 +35,9 @@ public class Particle {
     }
 
     public void applyForce(float[] force){
-//        acceleration[0] = force[0]/mass;
-//        acceleration[1] = force[1]/mass;
-//        acceleration[2] = force[2]/mass;
-//
-//        velocity[0] += acceleration[0];
-//        velocity[1] += acceleration[1];
-//        velocity[2] += acceleration[2];
-
-//        location[0] += velocity[0];
-//        location[1] += velocity[1];
-//        location[2] += velocity[2];
-
-        float reverseMass = 1.0f/mass;
-        acceleration = VecOperator.scale(force, reverseMass);
+        acceleration = VecOperator.scale(force, 1.0f/mass);
         velocity = VecOperator.add(velocity, acceleration);
-        // FIXME IT MALFUNCTION!!!
-//        velocity = VecOperator.scale(velocity, damping);
+        velocity = VecOperator.scale(velocity, damping);
         location = VecOperator.add(location, velocity);
         acceleration = VecOperator.scale(acceleration, 0f);
     }
