@@ -9,10 +9,10 @@ import kr.ac.kaist.vclab.bubble.utils.VecOperator;
 public class Spring {
     Particle particleA;
     Particle particleB;
-    float restLength = 1f; //DEFAULT SPRING LENGTH
-    float minLength = 0.5f;
+    float restLength = 0.5f; //DEFAULT SPRING LENGTH
+    float minLength = 0.3f;
     float maxLength = 50.0f;
-    float k = 0.00001f; // HOOKEAN COEFFICIENT
+    float k = 0.00005f; // HOOKEAN COEFFICIENT
 
     public Spring(Particle _particleA, Particle _particleB){
         particleA = _particleA;
@@ -27,23 +27,22 @@ public class Spring {
         float[] pointB = particleB.getLocation();
         float springLength = VecOperator.getDistance(pointA, pointB);
 
+        // FIXME NOT WORKING
         if(springLength < minLength){
             springLength = minLength;
             float zeroVelocity[] = {0f,0f,0f};
-            particleA.setVelocity(zeroVelocity);
-            particleB.setVelocity(zeroVelocity);
+//            particleA.setVelocity(zeroVelocity);
+//            particleB.setVelocity(zeroVelocity);
 
         } else if(springLength > maxLength){
             springLength = maxLength;
             float zeroVelocity[] = {0f,0f,0f};
-            particleA.setVelocity(zeroVelocity);
-            particleB.setVelocity(zeroVelocity);
+//            particleA.setVelocity(zeroVelocity);
+//            particleB.setVelocity(zeroVelocity);
         } else {
-            float stretch = springLength- restLength;
+            float stretch = springLength - restLength;
 
             forceA = VecOperator.sub(pointA, pointB);
-            System.out.println("forceA: " + forceA[0] + ", " + forceA[1] + ", " + forceA[2]);
-
             forceA = VecOperator.normalize(forceA);
             forceA = VecOperator.scale(forceA, k*(-1));
             forceA = VecOperator.scale(forceA, stretch);

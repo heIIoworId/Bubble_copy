@@ -32,6 +32,7 @@ public class GeomOperator {
         }
         return particles;
     }
+    // FIXME NEEDED TO BE CHECKED
     public static ArrayList<Spring> genSprings(ArrayList<Particle> particles){
         ArrayList<Spring> springs = new ArrayList<>();
         for(int i=0; i<particles.size(); i += 3){
