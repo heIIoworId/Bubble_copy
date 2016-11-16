@@ -1,7 +1,10 @@
 package kr.ac.kaist.vclab.bubble.physics;
 
+import android.opengl.Matrix;
+
 import kr.ac.kaist.vclab.bubble.events.SoundHandler;
 import kr.ac.kaist.vclab.bubble.utils.GLHelper;
+import kr.ac.kaist.vclab.bubble.utils.SystemHelper;
 import kr.ac.kaist.vclab.bubble.utils.VecOperator;
 
 /**
@@ -18,8 +21,18 @@ public class Blower {
         soundHandler.start();
     }
 
-    public void setBlowingDir(float[] viewMatrix){
-        blowingDir = GLHelper.getViewVector(viewMatrix);
+    public void setBlowingDir(float[] viewRotationMatrix){
+
+        float negativeZ[] = {0f,0f,-1f,0f};
+        float temp[] = new float[4];
+        Matrix.multiplyMV(temp, 0, viewRotationMatrix, 0, negativeZ, 0);
+
+        float viewVector[] = new float[3];
+        viewVector[0] = -temp[0];
+        viewVector[1] = -temp[1];
+        viewVector[2] = temp[2];
+
+        blowingDir = viewVector;
     }
 
     public void setBubbleCore(Particle _bubbleCore){
@@ -27,7 +40,7 @@ public class Blower {
     }
 
     public void applyForce(){
-        float amplitude = (float) (soundHandler.getAmplitude()/200000f);
+        float amplitude = (float) (soundHandler.getAmplitude()/400000f);
         float blowForce[] = VecOperator.scale(blowingDir, amplitude);
         bubbleCore.applyForce(blowForce);
     }
