@@ -43,11 +43,12 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private Square mSquare;
     private BubbleSphere mBubble;
 
-    // DECLARE OTHERS
+    // DECLARE PHYSICAL ENTITIES
     private World mWorld;
     private ArrayList<Particle> mParticles;
     private ArrayList<Spring> mSprings;
     private Blower mBlower;
+    private Particle mBubbleCore;
     // FIXME soundHandler COMMENTED OUT
 //    private SoundHandler soundHandler;
 
@@ -113,7 +114,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mSphere.color = new float[] {0.7f, 0.7f, 0.7f};
         // FIXME PARAM OF BUBBLE
         float radius = 4f;
-        int level = 4;
+        int level = 3;
         mBubble = new BubbleSphere(radius, level);
         mBubble.color = new float[] {0.3f, 0.8f, 0.9f};
 
@@ -124,11 +125,13 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // FIXME BLOWER COMMENTED OUT
 //        mBlower = new Blower();
 //        mBlower.setBlowingDir(mViewMatrix);
-//        mBlower.setParticles(mParticles);
+//        mBlower.setBubbleCore(mBubbleCore);
+        mBubbleCore = new Particle(new float[]{0f, 0f, 0f});
 
         mWorld = new World();
         mWorld.setParticles(mParticles);
         mWorld.setSprings(mSprings);
+        mWorld.setBubbleCore(mBubbleCore);
         // FIXME BLOWER COMMENTED OUT
 //        mWorld.setBlower(mBlower);
 
@@ -221,6 +224,11 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         normalMatrix(mSphereNormalMatrix, 0, mSphereModelViewMatrix, 0);
 
         // CALCULATE BUBBLE MATRIX
+        Matrix.setIdentityM(mBubbleTranslationMatrix, 0);
+        float curLocation[] = mBubbleCore.getLocation();
+        Matrix.translateM(
+                mBubbleTranslationMatrix, 0, curLocation[0], curLocation[1], curLocation[2]);
+
         Matrix.setIdentityM(mBubbleModelMatrix, 0);
         Matrix.multiplyMM(mTempMatrix, 0, mBubbleRotationMatrix, 0, mBubbleModelMatrix, 0);
         System.arraycopy(mTempMatrix, 0, mBubbleModelMatrix, 0, 16);
@@ -251,7 +259,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         //FIXME UPDATE NORMALS OF SPHERE
 
         //DRAW MODELS
-//        mSquare.draw(mProjMatrix, mSquareModelViewMatrix, mSquareNormalMatrix, mLight, mLight2);
+        mSquare.draw(mProjMatrix, mSquareModelViewMatrix, mSquareNormalMatrix, mLight, mLight2);
 //        mCube.draw(mProjMatrix, mCubeModelViewMatrix, mCubeNormalMatrix, mLight, mLight2);
 //        mSphere.draw(mProjMatrix, mSphereModelViewMatrix, mSphereNormalMatrix, mLight, mLight2);
         mBubble.draw(mProjMatrix, mBubbleModelViewMatrix, mBubbleNormalMatrix, mLight, mLight2);
