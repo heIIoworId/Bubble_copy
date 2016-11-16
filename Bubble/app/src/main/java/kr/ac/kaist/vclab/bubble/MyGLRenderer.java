@@ -35,7 +35,7 @@ import kr.ac.kaist.vclab.bubble.utils.GeomOperator;
  */
 
 public class MyGLRenderer implements GLSurfaceView.Renderer {
-
+    // TAG
     private static final String TAG = "MyGLRenderer";
 
     // PRESETS
