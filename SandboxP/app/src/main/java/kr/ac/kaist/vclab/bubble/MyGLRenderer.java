@@ -25,16 +25,16 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private float[] bgColor = new float[]{0.7f, 0.8f, 0.9f, 1.0f};
 
     // presets
-    private float mapSizeX = 20.0f;
+    private float mapSizeX = 30.0f;
     private float mapSizeY = 3.0f;
-    private float mapSizeZ = 20.0f;
-    private float mapUnitLength = 0.3f;
-    private float mapMaxHeight = 10.0f;
+    private float mapSizeZ = 30.0f;
+    private float mapUnitLength = 0.5f;
+    private float mapMaxHeight = 15.0f;
     private float mapMinHeight = -2.0f;
-    private float mapComplexity = 3.0f;
-    private float skySizeX = 40.0f;
-    private float skySizeY = 40.0f;
-    private float skySizeZ = 40.0f;
+    private float mapComplexity = 4.0f;
+    private float skySizeX = 80.0f;
+    private float skySizeY = 80.0f;
+    private float skySizeZ = 80.0f;
 
     // objects
     private Cube mCube;
@@ -113,7 +113,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // initialize rotation / translation matrix
         Matrix.setIdentityM(mViewRotationMatrix, 0);
         Matrix.setIdentityM(mViewTranslationMatrix, 0);
-        Matrix.translateM(mViewTranslationMatrix, 0, 0, -4.0f, -22.0f);
+        Matrix.translateM(mViewTranslationMatrix, 0, 0, -2.5f, -17.0f);
 
         Matrix.setIdentityM(mCubeRotationMatrix, 0);
         Matrix.setIdentityM(mCubeTranslationMatrix, 0);
@@ -125,7 +125,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         Matrix.setIdentityM(mSeaRotationMatrix, 0);
         Matrix.setIdentityM(mSeaTranslationMatrix, 0);
-        Matrix.translateM(mSeaTranslationMatrix, 0, -10.0f, -5.0f, -10.0f);
+        Matrix.translateM(mSeaTranslationMatrix, 0, -10.0f, -4.0f, -10.0f);
 
         Matrix.setIdentityM(mSkyRotationMatrix, 0);
         Matrix.setIdentityM(mSkyTranslationMatrix, 0);
@@ -226,7 +226,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                 mProjMatrix, 0,
                 -ratio, ratio, // left, right
                 -1.0f, 1.0f, // bottom, top
-                1.0f, 60.0f // near, far
+                1.0f, 100.0f // near, far
         );
     }
 
