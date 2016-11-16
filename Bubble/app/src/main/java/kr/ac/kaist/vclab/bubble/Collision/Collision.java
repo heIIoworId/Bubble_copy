@@ -8,17 +8,18 @@ import android.opengl.Matrix;
 public class Collision {
     protected float[] originalCenter;
     protected float[] center;
-/*
-    Collision(float [] center){
-        originalCenter = center;
 
-    }
-    */
-    public void move(float[] transformation){
+    /*
+        Collision(float [] center){
+            originalCenter = center;
+
+        }
+        */
+    public void move(float[] transformation) {
         Matrix.multiplyMV(center, 0, transformation, 0, originalCenter, 0);
     }
 
-    public float[] GetCenter(){
+    public float[] GetCenter() {
         return center;
     }
 

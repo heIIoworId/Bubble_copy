@@ -35,9 +35,9 @@ public class Cube {
     private static final int COORDS_PER_VERTEX = 3;
     private static final int VERTEX_STRIDE = COORDS_PER_VERTEX * 4;
 
-    private BoxCollision boxCollision = new BoxCollision(new float[]{1,0,0}, new float[]{0,1,0}, new float[]{0,0,1});
+    private BoxCollision boxCollision = new BoxCollision(new float[]{1, 0, 0}, new float[]{0, 1, 0}, new float[]{0, 0, 1});
 
-    public float color[] = { 0.2f, 0.709803922f, 0.898039216f };
+    public float color[] = {0.2f, 0.709803922f, 0.898039216f};
 
     private static float vertices[] = {
             // Front face
@@ -212,7 +212,8 @@ public class Cube {
         GLES20.glDisableVertexAttribArray(mPositionHandle);
         GLES20.glDisableVertexAttribArray(mNormalHandle);
     }
-    public BoxCollision getCollision(){
+
+    public BoxCollision getCollision() {
         return boxCollision;
     }
 }

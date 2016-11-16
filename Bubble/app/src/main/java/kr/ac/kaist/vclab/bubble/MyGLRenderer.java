@@ -22,6 +22,7 @@ import kr.ac.kaist.vclab.bubble.activities.MainActivity;
 import kr.ac.kaist.vclab.bubble.events.SoundHandler;
 import kr.ac.kaist.vclab.bubble.models.Cube;
 import kr.ac.kaist.vclab.bubble.models.MapCube;
+import kr.ac.kaist.vclab.bubble.models.SeaRectangle;
 import kr.ac.kaist.vclab.bubble.models.Sphere;
 import kr.ac.kaist.vclab.bubble.models.Square;
 import kr.ac.kaist.vclab.bubble.physics.Particle;
@@ -37,11 +38,21 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     private static final String TAG = "MyGLRenderer";
 
+    // PRESETS
+    private float mapSizeX = 30.0f; // X-size (widthX) of map
+    private float mapSizeY = 3.0f; // Y-size (thickness) of map
+    private float mapSizeZ = 30.0f; // Z-size (widthZ) of map
+    private float mapUnitLength = 0.5f; // length of the side of a triangle
+    private float mapMaxHeight = 12.0f; // maximum height
+    private float mapMinHeight = -2.0f; // minimum height (>= -mapSizeY)
+    private float mapComplexity = 3.6f; // complexity (bigger complexity -> more & steeper mountains)
+
     // DECLARE MODELS
     public Cube mCube;
     public Sphere mSphere;
-    private Square mSquare;
-    private MapCube mMap;
+    public Square mSquare;
+    public MapCube mMap;
+    public SeaRectangle mSea;
 
     // DECLARE OTHERS
     private World mWorld;
@@ -52,37 +63,41 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private float[] mLight2 = new float[3];
 
     // DECLARE MATRICES FOR 3D GRAPHICS
-    public float [] mViewRotationMatrix = new float[16];
-    public float [] mViewTranslationMatrix = new float[16];
-
-    public float [] mCubeRotationMatrix = new float[16];
-    public static float [] mCubeTranslationMatrix = new float[16];
-    public float[] mMapRotationMatrix = new float[16];
-
-    public float [] mSphereRotationMatrix = new float[16];
-    public float [] mSphereTranslationMatrix = new float[16];
-    public float[] mMapTranslationMatrix = new float[16];
-
-    private float[] mTempMatrix = new float[16];
-
     private float[] mViewMatrix = new float[16];
+
+    public float[] mViewRotationMatrix = new float[16];
+    public float[] mCubeRotationMatrix = new float[16];
+    public float[] mSphereRotationMatrix = new float[16];
+    public float[] mMapRotationMatrix = new float[16];
+    public float[] mSeaRotationMatrix = new float[16];
+
+    public float[] mViewTranslationMatrix = new float[16];
+    public float[] mCubeTranslationMatrix = new float[16];
+    public float[] mSphereTranslationMatrix = new float[16];
+    public float[] mMapTranslationMatrix = new float[16];
+    public float[] mSeaTranslationMatrix = new float[16];
 
     private float[] mCubeModelMatrix = new float[16];
     private float[] mSphereModelMatrix = new float[16];
     private float[] mSquareModelMatrix = new float[16];
     private float[] mMapModelMatrix = new float[16];
+    private float[] mSeaModelMatrix = new float[16];
 
     private float[] mCubeModelViewMatrix = new float[16];
     private float[] mSphereModelViewMatrix = new float[16];
     private float[] mSquareModelViewMatrix = new float[16];
     private float[] mMapModelViewMatrix = new float[16];
+    private float[] mSeaModelViewMatrix = new float[16];
 
     private float[] mCubeNormalMatrix = new float[16];
     private float[] mSphereNormalMatrix = new float[16];
     private float[] mSquareNormalMatrix = new float[16];
     private float[] mMapNormalMatrix = new float[16];
+    private float[] mSeaNormalMatrix = new float[16];
 
     private float[] mProjMatrix = new float[16];
+
+    private float[] mTempMatrix = new float[16];
 
     float scale = 0.4f;
 
@@ -94,24 +109,32 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 //        soundHandler = new SoundHandler();
 //        soundHandler.start();
 
-        // Set the background frame color
-        GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        GLES20.glEnable(GLES20.GL_CULL_FACE);
-        GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+        // SET BACKGROUND COLOR
+        GLES20.glClearColor(0.7f, 0.8f, 0.9f, 1.0f); // skyblue
 
         // INITIALIZE MODELS
         mSquare = new Square();
-        mSquare.color = new float[] {0.1f, 0.95f, 0.1f};
+        mSquare.color = new float[]{0.1f, 0.95f, 0.1f};
 
         mCube = new Cube();
         mCube.getCollision().scaleAxes(scale);
-        mCube.color = new float[] {0.2f, 0.7f, 0.9f};
+        mCube.color = new float[]{0.2f, 0.7f, 0.9f};
 
         mSphere = new Sphere();
         mSphere.getCollision().scaleRadius(scale);
-        mSphere.color = new float[] {0.7f, 0.7f, 0.7f};
+        mSphere.color = new float[]{0.7f, 0.7f, 0.7f};
 
-        mMap = new MapCube();
+        // ... map
+        mMap = new MapCube(
+                mapSizeX, mapSizeY, mapSizeZ,
+                mapUnitLength,
+                mapMaxHeight, mapMinHeight,
+                mapComplexity,
+                1.0f, true
+        );
+
+        // ... sea (same x, z size as map)
+        mSea = new SeaRectangle(mapSizeX, mapSizeZ);
 
         //INITIALIZE WORLD
         mWorld = new World();
@@ -121,22 +144,35 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mWorld.setSprings(springs);
 
         // INITIALIZE LIGHTS
-        mLight = new float[] {2.0f, 3.0f, 14.0f};
-        mLight2 = new float[] {-2.0f, -3.0f, -5.0f};
+        mLight = new float[]{2.0f, 3.0f, 14.0f};
+        mLight2 = new float[]{-2.0f, -3.0f, -5.0f};
 
         // INITIALIZE MATRICES
         resetViewMatrix();
 
+        // ... view
         Matrix.setIdentityM(mViewRotationMatrix, 0);
         Matrix.setIdentityM(mViewTranslationMatrix, 0);
-        Matrix.translateM(mViewTranslationMatrix, 0, 0, 0, -4f);
+        Matrix.translateM(mViewTranslationMatrix, 0, 0, 0, -14.0f);
 
+        // ... cube
         Matrix.setIdentityM(mCubeRotationMatrix, 0);
         Matrix.setIdentityM(mCubeTranslationMatrix, 0);
 
+        // ... sphere (spring-mass)
         Matrix.setIdentityM(mSphereRotationMatrix, 0);
         Matrix.setIdentityM(mSphereTranslationMatrix, 0);
         Matrix.translateM(mSphereTranslationMatrix, 0, 0, 0, 0);
+
+        // ... map
+        Matrix.setIdentityM(mMapRotationMatrix, 0);
+        Matrix.setIdentityM(mMapTranslationMatrix, 0);
+        Matrix.translateM(mMapTranslationMatrix, 0, -10.0f, -5.0f, -10.0f);
+
+        // ... sea
+        Matrix.setIdentityM(mSeaRotationMatrix, 0);
+        Matrix.setIdentityM(mSeaTranslationMatrix, 0);
+        Matrix.translateM(mSeaTranslationMatrix, 0, -10.0f, -4.0f, -10.0f);
 
 //        new Thread(new Runnable() {
 //            @Override
@@ -159,7 +195,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     }
 
     @Override
-    //Called at every frame.
     public void onDrawFrame(GL10 unused) {
 
         // Move bubble according to soundHandler
@@ -170,23 +205,23 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 //        System.out.println("vol/100000: " + goUp);
 //        Matrix.translateM(mCubeTranslationMatrix, 0, 0, goUp, 0);
 
-        // Draw background color
+        // CLEAR COLOR & DEPTH BUFFERS
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
-        // Calculate view matrix
+        // CALCULATE VIEWMATRIX
         Matrix.setIdentityM(mViewMatrix, 0);
         Matrix.multiplyMM(mTempMatrix, 0, mViewRotationMatrix, 0, mViewMatrix, 0);
         System.arraycopy(mTempMatrix, 0, mViewMatrix, 0, 16);
         Matrix.multiplyMM(mTempMatrix, 0, mViewTranslationMatrix, 0, mViewMatrix, 0);
         System.arraycopy(mTempMatrix, 0, mViewMatrix, 0, 16);
 
-        // Calculate Square ModelMatrix
+        // CALCULATE SQUARE MODELMATRIX
         Matrix.setIdentityM(mSquareModelMatrix, 0);
         Matrix.translateM(mSquareModelMatrix, 0, 0, -1, 0);
         Matrix.rotateM(mSquareModelMatrix, 0, -90, 1f, 0, 0);
         Matrix.scaleM(mSquareModelMatrix, 0, 2f, 2f, 2f);
 
-        // Calculate Cube ModelMatrix
+        // CALCULATE CUBE MODELMATRIX
         Matrix.setIdentityM(mCubeModelMatrix, 0);
         Matrix.multiplyMM(mTempMatrix, 0, mCubeRotationMatrix, 0, mCubeModelMatrix, 0);
         System.arraycopy(mTempMatrix, 0, mCubeModelMatrix, 0, 16);
@@ -195,7 +230,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         Matrix.scaleM(mCubeModelMatrix, 0, scale, scale, scale);
 
-        // Calculate Sphere ModelMatrix
+        // CALCULATE SPHERE MODELMATRIX
         Matrix.setIdentityM(mSphereModelMatrix, 0);
         Matrix.multiplyMM(mTempMatrix, 0, mSphereRotationMatrix, 0, mSphereModelMatrix, 0);
         System.arraycopy(mTempMatrix, 0, mSphereModelMatrix, 0, 16);
@@ -203,52 +238,63 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         System.arraycopy(mTempMatrix, 0, mSphereModelMatrix, 0, 16);
         Matrix.scaleM(mSphereModelMatrix, 0, scale, scale, scale);
 
-        // Calculate ModelViewMatrix
+
+        // CALCULATE MAP MODELMATRIX
+        Matrix.setIdentityM(mMapModelMatrix, 0);
+        Matrix.multiplyMM(mTempMatrix, 0, mMapRotationMatrix, 0, mMapModelMatrix, 0);
+        System.arraycopy(mTempMatrix, 0, mMapModelMatrix, 0, 16);
+        Matrix.multiplyMM(mTempMatrix, 0, mMapTranslationMatrix, 0, mMapModelMatrix, 0);
+        System.arraycopy(mTempMatrix, 0, mMapModelMatrix, 0, 16);
+
+        // CALCULATE SEA MODELMATRIX
+        Matrix.setIdentityM(mSeaModelMatrix, 0);
+        Matrix.multiplyMM(mTempMatrix, 0, mSeaRotationMatrix, 0, mSeaModelMatrix, 0);
+        System.arraycopy(mTempMatrix, 0, mSeaModelMatrix, 0, 16);
+        Matrix.multiplyMM(mTempMatrix, 0, mSeaTranslationMatrix, 0, mSeaModelMatrix, 0);
+        System.arraycopy(mTempMatrix, 0, mSeaModelMatrix, 0, 16);
+
+        // CALCULATE MODELVIEWMATRIX
         Matrix.multiplyMM(mSquareModelViewMatrix, 0, mViewMatrix, 0, mSquareModelMatrix, 0);
         Matrix.multiplyMM(mCubeModelViewMatrix, 0, mViewMatrix, 0, mCubeModelMatrix, 0);
         Matrix.multiplyMM(mSphereModelViewMatrix, 0, mViewMatrix, 0, mSphereModelMatrix, 0);
         Matrix.multiplyMM(mMapModelViewMatrix, 0, mViewMatrix, 0, mMapModelMatrix, 0);
+        Matrix.multiplyMM(mSeaModelViewMatrix, 0, mViewMatrix, 0, mSeaModelMatrix, 0);
 
-
-        // Calculate NormalMatrix
+        // CALCULATE NORMALMATRIX
         normalMatrix(mCubeNormalMatrix, 0, mCubeModelViewMatrix, 0);
         normalMatrix(mSphereNormalMatrix, 0, mSphereModelViewMatrix, 0);
         normalMatrix(mSquareNormalMatrix, 0, mSquareModelViewMatrix, 0);
         normalMatrix(mMapNormalMatrix, 0, mMapModelViewMatrix, 0);
+        normalMatrix(mSeaNormalMatrix, 0, mSeaModelViewMatrix, 0);
 
-
-        // calculate map model matrix
-        Matrix.setIdentityM(mMapModelMatrix, 0);
-
-        Matrix.multiplyMM(mTempMatrix, 0, mMapRotationMatrix, 0, mMapModelMatrix, 0);
-        System.arraycopy(mTempMatrix, 0, mMapModelMatrix, 0, 16);
-
-        Matrix.multiplyMM(mTempMatrix, 0, mMapTranslationMatrix, 0, mMapModelMatrix, 0);
-        System.arraycopy(mTempMatrix, 0, mMapModelMatrix, 0, 16);
-
-        Matrix.translateM(
-                mMapModelMatrix, 0,
-                -mMap.sizeX / 2.0f, mMap.sizeY / 2.0f - 3.0f, -mMap.sizeZ / 2.0f
-        );
-
-        //UPDATE WORLD AND VERTICES OF SPHERE
+        // UPDATE WORLD AND VERTICES OF SPHERE
         mWorld.update();
         float updatedVertices[] = GeomOperator.genVertices(mWorld.getParticles());
-        System.out.println("updated vertices: "+updatedVertices[11]);
+        // System.out.println("updated vertices: "+updatedVertices[11]);
         mSphere.setVertices(updatedVertices);
         //FIXME UPDATE NORMALS OF SPHERE
 
-        //Draw
+        // DRAW
+        // ... gl_depth_test (depth test)
+        GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+
+        // ... gl_cull_face (culling)
+        GLES20.glEnable(GLES20.GL_CULL_FACE);
         mSquare.draw(mProjMatrix, mSquareModelViewMatrix, mSquareNormalMatrix, mLight, mLight2);
         mCube.draw(mProjMatrix, mCubeModelViewMatrix, mCubeNormalMatrix, mLight, mLight2);
         mSphere.draw(mProjMatrix, mSphereModelViewMatrix, mSphereNormalMatrix, mLight, mLight2);
         mMap.draw(mProjMatrix, mMapModelViewMatrix, mMapNormalMatrix, mLight, mLight2);
+        GLES20.glDisable(GLES20.GL_CULL_FACE);
+
+        // ... gl_blend (alpha blending)
+        GLES20.glEnable(GLES20.GL_BLEND);
+        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+        mSea.draw(mProjMatrix, mSeaModelViewMatrix, mSeaNormalMatrix, mLight, mLight2);
+        GLES20.glDisable(GLES20.GL_BLEND);
     }
 
 
     @Override
-    // Adjust the viewport based on geometry changes,
-    // such as screen rotation
     public void onSurfaceChanged(GL10 unused, int width, int height) {
         GLES20.glViewport(0, 0, width, height);
 
@@ -260,7 +306,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         final float bottom = -1.0f;
         final float top = 1.0f;
         final float near = 1f;
-        final float far = 10.0f;
+        final float far = 80.0f; // it should be bigger than map (and skybox)'s size!
 
         Matrix.frustumM(mProjMatrix, 0, left, right, bottom, top, near, far);
     }
@@ -299,7 +345,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     }
 
     // Utility method for compiling a OpenGL shader.
-    public static int loadShader(int type, String shaderCode){
+    public static int loadShader(int type, String shaderCode) {
 
         // create a vertex shader type (GLES20.GL_VERTEX_SHADER)
         // or a fragment shader type (GLES20.GL_FRAGMENT_SHADER)
@@ -348,11 +394,11 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     /**
      * Utility method for debugging OpenGL calls. Provide the name of the call
      * just after making it:
-     *
+     * <p>
      * <pre>
      * mColorHandle = GLES20.glGetUniformLocation(mProgram, "vColor");
      * MyGLRenderer.checkGlError("glGetUniformLocation");</pre>
-     *
+     * <p>
      * If the operation is not successful, the check throws an error.
      *
      * @param glOperation - Name of the OpenGL call to check.

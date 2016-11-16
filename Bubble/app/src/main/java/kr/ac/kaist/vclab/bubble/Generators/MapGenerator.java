@@ -5,7 +5,8 @@ import android.opengl.GLES20;
 import java.util.ArrayList;
 import java.util.List;
 
-import kr.ac.kaist.vclab.bubble.utils.PerlinNoise;
+import kr.ac.kaist.vclab.bubble.PerlinNoise;
+import kr.ac.kaist.vclab.bubble.utils.VecOperator;
 
 /**
  * Created by avantgarde on 2016-11-02.
@@ -13,9 +14,9 @@ import kr.ac.kaist.vclab.bubble.utils.PerlinNoise;
 
 public class MapGenerator {
     // size
-    public float sizeX;
-    public float sizeY;
-    public float sizeZ;
+    float sizeX;
+    float sizeY;
+    float sizeZ;
 
     // dimension
     int dimX;
@@ -27,10 +28,18 @@ public class MapGenerator {
     // height map (2D array of y values)
     float[][] heightMap;
 
+    float normalRate;
+
     // flag for filling the faces
     boolean fill;
 
-    public MapGenerator(float sizeX, float sizeY, float sizeZ, float unit, boolean fill) {
+    public MapGenerator(float sizeX, float sizeY, float sizeZ, // size of the map
+                        float unit, // dist. between points
+                        float maxHeight, // max height (not y value!)
+                        float minHeight, // min height (can be negative)
+                        float complexity, // complexity
+                        float normalRate, // normal -> normal * normalRate + (0, 1, 0) * (1 - normalRate)
+                        boolean fill) { // true : show all / false : show skeleton only
         this.unit = unit;
         this.fill = fill;
 
@@ -41,27 +50,26 @@ public class MapGenerator {
         this.sizeZ = this.dimZ * this.unit;
         this.sizeY = sizeY;
 
+        this.normalRate = normalRate;
+
         heightMap = new float[this.dimX + 1][this.dimZ + 1];
 
-        for (int i = 0; i <= this.dimX; i++) {
-            for (int j = 0; j <= this.dimZ; j++) {
-                heightMap[i][j] = 0;
-            }
-        }
+        // seed for randomization
+        float seed = (float) Math.random();
 
         for (int i = 0; i <= this.dimX; i++) {
             for (int j = 0; j <= this.dimZ; j++) {
                 float nx = i / (float) dimX - 0.5f;
                 float nz = j / (float) dimZ - 0.5f;
 
-                heightMap[i][j] = 4.0f * (
-                        PerlinNoise.noise(nx * 3, nz * 3, 1)
-                                + 0.5f * PerlinNoise.noise(nx * 6, nz * 6, 2)
-                                + 0.25f * PerlinNoise.noise(nx * 12, nz * 12, 4)
+                heightMap[i][j] = maxHeight * (2.0f / (float) Math.sqrt(3)) * (
+                        PerlinNoise.noise(nx * complexity, nz * complexity, seed)
+                                + 0.5f * PerlinNoise.noise(nx * complexity * 2, nz * complexity * 2, 2.0f * seed)
+                                + 0.25f * PerlinNoise.noise(nx * complexity * 4, nz * complexity * 4, 4.0f * seed)
                 );
 
-                if (heightMap[i][j] < -sizeY) {
-                    heightMap[i][j] = -sizeY;
+                if (heightMap[i][j] < minHeight) {
+                    heightMap[i][j] = minHeight;
                 }
             }
         }
@@ -253,8 +261,18 @@ public class MapGenerator {
 
         if (fill) {
             // top
-            for (int i = 0; i < dimX * dimZ * 6; i++) {
-                buffer.add(new float[]{0.0f, 1.0f, 0.0f});
+            for (int i = 0; i < dimX; i++) {
+                for (int j = 0; j < dimZ; j++) {
+                    // lower triangle
+                    buffer.add(topNormal(i, j));
+                    buffer.add(topNormal(i, j + 1));
+                    buffer.add(topNormal(i + 1, j + 1));
+
+                    // upper triangle
+                    buffer.add(topNormal(i, j));
+                    buffer.add(topNormal(i + 1, j + 1));
+                    buffer.add(topNormal(i + 1, j));
+                }
             }
 
             // bottom
@@ -281,10 +299,38 @@ public class MapGenerator {
             for (int i = 0; i < dimZ * 6; i++) {
                 buffer.add(new float[]{-1.0f, 0.0f, 0.0f});
             }
+
+            // normal -> normal * normalRate + (0, 1, 0) * (1 - normalRate)
+            for (int i = 0; i < buffer.size(); i++) {
+                float[] normal = buffer.get(i);
+                buffer.set(i, new float[]{
+                        normal[0] * normalRate,
+                        normal[1] * normalRate + (1.0f - normalRate),
+                        normal[2] * normalRate
+                });
+            }
         } else {
             // top
-            for (int i = 0; i < (dimX * (dimZ + 1) + (dimX + 1) * dimZ + dimX * dimZ) * 3; i++) {
-                buffer.add(new float[]{0.0f, 1.0f, 0.0f});
+            for (int i = 0; i <= dimX; i++) {
+                for (int j = 0; j <= dimZ; j++) {
+                    // rows
+                    if (i != dimX) {
+                        buffer.add(topNormal(i, j));
+                        buffer.add(topNormal(i + 1, j));
+                    }
+
+                    // columns
+                    if (j != dimZ) {
+                        buffer.add(topNormal(i, j));
+                        buffer.add(topNormal(i, j + 1));
+                    }
+
+                    // diagonals
+                    if ((i != dimX) && (j != dimZ)) {
+                        buffer.add(topNormal(i, j));
+                        buffer.add(topNormal(i + 1, j + 1));
+                    }
+                }
             }
 
             // bottom
@@ -309,13 +355,144 @@ public class MapGenerator {
         }
     }
 
-    public float[] getTextures() {
+    public float[] getTextureCoors() {
+        List<float[]> buffer = new ArrayList<>();
+
         if (fill) {
-            // TODO : choose appropriate texture coordinates
-            return new float[]{};
-        }
-        else {
-            return new float[]{};
+            float ratio = 1.0f;
+
+            for (int i = 0; i < dimX; i++) {
+                for (int j = 0; j < dimZ; j++) {
+                    // lower triangle
+                    buffer.add(new float[]{
+                            unit * i / sizeX * ratio, unit * j / sizeZ * ratio, 0,
+                            unit * i / sizeX * ratio, unit * (j + 1) / sizeZ * ratio, 0,
+                            unit * (i + 1) / sizeX * ratio, unit * (j + 1) / sizeZ * ratio, 0
+                    });
+
+                    // upper triangle
+                    buffer.add(new float[]{
+                            unit * i / sizeX * ratio, unit * j / sizeZ * ratio, 0,
+                            unit * (i + 1) / sizeX * ratio, unit * (j + 1) / sizeZ * ratio, 0,
+                            unit * (i + 1) / sizeX * ratio, unit * j / sizeZ * ratio, 0
+                    });
+                }
+            }
+
+            // bottom
+            buffer.add(new float[]{
+                    0, 0, 0,
+                    0, 0, 0,
+                    0, 0, 0
+            });
+
+            buffer.add(new float[]{
+                    0, 0, 0,
+                    0, 0, 0,
+                    0, 0, 0
+            });
+
+            // front
+            for (int i = 0; i < dimX; i++) {
+                // lower triangle
+                buffer.add(new float[]{
+                        0, 0, 0,
+                        0, 0, 0,
+                        0, 0, 0
+                });
+
+                // upper triangle
+                buffer.add(new float[]{
+                        0, 0, 0,
+                        0, 0, 0,
+                        0, 0, 0
+                });
+            }
+
+            // back
+            for (int i = 0; i < dimX; i++) {
+                // lower triangle
+                buffer.add(new float[]{
+                        0, 0, 0,
+                        0, 0, 0,
+                        0, 0, 0
+                });
+
+                // upper triangle
+                buffer.add(new float[]{
+                        0, 0, 0,
+                        0, 0, 0,
+                        0, 0, 0
+                });
+            }
+
+            // right
+            for (int j = 1; j <= dimZ; j++) {
+                // lower triangle
+                buffer.add(new float[]{
+                        0, 0, 0,
+                        0, 0, 0,
+                        0, 0, 0
+                });
+
+                // upper triangle
+                buffer.add(new float[]{
+                        0, 0, 0,
+                        0, 0, 0,
+                        0, 0, 0
+                });
+            }
+
+            // left
+            for (int j = 1; j <= dimZ; j++) {
+                // lower triangle
+                buffer.add(new float[]{
+                        0, 0, 0,
+                        0, 0, 0,
+                        0, 0, 0
+                });
+
+                // upper triangle
+                buffer.add(new float[]{
+                        0, 0, 0,
+                        0, 0, 0,
+                        0, 0, 0
+                });
+            }
+
+            return listToArray(buffer, 9);
+        } else {
+            // top
+            for (int i = 0; i <= dimX; i++) {
+                for (int j = 0; j <= dimZ; j++) {
+                    // rows
+                    if (i != dimX) {
+                        buffer.add(new float[]{0, 0, 0, 0, 0, 0});
+                    }
+
+                    // columns
+                    if (j != dimZ) {
+                        buffer.add(new float[]{0, 0, 0, 0, 0, 0});
+                    }
+
+                    // diagonals
+                    if ((i != dimX) && (j != dimZ)) {
+                        buffer.add(new float[]{0, 0, 0, 0, 0, 0});
+                    }
+                }
+            }
+
+            // bottom
+            for (int i = 0; i < 4; i++) {
+                buffer.add(new float[]{0, 0, 0, 0, 0, 0});
+            }
+
+            // sides
+            for (int i = 0; i < 4; i++) {
+                buffer.add(new float[]{0, 0, 0, 0, 0, 0});
+            }
+
+            return listToArray(buffer, 6);
         }
     }
 
@@ -332,5 +509,45 @@ public class MapGenerator {
         }
 
         return result;
+    }
+
+    private float[] topVertex(int i, int j) {
+        return new float[]{unit * i, heightMap[i][j], unit * j};
+    }
+
+    private float[] topNormal(int i, int j) {
+        float[][] vs = null;
+        float[] vc = null;
+        float[] sum = null;
+
+        // borders -> just return (0, 1, 0) for the sake of convenience
+        if ((i == 0) || (i == dimX) || (j == 0) || (j == dimZ)) {
+            return new float[]{0.0f, 1.0f, 0.0f};
+        } else {
+            vs = new float[][]{
+                    topVertex(i - 1, j),
+                    topVertex(i, j + 1),
+                    topVertex(i + 1, j + 1),
+                    topVertex(i + 1, j),
+                    topVertex(i, j - 1),
+                    topVertex(i - 1, j - 1),
+                    topVertex(i - 1, j),
+            };
+
+            vc = topVertex(i, j);
+            sum = new float[]{0.0f, 0.0f, 0.0f};
+
+            for (int k = 0; k < 6; k++) {
+                float[] vec_1 = VecOperator.sub(vs[k], vc);
+                float[] vec_2 = VecOperator.sub(vs[k + 1], vc);
+
+                float weight = VecOperator.angle(vec_1, vec_2);
+                float[] faceNormal = VecOperator.cross(vec_1, vec_2);
+
+                sum = VecOperator.add(sum, VecOperator.scale(faceNormal, weight));
+            }
+
+            return VecOperator.normalize(sum);
+        }
     }
 }

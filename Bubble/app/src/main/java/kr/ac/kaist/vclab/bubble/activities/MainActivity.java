@@ -35,7 +35,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         // Create a GLSurfaceView instance and set it
         // as the ContentView for this Activity
         mGLView = new MyGLSurfaceView(this);
-        gyroHandler = new  GyroHandler();
+        gyroHandler = new GyroHandler();
 
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
@@ -44,20 +44,16 @@ public class MainActivity extends Activity implements SensorEventListener {
         buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
         buttonLayout.setGravity(Gravity.CENTER);
 
-        ToggleButton worldButton = new ToggleButton(this);
-        ToggleButton cube1Button = new ToggleButton(this);
-//        ToggleButton cube2Button = new ToggleButton(this);
+        ToggleButton myButton1 = new ToggleButton(this);
+        ToggleButton myButton2 = new ToggleButton(this);
 
-        setButtonText(worldButton, "World");
-        setButtonText(cube1Button, "Cube");
-//        setButtonText(cube2Button, "Cube2");
+        setButtonText(myButton1, "Button 1");
+        setButtonText(myButton2, "Button 2");
 
-        buttonLayout.addView(worldButton);
-        buttonLayout.addView(cube1Button);
-//        buttonLayout.addView(cube2Button);
+        buttonLayout.addView(myButton1);
+        buttonLayout.addView(myButton2);
 
-//        final ToggleButton[] buttons = {worldButton, cube1Button, cube2Button};
-        final ToggleButton[] buttons = {worldButton, cube1Button};
+        final ToggleButton[] buttons = {myButton1, myButton2};
 
         for (int i = 0; i < buttons.length; i++) {
             final ToggleButton button = buttons[i];
@@ -77,7 +73,7 @@ public class MainActivity extends Activity implements SensorEventListener {
                 }
             });
         }
-        worldButton.setChecked(true);
+        myButton1.setChecked(true);
 
         LinearLayout.LayoutParams glParams = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -96,6 +92,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         setContentView(layout);
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+
         //자이로스코프 센서(회전)
         gyroHandler.mGyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
     }
@@ -109,10 +106,11 @@ public class MainActivity extends Activity implements SensorEventListener {
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
+
     public void onSensorChanged(SensorEvent event) {
-        System.out.println("ddddddgdaagd");
+        // System.out.println("ddddddgdaagd");
         Sensor sensor = event.sensor;
-        System.out.println("dgdaagd");
+        // System.out.println("dgdaagd");
         if (sensor.getType() == Sensor.TYPE_GYROSCOPE) {
             gyroHandler.onSensorChanged(event);
         }
@@ -136,7 +134,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         // If your OpenGL application is memory intensive,
         // you should consider de-allocating objects that
         // consume significant memory here.
-        mSensorManager.registerListener(this, gyroHandler.mGyroscope,SensorManager.SENSOR_DELAY_FASTEST);
+        mSensorManager.registerListener(this, gyroHandler.mGyroscope, SensorManager.SENSOR_DELAY_FASTEST);
         mGLView.onPause();
     }
 

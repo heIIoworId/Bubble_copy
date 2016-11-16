@@ -15,31 +15,31 @@ public class World {
     ArrayList<Particle> particles;
     ArrayList<Spring> springs;
 
-    public World(){
+    public World() {
         particles = new ArrayList<Particle>();
         springs = new ArrayList<Spring>();
     }
 
-    public void update(){
+    public void update() {
         //FIXME dragging force and gravity should be included.
 
 //        for(int i=0; i<particles.size(); i++){
 //            particles.get(i).applyForce(gravity);
 //        }
-        for (int i=0; i<springs.size(); i++){
+        for (int i = 0; i < springs.size(); i++) {
             springs.get(i).applyForce();
         }
     }
 
-    public ArrayList<Particle> getParticles(){
+    public ArrayList<Particle> getParticles() {
         return particles;
     }
 
-    public void setParticles(ArrayList<Particle> _particles){
+    public void setParticles(ArrayList<Particle> _particles) {
         particles = _particles;
     }
 
-    public void setSprings(ArrayList<Spring> _springs){
+    public void setSprings(ArrayList<Spring> _springs) {
         springs = _springs;
     }
 }
