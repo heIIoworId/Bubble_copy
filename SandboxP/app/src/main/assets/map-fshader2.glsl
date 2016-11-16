@@ -35,7 +35,8 @@ void main() {
 
     // color = texture + diffuse + blinn-phong
     vec3 intensity = textureColor.xyz * diffuse * lambertian
-                     + specular * specColor;
+                        + specular * specColor;
+    // vec3 intensity = uColor * diffuse * lambertian + specular * specColor;
 
     // haze
     vec4 haze = vec4(0.5, 0.5, 0.5, 1.0);

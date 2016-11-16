@@ -356,20 +356,22 @@ public class MapGenerator {
         List<float[]> buffer = new ArrayList<>();
 
         if (fill) {
+            float ratio = 1.0f;
+
             for (int i = 0; i < dimX; i++) {
                 for (int j = 0; j < dimZ; j++) {
                     // lower triangle
                     buffer.add(new float[]{
-                            unit * i / sizeX, unit * j / sizeZ, 0,
-                            unit * i / sizeX, unit * (j + 1) / sizeZ, 0,
-                            unit * (i + 1) / sizeX, unit * (j + 1) / sizeZ, 0
+                            unit * i / sizeX * ratio, unit * j / sizeZ * ratio, 0,
+                            unit * i / sizeX * ratio, unit * (j + 1) / sizeZ * ratio, 0,
+                            unit * (i + 1) / sizeX * ratio, unit * (j + 1) / sizeZ * ratio, 0
                     });
 
                     // upper triangle
                     buffer.add(new float[]{
-                            unit * i / sizeX, unit * j / sizeZ, 0,
-                            unit * (i + 1) / sizeX, unit * (j + 1) / sizeZ, 0,
-                            unit * (i + 1) / sizeX, unit * j / sizeZ, 0
+                            unit * i / sizeX * ratio, unit * j / sizeZ * ratio, 0,
+                            unit * (i + 1) / sizeX * ratio, unit * (j + 1) / sizeZ * ratio, 0,
+                            unit * (i + 1) / sizeX * ratio, unit * j / sizeZ * ratio, 0
                     });
                 }
             }
