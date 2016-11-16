@@ -21,7 +21,8 @@ public class World {
     public World(){
         particles = new ArrayList<Particle>();
         springs = new ArrayList<Spring>();
-        blower = new Blower();
+        // FIXME BLOWER COMMENTED OUT
+//        blower = new Blower();
     }
 
     public void applyForce(){
@@ -33,8 +34,8 @@ public class World {
             springs.get(i).applyForce();
         }
 
-        // FIXME
-        blower.applyForce();
+        // FIXME BLOWER COMMENTED OUT
+//        blower.applyForce();
     }
 
     public ArrayList<Particle> getParticles(){

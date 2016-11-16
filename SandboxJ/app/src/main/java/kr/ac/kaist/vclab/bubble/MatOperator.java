@@ -14,23 +14,6 @@ import java.util.Arrays;
  * Created by PCPC on 2016-10-04.
  */
 public class MatOperator {
-    public static void cross(float[] p1, float[] p2, float[] result) {
-        result[0] = p1[1] * p2[2] - p2[1] * p1[2];
-        result[1] = p1[2] * p2[0] - p2[2] * p1[0];
-        result[2] = p1[0] * p2[1] - p2[0] * p1[1];
-    }
-
-    public static float dot(float[] p1, float[] p2) {
-        return p1[0] * p2[0] + p1[1] * p2[1] + p1[2] * p2[2];
-    }
-
-    public static float size(float[] vector) {
-        float sum = 0;
-        for (float v : vector) {
-            sum += v * v;
-        }
-        return (float) Math.sqrt(sum);
-    }
 
     public static  void normalMatrix(float[] dst, int dstOffset, float[] src, int srcOffset) {
         Matrix.invertM(dst, dstOffset, src, srcOffset);
@@ -41,13 +24,6 @@ public class MatOperator {
         float[] temp = Arrays.copyOf(dst, 16);
 
         Matrix.transposeM(dst, dstOffset, temp, 0);
-    }
-    public static float[] normalize(float[] vector) {
-        float length = size(vector);
-        for (int i = 0; i < vector.length; i++) {
-            vector[i] /= length;
-        }
-        return vector;
     }
 
 

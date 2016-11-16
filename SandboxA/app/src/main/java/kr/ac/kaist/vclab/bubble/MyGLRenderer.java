@@ -107,14 +107,16 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 //        ArrayList<Particle> mParticles = GeomOperator.genParticles(mSphere.getVertices());
         mParticles = GeomOperator.genParticles(mSphere.getVertices());
         mSprings = GeomOperator.genSprings(mParticles);
-        mBlower = new Blower();
-        mBlower.setBlowingDir(mViewMatrix);
-        mBlower.setParticles(mParticles);
+        // FIXME BLOWER COMMENTED OUT
+//        mBlower = new Blower();
+//        mBlower.setBlowingDir(mViewMatrix);
+//        mBlower.setParticles(mParticles);
 
         mWorld = new World();
         mWorld.setParticles(mParticles);
         mWorld.setSprings(mSprings);
-        mWorld.setBlower(mBlower);
+        // FIXME BLOWER COMMENTED OUT
+//        mWorld.setBlower(mBlower);
 
         // INITIALIZE LIGHTS
         mLight = new float[] {2.0f, 3.0f, 14.0f};
@@ -221,9 +223,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 //        mCube.setVertices(updatedVertices);
         //FIXME UPDATE NORMALS OF SPHERE
 
-        //Draw
-        mSquare.draw(mProjMatrix, mSquareModelViewMatrix, mSquareNormalMatrix, mLight, mLight2);
-        mCube.draw(mProjMatrix, mCubeModelViewMatrix, mCubeNormalMatrix, mLight, mLight2);
+        //DRAW MODELS
+        //mSquare.draw(mProjMatrix, mSquareModelViewMatrix, mSquareNormalMatrix, mLight, mLight2);
+        //mCube.draw(mProjMatrix, mCubeModelViewMatrix, mCubeNormalMatrix, mLight, mLight2);
         mSphere.draw(mProjMatrix, mSphereModelViewMatrix, mSphereNormalMatrix, mLight, mLight2);
     }
 
