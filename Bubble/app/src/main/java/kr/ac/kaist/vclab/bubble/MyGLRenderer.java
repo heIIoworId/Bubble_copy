@@ -107,6 +107,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private float[] mTempMatrix = new float[16];
 
     float scale = 0.4f;
+    float[] mCamera = new float[3];
 
     private float bubbleScale = 0.03f;
     private float[] bubbleStart = new float[]{0,0,0};
@@ -317,7 +318,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // ... gl_blend (alpha blending)
         GLES20.glEnable(GLES20.GL_BLEND);
         GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
-        mSphere.draw(mProjMatrix, mSphereModelViewMatrix, mSphereNormalMatrix, mLight, mLight2);
+        mSphere.draw(mProjMatrix, mSphereModelViewMatrix, mSphereModelMatrix, mViewMatrix, mSphereNormalMatrix, mLight, mLight2, mCamera,  mSkyBox.getCubeTex());
+
         mSea.draw(mProjMatrix, mSeaModelViewMatrix, mSeaNormalMatrix, mLight, mLight2);
     }
 
@@ -356,6 +358,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         final float eyeY = 0.0f;
         final float eyeZ = 4f;
 
+        mCamera[0] = eyeX;
+        mCamera[1] = eyeY;
+        mCamera[2] = eyeZ;
         // We are looking toward the distance
         final float lookX = 0.0f;
         final float lookY = 0.0f;
