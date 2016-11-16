@@ -102,6 +102,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         //INITIALIZE WORLD
         mWorld = new World();
+//        ArrayList<Particle> particles = GeomOperator.genParticles(mSphere.getVertices());
         ArrayList<Particle> particles = GeomOperator.genParticles(mSphere.getVertices());
         mWorld.setParticles(particles);
         ArrayList<Spring> springs = GeomOperator.genSprings(particles);
@@ -206,11 +207,12 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         float updatedVertices[] = GeomOperator.genVertices(mWorld.getParticles());
         System.out.println("updated vertices: "+updatedVertices[11]);
         mSphere.setVertices(updatedVertices);
+//        mCube.setVertices(updatedVertices);
         //FIXME UPDATE NORMALS OF SPHERE
 
         //Draw
         mSquare.draw(mProjMatrix, mSquareModelViewMatrix, mSquareNormalMatrix, mLight, mLight2);
-        //mCube.draw(mProjMatrix, mCubeModelViewMatrix, mCubeNormalMatrix, mLight, mLight2);
+        mCube.draw(mProjMatrix, mCubeModelViewMatrix, mCubeNormalMatrix, mLight, mLight2);
         mSphere.draw(mProjMatrix, mSphereModelViewMatrix, mSphereNormalMatrix, mLight, mLight2);
     }
 

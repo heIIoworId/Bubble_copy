@@ -108,15 +108,13 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     }
     public void onSensorChanged(SensorEvent event) {
-        System.out.println("ddddddgdaagd");
         Sensor sensor = event.sensor;
-        System.out.println("dgdaagd");
         if (sensor.getType() == Sensor.TYPE_GYROSCOPE) {
             gyroHandler.onSensorChanged(event);
         }
         float[] values = new float[3];
         values = gyroHandler.getSensorValues();
-        mGLView.rotateByGyroSensor(values[0], values[1], values[2]);
+        //mGLView.rotateByGyroSensor(values[0], values[1], values[2]);
 /*
         if (sensor.getType() == Sensor.TYPE_GYROSCOPE) {
             gyroX = event.values[0] * gyroScale;

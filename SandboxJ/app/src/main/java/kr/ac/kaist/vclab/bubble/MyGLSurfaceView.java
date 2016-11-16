@@ -22,6 +22,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
     private float[] temp1 = new float[16];
     private float[] temp2 = new float[16];
+    private float[] move = new float[16];
 
     public int mode;
 
@@ -73,40 +74,34 @@ public class MyGLSurfaceView extends GLSurfaceView {
                     } else if (count == 2) {
                         // Translate world
                         Matrix.translateM(mRenderer.mViewTranslationMatrix, 0, dx/ 100, -dy / 100, 0);
+                    }else if (count == 3) {
+                        // Translate world
+                        Matrix.translateM(mRenderer.mViewTranslationMatrix, 0, 0, 0, dy / 100);
                     }
                     break;
                 case 1:
                     if (count == 1) {
                         // Rotate cube1
-                        float[] rot = temp1;
-                        Matrix.setIdentityM(rot, 0);
-                        Matrix.rotateM(rot, 0, dx, 0, 1, 0);
-                        Matrix.rotateM(rot, 0, dy, 1, 0, 0);
-                        Matrix.multiplyMM(temp2, 0, rot, 0, mRenderer.mCubeRotationMatrix, 0);
+                        float[] move = new float[16];
+                        Matrix.setIdentityM(move, 0);
+                        Matrix.rotateM(move, 0, dx, 0, 1, 0);
+                        Matrix.rotateM(move, 0, dy, 1, 0, 0);
 
-                        float[] temp = new float[16];
-                        Matrix.multiplyMM(temp, 0 , mRenderer.mCubeTranslationMatrix, 0, temp2,0);
-                        mRenderer.mCube.getCollision().move(temp);
-                        if(Intersect.intersect(mRenderer.mSphere.getCollision(),mRenderer.mCube.getCollision())){
-                            System.out.println("Collllllll!!!!!!!!!");
-                            break;
-                        }
-                        System.arraycopy(temp2, 0, mRenderer.mCubeRotationMatrix, 0, 16);
+                        //Matrix.multiplyMM(temp2, 0, rot, 0, mRenderer.mCubeRotationMatrix, 0);
+                        mRenderer.move = move;
+
+                        //Matrix.multiplyMM(temp, 0 , mRenderer.mCubeTranslationMatrix, 0, temp2,0);
+
                     } else if (count == 2) {
                         // Translate cube1
                         SphereCollision s = mRenderer.mSphere.getCollision();
                         BoxCollision b = mRenderer.mCube.getCollision();
 
 
-                        Matrix.translateM(mRenderer.mCubeTranslationMatrix, 0, dx/ 100, -dy / 100, 0);
-                        float[] temp = new float[16];
-                        Matrix.multiplyMM(temp, 0 , mRenderer.mCubeTranslationMatrix, 0, mRenderer.mCubeRotationMatrix,0);
-                        mRenderer.mCube.getCollision().move(temp);
-                        if(Intersect.intersect(mRenderer.mSphere.getCollision(),mRenderer.mCube.getCollision())){
-                            System.out.println("Collllllll!!!!!!!!!");
-                            Matrix.translateM(mRenderer.mCubeTranslationMatrix, 0, -dx/ 100, dy / 100, 0);
-                            break;
-                        }
+                        float[] move = new float[16];
+                        Matrix.setIdentityM(move, 0);
+                        Matrix.translateM(move, 0, dx/100 , -dy/100 , 0);
+                        mRenderer.move = move;
 
                     }
                     break;
