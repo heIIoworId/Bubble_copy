@@ -120,7 +120,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 //        mBlower = new Blower();
 //        mBlower.setBubbleCore(mBubbleCore);
 
-
         mWorld = new World();
         mWorld.setParticles(mParticles);
         mWorld.setSprings(mSprings);
@@ -235,13 +234,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mBlower.setBlowingDir(mViewRotationMatrix);
         mWorld.applyForce();
         float updatedVertices[] = GeomOperator.genVertices(mWorld.getParticles());
-
-        // UPDATE VERTICES OF SPHERE
-//        mSphere.setVertices(updatedVertices);
         mBubble.setVertices(updatedVertices);
-        // FIXME LOG
-//        System.out.println("updated vertices: " + updatedVertices[0] + ", " + updatedVertices[1] + ", " + updatedVertices[2]);
-//        mCube.setVertices(updatedVertices);
         //FIXME UPDATE NORMALS OF SPHERE
 
         //DRAW MODELS

@@ -6,10 +6,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
-import java.util.Collections;
 
 import kr.ac.kaist.vclab.bubble.MyGLRenderer;
-import kr.ac.kaist.vclab.bubble.utils.SystemHelper;
 import kr.ac.kaist.vclab.bubble.utils.VecOperator;
 
 /**
@@ -30,6 +28,7 @@ public class BubbleSphere {
     private int mProjMatrixHandle;
     private int mModelViewMatrixHandle;
     private int mNormalMatrixHandle;
+
     private int mLightHandle;
     private int mLight2Handle;
     private int mColorHandle;

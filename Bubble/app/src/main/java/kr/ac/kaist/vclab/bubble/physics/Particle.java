@@ -1,5 +1,7 @@
 package kr.ac.kaist.vclab.bubble.physics;
 
+import kr.ac.kaist.vclab.bubble.utils.VecOperator;
+
 /**
  * Created by 84395 on 10/29/2016.
  */
@@ -11,8 +13,9 @@ public class Particle {
     private float location[];
     private float velocity[];
     private float acceleration[];
+    private float damping = 1f;
 
-    public Particle(float x, float y, float z) {
+    public Particle(float x, float y, float z){
         mass = 1.0f;
         location = new float[3];
         location[0] = x;
@@ -22,36 +25,45 @@ public class Particle {
         acceleration = new float[3];
     }
 
-    public Particle(float[] _location) {
+    public Particle(float[] _location){
         mass = 1.0f;
         location = _location;
         velocity = new float[3];
         acceleration = new float[3];
     }
 
-    public void applyForce(float[] force) {
-        acceleration[0] = force[0] / mass;
-        acceleration[1] = force[1] / mass;
-        acceleration[2] = force[2] / mass;
-
-        velocity[0] += acceleration[0];
-        velocity[1] += acceleration[1];
-        velocity[2] += acceleration[2];
-
-        location[0] += velocity[0];
-        location[1] += velocity[1];
-        location[2] += velocity[2];
+    public void applyForce(float[] force){
+        acceleration = VecOperator.scale(force, 1.0f/mass);
+        velocity = VecOperator.add(velocity, acceleration);
+        velocity = VecOperator.scale(velocity, damping);
+        location = VecOperator.add(location, velocity);
+        acceleration = VecOperator.scale(acceleration, 0f);
     }
 
-    public float[] getLocation() {
+    public float[] getLocation(){
         return location;
+    }
+    public void setLocation(float[] _location){
+        location = _location;
+    }
+
+    public void setDamping(float _damping){
+        damping = _damping;
     }
 
     public boolean isColocated(float[] _location) {
         boolean result = false;
-        if (location[0] == _location[0] && location[1] == _location[1] && location[2] == _location[2]) {
+        if(location[0]==_location[0] && location[1]==_location[1] && location[2]==_location[2]){
             result = true;
         }
         return result;
     }
+
+    public float[] getVelocity(){
+        return velocity;
+    }
+    public void setVelocity(float[] _velocity){
+        velocity = _velocity;
+    }
+
 }

@@ -23,9 +23,6 @@ public class MainActivity extends Activity {
 
     public static Context context;
     private MyGLSurfaceView mGLView;
-    private MyGLRenderer myRenderer;
-//    private MyHandler mHandler;
-//    private SoundHandler soundMeter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,9 +33,6 @@ public class MainActivity extends Activity {
         // Create a GLSurfaceView instance and set it
         // as the ContentView for this Activity
         mGLView = new MyGLSurfaceView(this);
-        myRenderer = mGLView.getmRenderer();
-        myRenderer.mCubeTranslationMatrix[3] = 0.5f;
-        System.out.println("moved x: "+ myRenderer.mCubeTranslationMatrix[3]);
 
 //        new Thread(new Runnable() {
 //            @Override
