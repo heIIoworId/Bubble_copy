@@ -8,6 +8,7 @@ import java.nio.FloatBuffer;
 import java.util.ArrayList;
 
 import kr.ac.kaist.vclab.bubble.MyGLRenderer;
+import kr.ac.kaist.vclab.bubble.utils.SystemHelper;
 import kr.ac.kaist.vclab.bubble.utils.VecOperator;
 
 /**
@@ -46,7 +47,7 @@ public class BubbleSphere2 {
     private static ArrayList<Float> verticesList;
     private static float normals[];
     private static ArrayList<Float> normalsList;
-    public float color[];
+    public float[] color = { 0.2f, 0.709803922f, 0.898039216f };
 
     public BubbleSphere2(float _radius, int _level){
 
@@ -73,6 +74,8 @@ public class BubbleSphere2 {
         for(int i = 0; i<verticesList.size(); i++){
             vertices[i] = verticesList.get(i);
         }
+        // FIXME LOG
+        SystemHelper.printFloatArray(vertices);
         initVertexBuffer();
 
         normals = new float[normalsList.size()];
@@ -135,6 +138,7 @@ public class BubbleSphere2 {
 
         // DRAW
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertices.length / 3);
+//        GLES20.glDrawArrays(GLES20.GL_LINES, 0, vertices.length / 3);
         GLES20.glLineWidth(3.0f);
 
         GLES20.glDisableVertexAttribArray(mPositionHandle);
@@ -198,7 +202,7 @@ public class BubbleSphere2 {
         }
     }
 
-     public void initVertexBuffer(){
+    public void initVertexBuffer(){
         ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
         byteBuf.order(ByteOrder.nativeOrder());
         mVertexBuffer = byteBuf.asFloatBuffer();

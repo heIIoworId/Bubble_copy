@@ -20,6 +20,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import kr.ac.kaist.vclab.bubble.activities.MainActivity;
 import kr.ac.kaist.vclab.bubble.events.SoundHandler;
+import kr.ac.kaist.vclab.bubble.models.BubbleSphere2;
 import kr.ac.kaist.vclab.bubble.models.Cube;
 import kr.ac.kaist.vclab.bubble.models.Sphere;
 import kr.ac.kaist.vclab.bubble.models.Square;
@@ -41,44 +42,53 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private Cube mCube;
     private Sphere mSphere;
     private Square mSquare;
+    private BubbleSphere2 mBubble;
 
     // DECLARE OTHERS
     private World mWorld;
     private ArrayList<Particle> mParticles;
     private ArrayList<Spring> mSprings;
     private Blower mBlower;
+    // FIXME SoundHandler COMMNENTED OUT
 //    private SoundHandler soundHandler;
 
     //DECLARE LIGHTS
     private float[] mLight = new float[3];
     private float[] mLight2 = new float[3];
 
-    // DECLARE MATRICES FOR 3D GRAPHICS
+    // VIEW MATRIX
     public float [] mViewRotationMatrix = new float[16];
     public float [] mViewTranslationMatrix = new float[16];
-
-    public float [] mCubeRotationMatrix = new float[16];
-    public static float [] mCubeTranslationMatrix = new float[16];
-
-    public float [] mSphereRotationMatrix = new float[16];
-    public float [] mSphereTranslationMatrix = new float[16];
-
-    private float[] mTempMatrix = new float[16];
-
     private float[] mViewMatrix = new float[16];
 
+    // MATRICES FOR mCube
+    public float [] mCubeRotationMatrix = new float[16];
+    public static float [] mCubeTranslationMatrix = new float[16];
     private float[] mCubeModelMatrix = new float[16];
-    private float[] mSphereModelMatrix = new float[16];
-    private float[] mSquareModelMatrix = new float[16];
-
     private float[] mCubeModelViewMatrix = new float[16];
-    private float[] mSphereModelViewMatrix = new float[16];
-    private float[] mSquareModelViewMatrix = new float[16];
-
     private float[] mCubeNormalMatrix = new float[16];
+
+    // MATRICES FOR mSphere
+    public float [] mSphereRotationMatrix = new float[16];
+    public float [] mSphereTranslationMatrix = new float[16];
+    private float[] mSphereModelMatrix = new float[16];
+    private float[] mSphereModelViewMatrix = new float[16];
     private float[] mSphereNormalMatrix = new float[16];
+
+    // MATRICES FOR mBubble
+    public float [] mBubbleRotationMatrix = new float[16];
+    public float [] mBubbleTranslationMatrix = new float[16];
+    private float[] mBubbleModelMatrix = new float[16];
+    private float[] mBubbleModelViewMatrix = new float[16];
+    private float[] mBubbleNormalMatrix = new float[16];
+
+    // MATRICES FOR mSquare
+    private float[] mSquareModelMatrix = new float[16];
+    private float[] mSquareModelViewMatrix = new float[16];
     private float[] mSquareNormalMatrix = new float[16];
 
+    // OTHER MATRICES
+    private float[] mTempMatrix = new float[16];
     private float[] mProjMatrix = new float[16];
 
     @Override
@@ -102,6 +112,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mCube.color = new float[] {0.2f, 0.7f, 0.9f};
         mSphere = new Sphere();
         mSphere.color = new float[] {0.7f, 0.7f, 0.7f};
+        float radius = 2f;
+        int level = 2;
+        mBubble = new BubbleSphere2(radius, level);
+        mBubble.color = new float[] {0.8f, 0.8f, 0.5f};
 
         //INITIALIZE WORLD
 //        ArrayList<Particle> mParticles = GeomOperator.genParticles(mSphere.getVertices());
@@ -118,23 +132,29 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // FIXME BLOWER COMMENTED OUT
 //        mWorld.setBlower(mBlower);
 
-        // INITIALIZE LIGHTS
+        // INIT LIGHTS
         mLight = new float[] {2.0f, 3.0f, 14.0f};
         mLight2 = new float[] {-2.0f, -3.0f, -5.0f};
 
-        // INITIALIZE MATRICES
+        // INIT VIEW MATRIX
         resetViewMatrix();
-
         Matrix.setIdentityM(mViewRotationMatrix, 0);
         Matrix.setIdentityM(mViewTranslationMatrix, 0);
         Matrix.translateM(mViewTranslationMatrix, 0, 0, 0, -4f);
 
+        // INIT CUBE MATRIX
         Matrix.setIdentityM(mCubeRotationMatrix, 0);
         Matrix.setIdentityM(mCubeTranslationMatrix, 0);
 
+        // INIT SPHERE MATRIX
         Matrix.setIdentityM(mSphereRotationMatrix, 0);
         Matrix.setIdentityM(mSphereTranslationMatrix, 0);
         Matrix.translateM(mSphereTranslationMatrix, 0, 0, 0, 0);
+
+        // INIT BUBBLE MATRIX
+        Matrix.setIdentityM(mBubbleRotationMatrix, 0);
+        Matrix.setIdentityM(mBubbleTranslationMatrix, 0);
+        Matrix.translateM(mBubbleTranslationMatrix, 0, 0, 0, 0);
 
 //        new Thread(new Runnable() {
 //            @Override
@@ -162,49 +182,57 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // Draw background color
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
-        // Calculate view matrix
+        // FIXME DON'T KNOW WHY IT IS NEEDED
+        float scale = 0.4f;
+
+        // CALCULATE VIEW MATRIX
         Matrix.setIdentityM(mViewMatrix, 0);
         Matrix.multiplyMM(mTempMatrix, 0, mViewRotationMatrix, 0, mViewMatrix, 0);
         System.arraycopy(mTempMatrix, 0, mViewMatrix, 0, 16);
         Matrix.multiplyMM(mTempMatrix, 0, mViewTranslationMatrix, 0, mViewMatrix, 0);
         System.arraycopy(mTempMatrix, 0, mViewMatrix, 0, 16);
 
-        // Calculate Square ModelMatrix
+        // Calculate Square MATRIX
         Matrix.setIdentityM(mSquareModelMatrix, 0);
         Matrix.translateM(mSquareModelMatrix, 0, 0, -1, 0);
         Matrix.rotateM(mSquareModelMatrix, 0, -90, 1f, 0, 0);
         Matrix.scaleM(mSquareModelMatrix, 0, 2f, 2f, 2f);
+        Matrix.multiplyMM(mSquareModelViewMatrix, 0, mViewMatrix, 0, mSquareModelMatrix, 0);
+        normalMatrix(mSquareNormalMatrix, 0, mSquareModelViewMatrix, 0);
 
-        // Calculate Cube ModelMatrix
+        // Calculate Cube MATRIX
         Matrix.setIdentityM(mCubeModelMatrix, 0);
         Matrix.multiplyMM(mTempMatrix, 0, mCubeRotationMatrix, 0, mCubeModelMatrix, 0);
         System.arraycopy(mTempMatrix, 0, mCubeModelMatrix, 0, 16);
         Matrix.multiplyMM(mTempMatrix, 0, mCubeTranslationMatrix, 0, mCubeModelMatrix, 0);
         System.arraycopy(mTempMatrix, 0, mCubeModelMatrix, 0, 16);
-
-        float scale = 0.4f;
         Matrix.scaleM(mCubeModelMatrix, 0, scale, scale, scale);
+        Matrix.multiplyMM(mCubeModelViewMatrix, 0, mViewMatrix, 0, mCubeModelMatrix, 0);
+        normalMatrix(mCubeNormalMatrix, 0, mCubeModelViewMatrix, 0);
 
-        // Calculate Sphere ModelMatrix
+        // CALCULATE SPHERE MATRIX
         Matrix.setIdentityM(mSphereModelMatrix, 0);
         Matrix.multiplyMM(mTempMatrix, 0, mSphereRotationMatrix, 0, mSphereModelMatrix, 0);
         System.arraycopy(mTempMatrix, 0, mSphereModelMatrix, 0, 16);
         Matrix.multiplyMM(mTempMatrix, 0, mSphereTranslationMatrix, 0, mSphereModelMatrix, 0);
         System.arraycopy(mTempMatrix, 0, mSphereModelMatrix, 0, 16);
         Matrix.scaleM(mSphereModelMatrix, 0, scale, scale, scale);
-
-        // Calculate ModelViewMatrix
-        Matrix.multiplyMM(mSquareModelViewMatrix, 0, mViewMatrix, 0, mSquareModelMatrix, 0);
-        Matrix.multiplyMM(mCubeModelViewMatrix, 0, mViewMatrix, 0, mCubeModelMatrix, 0);
         Matrix.multiplyMM(mSphereModelViewMatrix, 0, mViewMatrix, 0, mSphereModelMatrix, 0);
-
-        // Calculate NormalMatrix
-        normalMatrix(mCubeNormalMatrix, 0, mCubeModelViewMatrix, 0);
         normalMatrix(mSphereNormalMatrix, 0, mSphereModelViewMatrix, 0);
-        normalMatrix(mSquareNormalMatrix, 0, mSquareModelViewMatrix, 0);
+
+        // CALCULATE BUBBLE MATRIX
+        Matrix.setIdentityM(mBubbleModelMatrix, 0);
+        Matrix.multiplyMM(mTempMatrix, 0, mBubbleRotationMatrix, 0, mBubbleModelMatrix, 0);
+        System.arraycopy(mTempMatrix, 0, mBubbleModelMatrix, 0, 16);
+        Matrix.multiplyMM(mTempMatrix, 0, mBubbleTranslationMatrix, 0, mBubbleModelMatrix, 0);
+        System.arraycopy(mTempMatrix, 0, mBubbleModelMatrix, 0, 16);
+        Matrix.scaleM(mBubbleModelMatrix, 0, scale, scale, scale);
+        Matrix.multiplyMM(mBubbleModelViewMatrix, 0, mViewMatrix, 0, mBubbleModelMatrix, 0);
+        normalMatrix(mBubbleNormalMatrix, 0, mBubbleModelViewMatrix, 0);
 
         //UPDATE WORLD AND VERTICES OF SPHERE
-        mWorld.applyForce();
+        // FIXME TEMP COMMENTED OUT
+//        mWorld.applyForce();
         float updatedVertices[] = GeomOperator.genVertices(mWorld.getParticles());
 
         // FIXME WHEN SOUND HANDLER IS ACTIVATED
@@ -218,15 +246,16 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // UPDATE VERTICES OF SPHERE
         mSphere.setVertices(updatedVertices);
         // FIXME LOG
-        System.out.println("updated vertices: " +
-                updatedVertices[0] + ", " + updatedVertices[1] + ", " + updatedVertices[2]);
+//        System.out.println("updated vertices: " + updatedVertices[0] + ", " + updatedVertices[1] + ", " + updatedVertices[2]);
 //        mCube.setVertices(updatedVertices);
         //FIXME UPDATE NORMALS OF SPHERE
 
         //DRAW MODELS
-        //mSquare.draw(mProjMatrix, mSquareModelViewMatrix, mSquareNormalMatrix, mLight, mLight2);
+        mSquare.draw(mProjMatrix, mSquareModelViewMatrix, mSquareNormalMatrix, mLight, mLight2);
         //mCube.draw(mProjMatrix, mCubeModelViewMatrix, mCubeNormalMatrix, mLight, mLight2);
+        // FIXME TEMP COMMENTED OUT
         mSphere.draw(mProjMatrix, mSphereModelViewMatrix, mSphereNormalMatrix, mLight, mLight2);
+        mBubble.draw(mProjMatrix, mBubbleModelViewMatrix, mBubbleNormalMatrix, mLight, mLight2);
     }
 
 
