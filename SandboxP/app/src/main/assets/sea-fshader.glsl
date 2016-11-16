@@ -22,8 +22,8 @@ void main() {
     vec3 intensity = textureColor.xyz * diffuse;
 
     // haze
-    vec4 haze = vec4(0.5, 0.5, 0.5, 0.7);
-    float ratio = 1 + vPosition.z/23;
+    vec4 haze = vec4(0.3, 0.3, 0.3, 1.0);
+    float ratio = 1 + vPosition.z/37;
 
-    gl_FragColor = ratio * vec4(intensity, 0.7) + (1 - ratio) * haze;
+    gl_FragColor = ratio * vec4(intensity, 0.3) + (1 - ratio) * haze;
 }
