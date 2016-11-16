@@ -9,10 +9,10 @@ import kr.ac.kaist.vclab.bubble.utils.VecOperator;
 public class Spring {
     Particle particleA;
     Particle particleB;
-    float restLength = 0.5f; //DEFAULT SPRING LENGTH
+    float restLength; //DEFAULT SPRING LENGTH
     float minLength = 0.3f;
     float maxLength = 50.0f;
-    float k = 0.00005f; // HOOKEAN COEFFICIENT
+    float k = 0.0002f; // HOOKEAN COEFFICIENT
 
     public Spring(Particle _particleA, Particle _particleB){
         particleA = _particleA;
@@ -73,6 +73,10 @@ public class Spring {
         float[] pointB = particleB.getLocation();
         length = VecOperator.getDistance(pointA, pointB);
         return length;
+    }
+
+    public void setRestLength(float _restLength){
+        restLength = _restLength;
     }
 
     public Particle getParticleA(){

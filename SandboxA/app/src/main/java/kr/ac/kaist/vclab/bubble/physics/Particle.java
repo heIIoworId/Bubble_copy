@@ -23,7 +23,7 @@ public class Particle {
         location[2] = z;
         velocity = new float[3];
         acceleration = new float[3];
-        damping = 1f;
+        damping = 0.9f;
     }
 
     public Particle(float[] _location){
