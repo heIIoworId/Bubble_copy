@@ -4,6 +4,7 @@ import java.util.List;
 
 import kr.ac.kaist.vclab.bubble.MatOperator;
 import kr.ac.kaist.vclab.bubble.Sphere;
+import kr.ac.kaist.vclab.bubble.VecOperator;
 
 /**
  * Created by Jongmin on 2016-10-28.
@@ -28,15 +29,15 @@ public class Intersect {
         for(int i=0; i<3; i++){
             float length;
             float[] axis = new float[3];
-            axis[0] = axes[i];
-            axis[1] = axes[4+i];
-            axis[2] = axes[8+i];
+            axis[0] = axes[i*4];
+            axis[1] = axes[i*4+1];
+            axis[2] = axes[i*4+2];
 //            System.out.println("dis : " + distance[0] + " " + distance[1] + " " + distance[2]);
 //            System.out.println("axis : " + axis[0] + " " + axis[1] + " " + axis[2]);
-            length = MatOperator.size(axis);
-            axis = MatOperator.normalize(axis);
+            length = VecOperator.getMag(axis);
+            axis = VecOperator.normalize(axis);
 
-            float dot = MatOperator.dot(distance, axis);
+            float dot = VecOperator.dot(distance, axis);
 //            System.out.println(dot);
             if (Math.abs(dot) > length && dot != 0){
                 dot *= length/Math.abs(dot);
@@ -90,27 +91,39 @@ public class Intersect {
         System.out.println("box "+boxCenter[0] +" " +boxCenter[1]+" "+boxCenter[2]);
         System.out.println("sphere "+sphereCenter[0] +" " +sphereCenter[1]+" "+sphereCenter[2]);
         System.out.println("radius " + sphereCollision.GetRadius());*/
-        return MatOperator.size(result) <= sphereCollision.GetRadius();
+        return VecOperator.getMag(result) <= sphereCollision.GetRadius();
     }
 
-    public static boolean intersect(SphereCollision sphereCollision1, SphereCollision sphereCollision2){
-        float[] distance = new float[3];
-        float[] sphereCollisionCenter1 = sphereCollision1.GetCenter();
-        float[] sphereCollisionCenter2 = sphereCollision2.GetCenter();
-        for(int i=0; i<3; i++){
-            distance[i] = sphereCollisionCenter1[i] - sphereCollisionCenter2[i];
+
+    public static boolean intersect(SphereCollision sphereCollision, TriangleCollision triangleCollision) {
+        float[] vectors = triangleCollision.vectors;
+        float[] sphereCenter = sphereCollision.GetCenter();
+
+
+        float[] vec1 = new float[]{vectors[0], vectors[1], vectors[2]};
+        System.out.println("v1 "+ vec1[0] + " " + vec1[1]+ " " +vec1[2]);
+        float[] vec21 = new float[]{vectors[4] - vectors[0], vectors[5] - vectors[1], vectors[6] - vectors[2]};
+        float[] vec31 = new float[]{vectors[8] - vectors[0], vectors[9] - vectors[1], vectors[10] - vectors[2]};
+        float[] normal = new float[3];
+        VecOperator.cross(vec21, vec31, normal);
+        normal = VecOperator.normalize(normal);
+        //ax+by+cz = d , plane : {a,b,c,d}-
+        float[] plane = new float[]{normal[0], normal[1], normal[2], VecOperator.dot(normal, vec1)};
+
+        float distance = (VecOperator.dot(normal, sphereCenter) - plane[3]) / (VecOperator.dot(normal, normal));
+        if (distance > sphereCollision.GetRadius()) {
+            return false;
         }
 
-        return MatOperator.size(distance) <= Math.abs(sphereCollision2.GetRadius() - sphereCollision1.GetRadius());
+        float[] nearest = new float[3];
+        nearest = VecOperator.scale(normal, -distance);
+        nearest = VecOperator.sub(sphereCenter, nearest);
+
+        float a = (nearest[0] * vec31[1] - nearest[1] * vec31[0]) / (vec21[0] * vec31[1] - vec21[1] * vec31[0]);
+        float b = (nearest[0] * vec21[1] - nearest[1] * vec21[0]) / (vec31[0] * vec21[1] - vec31[1] * vec21[0]);
+        System.out.println("nearest"+ " " + nearest[0]+ " " + nearest[1] + " " + nearest[2]);
+        System.out.println("a " + a + " b " + b);
+
+        return a >= 0 && a <= 1 && b >=0 && b <= 1;
     }
-/*
-    public static boolean intersect(SphereCollision sphereCollision, List<Collision> collisionList){
-        for (Collision c: collisionList) {
-            if()
-            if(intersect(sphereCollision, c))
-
-        }
-    }*/
-
-
 }
