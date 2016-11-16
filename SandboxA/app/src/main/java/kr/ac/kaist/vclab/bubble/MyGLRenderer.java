@@ -19,8 +19,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import kr.ac.kaist.vclab.bubble.activities.MainActivity;
-import kr.ac.kaist.vclab.bubble.events.SoundHandler;
-import kr.ac.kaist.vclab.bubble.models.BubbleSphere2;
+import kr.ac.kaist.vclab.bubble.models.BubbleSphere;
 import kr.ac.kaist.vclab.bubble.models.Cube;
 import kr.ac.kaist.vclab.bubble.models.Sphere;
 import kr.ac.kaist.vclab.bubble.models.Square;
@@ -42,14 +41,14 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private Cube mCube;
     private Sphere mSphere;
     private Square mSquare;
-    private BubbleSphere2 mBubble;
+    private BubbleSphere mBubble;
 
     // DECLARE OTHERS
     private World mWorld;
     private ArrayList<Particle> mParticles;
     private ArrayList<Spring> mSprings;
     private Blower mBlower;
-    // FIXME SoundHandler COMMNENTED OUT
+    // FIXME soundHandler COMMENTED OUT
 //    private SoundHandler soundHandler;
 
     //DECLARE LIGHTS
@@ -95,7 +94,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     // CALLED WHEN SURFACE IS CREATED AT FIRST.
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
 
-        //FIXME DISABLE THIS WHEN TRYING TO RUN ON DESKTOP
+        //FIXME soundHandler COMMENTED OUT
         //INITIALIZE AND START SOUND HANDLER
 //        soundHandler = new SoundHandler();
 //        soundHandler.start();
@@ -113,13 +112,13 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mSphere = new Sphere();
         mSphere.color = new float[] {0.7f, 0.7f, 0.7f};
         float radius = 3f;
-        int level = 2;
-        mBubble = new BubbleSphere2(radius, level);
-        mBubble.color = new float[] {0.8f, 0.8f, 0.5f};
+        int level = 4;
+        mBubble = new BubbleSphere(radius, level);
+        mBubble.color = new float[] {0.3f, 0.8f, 0.9f};
 
         //INITIALIZE WORLD
-//        ArrayList<Particle> mParticles = GeomOperator.genParticles(mSphere.getVertices());
-        mParticles = GeomOperator.genParticles(mSphere.getVertices());
+//        mParticles = GeomOperator.genParticles(mSphere.getVertices());
+        mParticles = GeomOperator.genParticles(mBubble.getVertices());
         mSprings = GeomOperator.genSprings(mParticles);
         // FIXME BLOWER COMMENTED OUT
 //        mBlower = new Blower();
@@ -231,11 +230,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         normalMatrix(mBubbleNormalMatrix, 0, mBubbleModelViewMatrix, 0);
 
         //UPDATE WORLD AND VERTICES OF SPHERE
-        // FIXME TEMP COMMENTED OUT
-//        mWorld.applyForce();
+        mWorld.applyForce();
         float updatedVertices[] = GeomOperator.genVertices(mWorld.getParticles());
 
-        // FIXME WHEN SOUND HANDLER IS ACTIVATED
+        // FIXME SoundHandler COMMENTED OUT
         // Move bubble according to soundHandler
 //        int vol = (int) soundHandler.getAmplitude();
 //        System.out.println("vol: " + vol);
@@ -244,7 +242,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 //        Matrix.translateM(mCubeTranslationMatrix, 0, 0, goUp, 0);
 
         // UPDATE VERTICES OF SPHERE
-        mSphere.setVertices(updatedVertices);
+//        mSphere.setVertices(updatedVertices);
+        mBubble.setVertices(updatedVertices);
         // FIXME LOG
 //        System.out.println("updated vertices: " + updatedVertices[0] + ", " + updatedVertices[1] + ", " + updatedVertices[2]);
 //        mCube.setVertices(updatedVertices);
@@ -252,8 +251,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         //DRAW MODELS
         mSquare.draw(mProjMatrix, mSquareModelViewMatrix, mSquareNormalMatrix, mLight, mLight2);
-        //mCube.draw(mProjMatrix, mCubeModelViewMatrix, mCubeNormalMatrix, mLight, mLight2);
-        //mSphere.draw(mProjMatrix, mSphereModelViewMatrix, mSphereNormalMatrix, mLight, mLight2);
+//        mCube.draw(mProjMatrix, mCubeModelViewMatrix, mCubeNormalMatrix, mLight, mLight2);
+//        mSphere.draw(mProjMatrix, mSphereModelViewMatrix, mSphereNormalMatrix, mLight, mLight2);
         mBubble.draw(mProjMatrix, mBubbleModelViewMatrix, mBubbleNormalMatrix, mLight, mLight2);
     }
 

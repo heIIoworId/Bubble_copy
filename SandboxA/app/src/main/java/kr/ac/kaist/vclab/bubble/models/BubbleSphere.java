@@ -6,6 +6,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import kr.ac.kaist.vclab.bubble.MyGLRenderer;
 import kr.ac.kaist.vclab.bubble.utils.SystemHelper;
@@ -15,7 +16,7 @@ import kr.ac.kaist.vclab.bubble.utils.VecOperator;
  * Created by mnswpr on 11/16/2016.
  */
 
-public class BubbleSphere2 {
+public class BubbleSphere {
 
     private final int mProgram;
     private FloatBuffer mVertexBuffer;
@@ -47,9 +48,9 @@ public class BubbleSphere2 {
     private static ArrayList<Float> verticesList;
     private static float normals[];
     private static ArrayList<Float> normalsList;
-    public float[] color = { 0.2f, 0.709803922f, 0.898039216f };
+    public float[] color;
 
-    public BubbleSphere2(float _radius, int _level){
+    public BubbleSphere(float _radius, int _level){
 
         verticesList = new ArrayList<>();
         normalsList = new ArrayList<>();
@@ -70,14 +71,14 @@ public class BubbleSphere2 {
         subdivide(vertexF, vertexD, vertexC, _level, _radius);
         subdivide(vertexF, vertexA, vertexD, _level, _radius);
 
+//        Collections.reverse(verticesList);
         vertices = new float[verticesList.size()];
         for(int i = 0; i<verticesList.size(); i++){
             vertices[i] = verticesList.get(i);
         }
-        // FIXME LOG
-        SystemHelper.printFloatArray(vertices);
         initVertexBuffer();
 
+//        Collections.reverse(normalsList);
         normals = new float[normalsList.size()];
         for(int i = 0; i<normalsList.size(); i++){
             normals[i] = normalsList.get(i);
@@ -162,14 +163,14 @@ public class BubbleSphere2 {
             _vertex3 = VecOperator.scale(_vertex3, radius);
 
             verticesList.add(_vertex1[0]);
-            verticesList.add(_vertex1[2]);
             verticesList.add(_vertex1[1]);
+            verticesList.add(_vertex1[2]);
             verticesList.add(_vertex2[0]);
-            verticesList.add(_vertex2[2]);
             verticesList.add(_vertex2[1]);
+            verticesList.add(_vertex2[2]);
             verticesList.add(_vertex3[0]);
-            verticesList.add(_vertex3[2]);
             verticesList.add(_vertex3[1]);
+            verticesList.add(_vertex3[2]);
 
         } else {
             float vertex1[] = new float[3];
