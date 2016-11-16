@@ -112,7 +112,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mCube.color = new float[] {0.2f, 0.7f, 0.9f};
         mSphere = new Sphere();
         mSphere.color = new float[] {0.7f, 0.7f, 0.7f};
-        float radius = 2f;
+        float radius = 3f;
         int level = 2;
         mBubble = new BubbleSphere2(radius, level);
         mBubble.color = new float[] {0.8f, 0.8f, 0.5f};
@@ -253,8 +253,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         //DRAW MODELS
         mSquare.draw(mProjMatrix, mSquareModelViewMatrix, mSquareNormalMatrix, mLight, mLight2);
         //mCube.draw(mProjMatrix, mCubeModelViewMatrix, mCubeNormalMatrix, mLight, mLight2);
-        // FIXME TEMP COMMENTED OUT
-        mSphere.draw(mProjMatrix, mSphereModelViewMatrix, mSphereNormalMatrix, mLight, mLight2);
+        //mSphere.draw(mProjMatrix, mSphereModelViewMatrix, mSphereNormalMatrix, mLight, mLight2);
         mBubble.draw(mProjMatrix, mBubbleModelViewMatrix, mBubbleNormalMatrix, mLight, mLight2);
     }
 
