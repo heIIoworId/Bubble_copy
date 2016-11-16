@@ -2503,8 +2503,8 @@ public class Sphere {
 
         // Draw the sphere
 
-//        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertices.length / 3);
-        GLES20.glDrawArrays(GLES20.GL_LINES, 0, vertices.length / 3);
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertices.length / 3);
+//        GLES20.glDrawArrays(GLES20.GL_LINES, 0, vertices.length / 3);
         GLES20.glLineWidth(3.0f);
 
         GLES20.glDisableVertexAttribArray(mPositionHandle);

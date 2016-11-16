@@ -23,6 +23,7 @@ import kr.ac.kaist.vclab.bubble.events.SoundHandler;
 import kr.ac.kaist.vclab.bubble.models.Cube;
 import kr.ac.kaist.vclab.bubble.models.MapCube;
 import kr.ac.kaist.vclab.bubble.models.SeaRectangle;
+import kr.ac.kaist.vclab.bubble.models.SkyBox;
 import kr.ac.kaist.vclab.bubble.models.Sphere;
 import kr.ac.kaist.vclab.bubble.models.Square;
 import kr.ac.kaist.vclab.bubble.physics.Particle;
@@ -53,6 +54,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     public Square mSquare;
     public MapCube mMap;
     public SeaRectangle mSea;
+    public SkyBox mSkyBox;
 
     // DECLARE OTHERS
     private World mWorld;
@@ -70,36 +72,45 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     public float[] mSphereRotationMatrix = new float[16];
     public float[] mMapRotationMatrix = new float[16];
     public float[] mSeaRotationMatrix = new float[16];
+    public float[] mSkyboxRotationMatrix = new float[16];
 
     public float[] mViewTranslationMatrix = new float[16];
     public float[] mCubeTranslationMatrix = new float[16];
     public float[] mSphereTranslationMatrix = new float[16];
     public float[] mMapTranslationMatrix = new float[16];
     public float[] mSeaTranslationMatrix = new float[16];
+    public float[] mSkyboxTranslationMatrix = new float[16];
 
     private float[] mCubeModelMatrix = new float[16];
     private float[] mSphereModelMatrix = new float[16];
     private float[] mSquareModelMatrix = new float[16];
     private float[] mMapModelMatrix = new float[16];
     private float[] mSeaModelMatrix = new float[16];
+    private float[] mSkyboxModelMatrix = new float[16];
 
     private float[] mCubeModelViewMatrix = new float[16];
     private float[] mSphereModelViewMatrix = new float[16];
     private float[] mSquareModelViewMatrix = new float[16];
     private float[] mMapModelViewMatrix = new float[16];
     private float[] mSeaModelViewMatrix = new float[16];
+    private float[] mSkyboxModelViewMatrix = new float[16];
 
     private float[] mCubeNormalMatrix = new float[16];
     private float[] mSphereNormalMatrix = new float[16];
     private float[] mSquareNormalMatrix = new float[16];
     private float[] mMapNormalMatrix = new float[16];
     private float[] mSeaNormalMatrix = new float[16];
+    private float[] mSkyboxNormalMatrix = new float[16];
 
     private float[] mProjMatrix = new float[16];
 
     private float[] mTempMatrix = new float[16];
 
     float scale = 0.4f;
+
+    private float bubbleScale = 0.03f;
+    private float[] bubbleStart = new float[]{0,0,0};
+    private float cameraDistance = 1.5f;
 
     @Override
     // CALLED WHEN SURFACE IS CREATED AT FIRST.
@@ -135,6 +146,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         // ... sea (same x, z size as map)
         mSea = new SeaRectangle(mapSizeX, mapSizeZ);
+        mSkyBox = new SkyBox();
 
         //INITIALIZE WORLD
         mWorld = new World();
@@ -162,7 +174,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // ... sphere (spring-mass)
         Matrix.setIdentityM(mSphereRotationMatrix, 0);
         Matrix.setIdentityM(mSphereTranslationMatrix, 0);
-        Matrix.translateM(mSphereTranslationMatrix, 0, 0, 0, 0);
+        Matrix.translateM(mSphereTranslationMatrix, 0, bubbleStart[0], bubbleStart[1], bubbleStart[2]);
 
         // ... map
         Matrix.setIdentityM(mMapRotationMatrix, 0);
@@ -173,6 +185,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.setIdentityM(mSeaRotationMatrix, 0);
         Matrix.setIdentityM(mSeaTranslationMatrix, 0);
         Matrix.translateM(mSeaTranslationMatrix, 0, -10.0f, -4.0f, -10.0f);
+
+        // ... skybox
+        Matrix.setIdentityM(mSkyboxRotationMatrix, 0);
+        Matrix.setIdentityM(mSkyboxTranslationMatrix, 0);
 
 //        new Thread(new Runnable() {
 //            @Override
@@ -231,13 +247,16 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.scaleM(mCubeModelMatrix, 0, scale, scale, scale);
 
         // CALCULATE SPHERE MODELMATRIX
+        updateView();
+
         Matrix.setIdentityM(mSphereModelMatrix, 0);
+
         Matrix.multiplyMM(mTempMatrix, 0, mSphereRotationMatrix, 0, mSphereModelMatrix, 0);
         System.arraycopy(mTempMatrix, 0, mSphereModelMatrix, 0, 16);
+
         Matrix.multiplyMM(mTempMatrix, 0, mSphereTranslationMatrix, 0, mSphereModelMatrix, 0);
         System.arraycopy(mTempMatrix, 0, mSphereModelMatrix, 0, 16);
-        Matrix.scaleM(mSphereModelMatrix, 0, scale, scale, scale);
-
+        Matrix.scaleM(mSphereModelMatrix, 0, bubbleScale, bubbleScale, bubbleScale);
 
         // CALCULATE MAP MODELMATRIX
         Matrix.setIdentityM(mMapModelMatrix, 0);
@@ -253,12 +272,21 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.multiplyMM(mTempMatrix, 0, mSeaTranslationMatrix, 0, mSeaModelMatrix, 0);
         System.arraycopy(mTempMatrix, 0, mSeaModelMatrix, 0, 16);
 
+        // CALCULATE SKYBOX MODELMATRIX
+        Matrix.setIdentityM(mSkyboxModelMatrix, 0);
+        Matrix.multiplyMM(mTempMatrix, 0, mSkyboxRotationMatrix, 0, mSkyboxModelMatrix, 0);
+        System.arraycopy(mTempMatrix, 0, mSkyboxModelMatrix, 0, 16);
+        Matrix.multiplyMM(mTempMatrix, 0, mSkyboxTranslationMatrix, 0, mSkyboxModelMatrix, 0);
+        System.arraycopy(mTempMatrix, 0, mSkyboxModelMatrix, 0, 16);
+
+        Matrix.scaleM(mSkyboxModelMatrix, 0, 30, 30, 30);
         // CALCULATE MODELVIEWMATRIX
         Matrix.multiplyMM(mSquareModelViewMatrix, 0, mViewMatrix, 0, mSquareModelMatrix, 0);
         Matrix.multiplyMM(mCubeModelViewMatrix, 0, mViewMatrix, 0, mCubeModelMatrix, 0);
         Matrix.multiplyMM(mSphereModelViewMatrix, 0, mViewMatrix, 0, mSphereModelMatrix, 0);
         Matrix.multiplyMM(mMapModelViewMatrix, 0, mViewMatrix, 0, mMapModelMatrix, 0);
         Matrix.multiplyMM(mSeaModelViewMatrix, 0, mViewMatrix, 0, mSeaModelMatrix, 0);
+        Matrix.multiplyMM(mSkyboxModelViewMatrix, 0, mViewMatrix, 0, mSkyboxModelMatrix, 0);
 
         // CALCULATE NORMALMATRIX
         normalMatrix(mCubeNormalMatrix, 0, mCubeModelViewMatrix, 0);
@@ -266,6 +294,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         normalMatrix(mSquareNormalMatrix, 0, mSquareModelViewMatrix, 0);
         normalMatrix(mMapNormalMatrix, 0, mMapModelViewMatrix, 0);
         normalMatrix(mSeaNormalMatrix, 0, mSeaModelViewMatrix, 0);
+        normalMatrix(mSkyboxNormalMatrix, 0, mSkyboxModelViewMatrix, 0);
 
         // UPDATE WORLD AND VERTICES OF SPHERE
         mWorld.update();
@@ -280,17 +309,16 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         // ... gl_cull_face (culling)
         GLES20.glEnable(GLES20.GL_CULL_FACE);
-        mSquare.draw(mProjMatrix, mSquareModelViewMatrix, mSquareNormalMatrix, mLight, mLight2);
-        mCube.draw(mProjMatrix, mCubeModelViewMatrix, mCubeNormalMatrix, mLight, mLight2);
-        mSphere.draw(mProjMatrix, mSphereModelViewMatrix, mSphereNormalMatrix, mLight, mLight2);
+        mSkyBox.draw(mProjMatrix, mSkyboxModelViewMatrix, mSkyboxNormalMatrix, mLight, mLight2);
+        //mSquare.draw(mProjMatrix, mSquareModelViewMatrix, mSquareNormalMatrix, mLight, mLight2);
+        //mCube.draw(mProjMatrix, mCubeModelViewMatrix, mCubeNormalMatrix, mLight, mLight2);
         mMap.draw(mProjMatrix, mMapModelViewMatrix, mMapNormalMatrix, mLight, mLight2);
-        GLES20.glDisable(GLES20.GL_CULL_FACE);
 
         // ... gl_blend (alpha blending)
         GLES20.glEnable(GLES20.GL_BLEND);
         GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+        mSphere.draw(mProjMatrix, mSphereModelViewMatrix, mSphereNormalMatrix, mLight, mLight2);
         mSea.draw(mProjMatrix, mSeaModelViewMatrix, mSeaNormalMatrix, mLight, mLight2);
-        GLES20.glDisable(GLES20.GL_BLEND);
     }
 
 
@@ -411,4 +439,21 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         }
     }
 
+    public void updateView(){
+        float[] eye = new float[]{mSphereTranslationMatrix[12], mSphereTranslationMatrix[13], mSphereTranslationMatrix[14]};
+
+        float[] translation = new float[]{0,0,-1,0};
+        float[] change_translation = new float[4];
+        Matrix.multiplyMV(change_translation, 0, mViewRotationMatrix, 0, translation, 0);
+        for (int i=0; i<3; i++){
+            change_translation[i]*=cameraDistance;
+            eye[i] += change_translation[i];
+        }
+
+        float[] look = new float[]{mSphereTranslationMatrix[12], mSphereTranslationMatrix[13], mSphereTranslationMatrix[14]};
+
+        float[] up = new float[] {0,1,0,0};
+
+        Matrix.setLookAtM(mViewMatrix, 0, eye[0], eye[1], eye[2], look[0], look[1], look[2], up[0], up[1], up[2]);
+    }
 }

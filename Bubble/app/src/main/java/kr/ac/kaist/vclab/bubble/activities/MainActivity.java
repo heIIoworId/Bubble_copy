@@ -116,7 +116,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         }
         float[] values = new float[3];
         values = gyroHandler.getSensorValues();
-        mGLView.rotateByGyroSensor(values[0], values[1], values[2]);
+        mGLView.rotateByGyroSensor(values[0], -values[1], -values[2]);
 /*
         if (sensor.getType() == Sensor.TYPE_GYROSCOPE) {
             gyroX = event.values[0] * gyroScale;
