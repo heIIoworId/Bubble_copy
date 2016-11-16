@@ -64,7 +64,7 @@ public class SeaRectangle {
                 0.0f, 1.0f, 0.0f
         };
 
-        textureCoors = new float[]{
+        textureCoors = new float[] {
                 0.0f, 0.0f, 0.0f,
                 0.0f, 1.0f, 0.0f,
                 1.0f, 1.0f, 0.0f,
