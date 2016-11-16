@@ -6,6 +6,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
+import kr.ac.kaist.vclab.bubble.Collision.TriangleCollision;
+
 /**
  * Created by sjjeon on 16. 9. 21.
  */
@@ -29,6 +31,9 @@ public class Square {
     private int mLightHandle;
     private int mLight2Handle;
     private int mColorHandle;
+
+    private TriangleCollision triangleCollision1 = new TriangleCollision(new float[]{-1,1,0}, new float[]{-1,-1,0}, new float[]{1,1,0});
+    private TriangleCollision triangleCollision2 = new TriangleCollision(new float[]{-1,-1,0}, new float[]{1,-1,0}, new float[]{1,1,0});
 
     private static final int COORDS_PER_VERTEX = 3;
     private static final int VERTEX_STRIDE = COORDS_PER_VERTEX * 4;
@@ -125,5 +130,12 @@ public class Square {
 
         GLES20.glDisableVertexAttribArray(mPositionHandle);
         GLES20.glDisableVertexAttribArray(mNormalHandle);
+    }
+
+    public TriangleCollision getCollision1(){
+        return triangleCollision1;
+    }
+    public TriangleCollision getCollision2(){
+        return triangleCollision2;
     }
 }

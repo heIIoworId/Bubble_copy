@@ -35,13 +35,4 @@ public class SphereCollision extends Collision{
         System.out.println(radius + " scale");
     }
 
-    boolean IsCollided(BoxCollision target){
-        return Intersect.intersect(this, target);
-    }
-
-
-
-    boolean IsCollided(SphereCollision target){
-        return Intersect.intersect(this, target);
-    }
 }

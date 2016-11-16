@@ -94,6 +94,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // Initialize square
         mSquare = new Square();
         mSquare.color = new float[] {0.1f, 0.95f, 0.1f};
+      //  mSquare.getCollision1().scalevectors(2.0f);
+      //  mSquare.getCollision2().scalevectors(2.0f);
 
         // Initialize cube
         mCube = new Cube();
@@ -143,7 +145,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     public void onDrawFrame(GL10 unused) {
         // Draw background color
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
-
+        //Matrix.translateM(mSphereTranslationMatrix,0 ,0 ,-0.01f,0);
         // Calculate view matrix
         Matrix.setIdentityM(mViewMatrix, 0);
         Matrix.multiplyMM(mTempMatrix, 0, mViewRotationMatrix, 0, mViewMatrix, 0);
@@ -207,6 +209,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mSphere.draw(mProjMatrix, mSphereModelViewMatrix, mSphereNormalMatrix, mLight, mLight2,  mCube2.getCubeTex());
         mSphere.getCollision().move(mSphereModelMatrix);
         mCube.getCollision().move(mCubeModelMatrix);
+        mSquare.getCollision1().move(mSquareModelMatrix);
+        mSquare.getCollision2().move(mSquareModelMatrix);
     }
 
     @Override
@@ -339,18 +343,44 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         }
         */
         float[] temp = new float[16];
-        Matrix.multiplyMM(mCubeRotationMatrix, 0 , mCubeRotationMatrix, 0 , linear, 0);
+       /*
+       Matrix.multiplyMM(mCubeRotationMatrix, 0 , mCubeRotationMatrix, 0 , linear, 0);
         Matrix.multiplyMM(mCubeTranslationMatrix, 0 , mCubeTranslationMatrix, 0 , translation, 0);
         Matrix.multiplyMM(temp, 0, mCubeTranslationMatrix, 0 , mCubeRotationMatrix, 0);
+        */
+        Matrix.multiplyMM(mSphereRotationMatrix, 0 , mSphereRotationMatrix, 0 , linear, 0);
+        Matrix.multiplyMM(mSphereTranslationMatrix, 0 , mSphereTranslationMatrix, 0 , translation, 0);
+        Matrix.multiplyMM(temp, 0, mSphereTranslationMatrix, 0 , mSphereRotationMatrix, 0);
 
-        mCube.getCollision().move(temp);
+        mSphere.getCollision().move(temp);
         if(Intersect.intersect(mSphere.getCollision(), mCube.getCollision())){
-            //System.out.println("Collllllll!!!!!!!!!");
+            System.out.println("Collllllll!!!!!!!!!");
             Matrix.invertM(linear, 0, linear , 0);
             Matrix.invertM(translation, 0, translation , 0);
 
-            Matrix.multiplyMM(mCubeRotationMatrix, 0 , mCubeRotationMatrix, 0 , linear, 0);
-            Matrix.multiplyMM(mCubeTranslationMatrix, 0 , mCubeTranslationMatrix, 0 , translation, 0);
+//            Matrix.multiplyMM(mCubeRotationMatrix, 0 , mCubeRotationMatrix, 0 , linear, 0);
+//            Matrix.multiplyMM(mCubeTranslationMatrix, 0 , mCubeTranslationMatrix, 0 , translation, 0);
+
+            Matrix.multiplyMM(mSphereRotationMatrix, 0 , mSphereRotationMatrix, 0 , linear, 0);
+            Matrix.multiplyMM(mSphereTranslationMatrix, 0 , mSphereTranslationMatrix, 0 , translation, 0);
+        }
+        else if(Intersect.intersect(mSphere.getCollision(), mSquare.getCollision1())){
+            System.out.println("Col22222lllllll!!!!!!!!!2");
+
+            Matrix.invertM(linear, 0, linear , 0);
+            Matrix.invertM(translation, 0, translation , 0);
+
+            Matrix.multiplyMM(mSphereRotationMatrix, 0 , mSphereRotationMatrix, 0 , linear, 0);
+            Matrix.multiplyMM(mSphereTranslationMatrix, 0 , mSphereTranslationMatrix, 0 , translation, 0);
+        }
+        else if(Intersect.intersect(mSphere.getCollision(), mSquare.getCollision2())){
+            System.out.println("Col3333lllllll!!!!!!!!!333");
+
+            Matrix.invertM(linear, 0, linear , 0);
+            Matrix.invertM(translation, 0, translation , 0);
+
+            Matrix.multiplyMM(mSphereRotationMatrix, 0 , mSphereRotationMatrix, 0 , linear, 0);
+            Matrix.multiplyMM(mSphereTranslationMatrix, 0 , mSphereTranslationMatrix, 0 , translation, 0);
         }
         /*
         System.out.println("move1-----------------");

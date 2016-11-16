@@ -23,6 +23,7 @@ public class BoxCollision extends Collision {
         originalCenter = new float[]{0,0,0,1};
         center = new float[]{0,0,0,1};
         //System.out.println("hiiii");
+        /*
         for(int i=0; i<4; i++){
             for(int j=0; j<4; j++){
                 if(i==3){
@@ -45,6 +46,29 @@ public class BoxCollision extends Collision {
                 }
             }
         }
+        */
+        for(int i=0; i<4; i++){
+            for(int j=0; j<4; j++){
+                if(i==3){
+                    originAxis[i*4+j] = 0;
+                }
+                else {
+                    switch (j) {
+                        case 0:
+                            originAxis[i + j*4] = axis1[i];
+                            break;
+                        case 1:
+                            originAxis[i + j*4] = axis2[i];
+                            break;
+                        case 2:
+                            originAxis[i + j*4] = axis3[i];
+                            break;
+                        default:
+                            originAxis[i * 4 + j] = 0;
+                    }
+                }
+            }
+        }
         this.axis1 = axis1;
         this.axis2 = axis2;
         this.axis3 = axis3;
@@ -58,15 +82,15 @@ public class BoxCollision extends Collision {
 
         for(int i=0; i<3; i++){
             for (int j=0; j<4; j++){
-                switch (j%4){
+                switch (j){
                     case 0:
-                        axis1[i] = axes[i*4+j];
+                        axis1[i] = axes[i+j*4];
                         break;
                     case 1:
-                        axis2[i] = axes[i*4+j];
+                        axis2[i] = axes[i+j*4];
                         break;
                     case 2:
-                        axis3[i] = axes[i*4+j];
+                        axis3[i] = axes[i+j*4];
                         break;
                     default:
                         break;

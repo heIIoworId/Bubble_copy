@@ -218,9 +218,9 @@ public class Cube {
 
         // prepare shaders and OpenGL program
         int vertexShader = MyGLRenderer.loadShaderFromFile(
-                GLES20.GL_VERTEX_SHADER, "texture2-gl2.vshader");
+                GLES20.GL_VERTEX_SHADER, "basic-gl2.vshader");
         int fragmentShader = MyGLRenderer.loadShaderFromFile(
-                GLES20.GL_FRAGMENT_SHADER, "texture2-gl2.fshader");
+                GLES20.GL_FRAGMENT_SHADER, "diffuse-gl2.fshader");
 
         mProgram = GLES20.glCreateProgram();             // create empty OpenGL Program
         GLES20.glAttachShader(mProgram, vertexShader);   // add the vertex shader to program
