@@ -12,7 +12,7 @@ public class Spring {
     float restLength; //DEFAULT SPRING LENGTH
     float minLength;
     float maxLength;
-    float k = 0.001f; // HOOKEAN COEFFICIENT
+    float k = 0.07f; // HOOKEAN COEFFICIENT
 
     public Spring(Particle _particleA, Particle _particleB){
         particleA = _particleA;

@@ -112,8 +112,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mSphere = new Sphere();
         mSphere.color = new float[] {0.7f, 0.7f, 0.7f};
         // FIXME PARAM OF BUBBLE
-        float radius = 3f;
-        int level = 5;
+        float radius = 4f;
+        int level = 4;
         mBubble = new BubbleSphere(radius, level);
         mBubble.color = new float[] {0.3f, 0.8f, 0.9f};
 
@@ -251,7 +251,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         //FIXME UPDATE NORMALS OF SPHERE
 
         //DRAW MODELS
-        mSquare.draw(mProjMatrix, mSquareModelViewMatrix, mSquareNormalMatrix, mLight, mLight2);
+//        mSquare.draw(mProjMatrix, mSquareModelViewMatrix, mSquareNormalMatrix, mLight, mLight2);
 //        mCube.draw(mProjMatrix, mCubeModelViewMatrix, mCubeNormalMatrix, mLight, mLight2);
 //        mSphere.draw(mProjMatrix, mSphereModelViewMatrix, mSphereNormalMatrix, mLight, mLight2);
         mBubble.draw(mProjMatrix, mBubbleModelViewMatrix, mBubbleNormalMatrix, mLight, mLight2);

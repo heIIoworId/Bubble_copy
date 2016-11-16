@@ -57,8 +57,8 @@ public class GeomOperator {
                 }
             }
 
-            float restLengthRatio = 0.9f;
-            float minLengthRatio = 0.8f;
+            float restLengthRatio = 0.95f;
+            float minLengthRatio = 0.7f;
             float maxLengthRatio = 1.5f;
 
             if(isUniqueAB){
