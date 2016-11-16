@@ -39,8 +39,8 @@ void main() {
     // vec3 intensity = uColor * diffuse * lambertian + specular * specColor;
 
     // haze
-    vec4 haze = vec4(0.5, 0.5, 0.5, 1.0);
-    float ratio = 1 + vPosition.z/37;
+    vec4 haze = vec4(0.7, 0.7, 0.7, 1.0);
+    float ratio = 1 + vPosition.z/33;
 
     gl_FragColor = ratio * vec4(intensity, 1.0) + (1 - ratio) * haze;
 }

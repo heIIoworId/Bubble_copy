@@ -29,7 +29,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private float mapSizeY = 3.0f;
     private float mapSizeZ = 30.0f;
     private float mapUnitLength = 0.5f;
-    private float mapMaxHeight = 15.0f;
+    private float mapMaxHeight = 13.0f;
     private float mapMinHeight = -2.0f;
     private float mapComplexity = 4.0f;
     private float skySizeX = 80.0f;
@@ -204,15 +204,13 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mCube.draw(mProjMatrix, mCubeModelViewMatrix, mCubeNormalMatrix, mLight, mLight2);
         mMap.draw(mProjMatrix, mMapModelViewMatrix, mMapNormalMatrix, mLight, mLight2);
         mSky.draw(mProjMatrix, mSkyModelViewMatrix, mSkyNormalMatrix, mLight, mLight2);
-        // mSea.draw(mProjMatrix, mSeaModelViewMatrix, mSeaNormalMatrix, mLight, mLight2);
         GLES20.glDisable(GLES20.GL_CULL_FACE);
-        //GLES20.glDisable(GLES20.GL_DEPTH_TEST);
+        // GLES20.glDisable(GLES20.GL_DEPTH_TEST);
 
         GLES20.glEnable(GLES20.GL_BLEND);
         GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
         mSea.draw(mProjMatrix, mSeaModelViewMatrix, mSeaNormalMatrix, mLight, mLight2);
         GLES20.glDisable(GLES20.GL_BLEND);
-
     }
 
     @Override
