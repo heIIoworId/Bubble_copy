@@ -10,9 +10,9 @@ public class Spring {
     Particle particleA;
     Particle particleB;
     float restLength; //DEFAULT SPRING LENGTH
-    float minLength = 0.3f;
-    float maxLength = 50.0f;
-    float k = 0.0002f; // HOOKEAN COEFFICIENT
+    float minLength;
+    float maxLength;
+    float k = 0.001f; // HOOKEAN COEFFICIENT
 
     public Spring(Particle _particleA, Particle _particleB){
         particleA = _particleA;
@@ -31,26 +31,26 @@ public class Spring {
         if(springLength < minLength){
             springLength = minLength;
             float zeroVelocity[] = {0f,0f,0f};
-//            particleA.setVelocity(zeroVelocity);
-//            particleB.setVelocity(zeroVelocity);
+            particleA.setVelocity(zeroVelocity);
+            particleB.setVelocity(zeroVelocity);
 
         } else if(springLength > maxLength){
             springLength = maxLength;
             float zeroVelocity[] = {0f,0f,0f};
-//            particleA.setVelocity(zeroVelocity);
-//            particleB.setVelocity(zeroVelocity);
+            particleA.setVelocity(zeroVelocity);
+            particleB.setVelocity(zeroVelocity);
         } else {
             float stretch = springLength - restLength;
 
             forceA = VecOperator.sub(pointA, pointB);
             forceA = VecOperator.normalize(forceA);
-            forceA = VecOperator.scale(forceA, k*(-1));
-            forceA = VecOperator.scale(forceA, stretch);
+            forceA = VecOperator.scale(forceA, k);
+            forceA = VecOperator.scale(forceA, (-1f)*stretch);
 
             forceB = VecOperator.sub(pointB, pointA);
             forceB = VecOperator.normalize(forceB);
-            forceB = VecOperator.scale(forceB, k*(-1));
-            forceB = VecOperator.scale(forceB, stretch);
+            forceB = VecOperator.scale(forceB, k);
+            forceB = VecOperator.scale(forceB, (-1f)*stretch);
 
             particleA.applyForce(forceA);
             particleB.applyForce(forceB);
@@ -77,6 +77,12 @@ public class Spring {
 
     public void setRestLength(float _restLength){
         restLength = _restLength;
+    }
+    public void setMinLength(float _minLength){
+        minLength = _minLength;
+    }
+    public void setMaxLength(float _maxLength){
+        maxLength = _maxLength;
     }
 
     public Particle getParticleA(){

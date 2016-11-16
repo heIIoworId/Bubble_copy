@@ -23,7 +23,6 @@ public class Particle {
         location[2] = z;
         velocity = new float[3];
         acceleration = new float[3];
-        damping = 0.9f;
     }
 
     public Particle(float[] _location){
@@ -31,7 +30,6 @@ public class Particle {
         location = _location;
         velocity = new float[3];
         acceleration = new float[3];
-        damping = 1f;
     }
 
     public void applyForce(float[] force){
@@ -58,7 +56,11 @@ public class Particle {
         return result;
     }
 
+    public float[] getVelocity(){
+        return velocity;
+    }
     public void setVelocity(float[] _velocity){
         velocity = _velocity;
     }
+
 }

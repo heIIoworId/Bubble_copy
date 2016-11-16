@@ -111,8 +111,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mCube.color = new float[] {0.2f, 0.7f, 0.9f};
         mSphere = new Sphere();
         mSphere.color = new float[] {0.7f, 0.7f, 0.7f};
+        // FIXME PARAM OF BUBBLE
         float radius = 3f;
-        int level = 4;
+        int level = 5;
         mBubble = new BubbleSphere(radius, level);
         mBubble.color = new float[] {0.3f, 0.8f, 0.9f};
 

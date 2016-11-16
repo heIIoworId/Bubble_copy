@@ -36,7 +36,6 @@ public class GeomOperator {
     // FIXME NEEDED TO BE CHECKED
     public static ArrayList<Spring> genSprings(ArrayList<Particle> particles){
         ArrayList<Spring> springs = new ArrayList<>();
-        float lengthRatio = 0.9f;
         for(int i=0; i<particles.size(); i += 3){
             boolean isUniqueAB = true;
             boolean isUniqueBC = true;
@@ -58,17 +57,24 @@ public class GeomOperator {
                 }
             }
 
-            // FIXME TEMP TEST
+            float restLengthRatio = 0.9f;
+            float minLengthRatio = 0.8f;
+            float maxLengthRatio = 1.5f;
+
             if(isUniqueAB){
                 float dist = VecOperator.getDistance(a.getLocation(), b.getLocation());
                 Spring temp = new Spring(a, b);
-                temp.setRestLength(dist * lengthRatio);
+                temp.setRestLength(dist * restLengthRatio);
+                temp.setMinLength(dist * minLengthRatio);
+                temp.setMaxLength(dist * maxLengthRatio);
                 springs.add(temp);
             }
             if(isUniqueBC){
                 float dist = VecOperator.getDistance(b.getLocation(), c.getLocation());
                 Spring temp = new Spring(b, c);
-                temp.setRestLength(dist * lengthRatio);
+                temp.setRestLength(dist * restLengthRatio);
+                temp.setMinLength(dist * minLengthRatio);
+                temp.setMaxLength(dist * maxLengthRatio);
                 springs.add(temp);
 
 //                springs.add(new Spring(b, c));
@@ -76,7 +82,9 @@ public class GeomOperator {
             if(isUniqueCA){
                 float dist = VecOperator.getDistance(c.getLocation(), a.getLocation());
                 Spring temp = new Spring(c, a);
-                temp.setRestLength(dist * lengthRatio);
+                temp.setRestLength(dist * restLengthRatio);
+                temp.setMinLength(dist * minLengthRatio);
+                temp.setMaxLength(dist * maxLengthRatio);
                 springs.add(temp);
 //                springs.add(new Spring(c, a));
             }
