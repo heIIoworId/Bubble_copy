@@ -15,7 +15,11 @@ void main() {
     // diffuse
     float diffuse = max(0.0, dot(normal, tolight));
     diffuse += max(0.0, dot(normal, tolight2));
-    vec3 intensity = uColor * diffuse;
+    // vec3 intensity = uColor * diffuse;
+
+    // texture
+    vec4 textureColor = texture2D(uTextureUnit, vTextureCoor);
+    vec3 intensity = textureColor.xyz * diffuse;
 
     // haze
     vec4 haze = vec4(0.5, 0.5, 0.5, 0.7);
