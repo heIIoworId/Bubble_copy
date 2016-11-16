@@ -12,7 +12,7 @@ public class GLHelper {
 
         float negativeZ[] = {0f,0f,-1f,0f};
         float temp[] = new float[4];
-        Matrix.multiplyMM(temp, 0, viewMatrix, 0, negativeZ, 0);
+        Matrix.multiplyMV(temp, 0, viewMatrix, 0, negativeZ, 0);
 
         float viewVector[] = new float[3];
         viewVector[0] = temp[0];

@@ -23,6 +23,7 @@ import kr.ac.kaist.vclab.bubble.events.SoundHandler;
 import kr.ac.kaist.vclab.bubble.models.Cube;
 import kr.ac.kaist.vclab.bubble.models.Sphere;
 import kr.ac.kaist.vclab.bubble.models.Square;
+import kr.ac.kaist.vclab.bubble.physics.Blower;
 import kr.ac.kaist.vclab.bubble.physics.Particle;
 import kr.ac.kaist.vclab.bubble.physics.Spring;
 import kr.ac.kaist.vclab.bubble.physics.World;
@@ -43,7 +44,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     // DECLARE OTHERS
     private World mWorld;
-    private SoundHandler soundHandler;
+    private ArrayList<Particle> mParticles;
+    private ArrayList<Spring> mSprings;
+    private Blower mBlower;
+//    private SoundHandler soundHandler;
 
     //DECLARE LIGHTS
     private float[] mLight = new float[3];
@@ -94,20 +98,23 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // INITIALIZE MODELS
         mSquare = new Square();
         mSquare.color = new float[] {0.1f, 0.95f, 0.1f};
-
         mCube = new Cube();
         mCube.color = new float[] {0.2f, 0.7f, 0.9f};
-
         mSphere = new Sphere();
         mSphere.color = new float[] {0.7f, 0.7f, 0.7f};
 
         //INITIALIZE WORLD
+//        ArrayList<Particle> mParticles = GeomOperator.genParticles(mSphere.getVertices());
+        mParticles = GeomOperator.genParticles(mSphere.getVertices());
+        mSprings = GeomOperator.genSprings(mParticles);
+        mBlower = new Blower();
+        mBlower.setBlowingDir(mViewMatrix);
+        mBlower.setParticles(mParticles);
+
         mWorld = new World();
-//        ArrayList<Particle> particles = GeomOperator.genParticles(mSphere.getVertices());
-        ArrayList<Particle> particles = GeomOperator.genParticles(mSphere.getVertices());
-        mWorld.setParticles(particles);
-        ArrayList<Spring> springs = GeomOperator.genSprings(particles);
-        mWorld.setSprings(springs);
+        mWorld.setParticles(mParticles);
+        mWorld.setSprings(mSprings);
+        mWorld.setBlower(mBlower);
 
         // INITIALIZE LIGHTS
         mLight = new float[] {2.0f, 3.0f, 14.0f};
@@ -197,7 +204,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         //UPDATE WORLD AND VERTICES OF SPHERE
         mWorld.applyForce();
         float updatedVertices[] = GeomOperator.genVertices(mWorld.getParticles());
-
 
         // FIXME WHEN SOUND HANDLER IS ACTIVATED
         // Move bubble according to soundHandler
