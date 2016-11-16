@@ -20,7 +20,8 @@ public class GeomOperator {
                 Particle currParticle = particles.get(j);
                 if(isUnique){
                     isUnique = !currParticle.isColocated(location);
-                    if(!isUnique) { // WHEN isUnique IS FALSE,
+                    if(!isUnique) {
+                        // WHEN isUnique IS FALSE, ADDING IDENTICAL PARTICLE OBJECT AGAIN
                         particles.add(currParticle);
                     }
                 }

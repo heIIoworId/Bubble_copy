@@ -18,21 +18,22 @@ import kr.ac.kaist.vclab.bubble.MyGLRenderer;
 public class BubbleSphere {
 
     private final int mProgram;
+
+    //BUFFER
     private FloatBuffer mVertexBuffer;
     private FloatBuffer mNormalBuffer;
     private FloatBuffer mTextureCoordBuffer;
     private ShortBuffer mIndexBuffer;
 
-    // attribute handles
+    // ATTRIBUTE HANDLES
     private int mPositionHandle;
     private int mNormalHandle;
 
-    // uniform handles
+    // UNIFORM HANDLES
     private int mProjMatrixHandle;
     private int mModelViewMatrixHandle;
-    private int mNormalMatrixHandle;
     // MATRIX FOR AFFINE TRANSFORMATION OF NORMAL VECTOR FROM MODEL FRAME --> EYE FRAME
-
+    private int mNormalMatrixHandle;
     private int mLightHandle;
     private int mLight2Handle;
     private int mColorHandle;
@@ -80,9 +81,10 @@ public class BubbleSphere {
                      float[] normalMatrix,
                      float[] light,
                      float[] light2) {
+
         GLES20.glUseProgram(mProgram);
 
-        // uniforms
+        // INITIATE UNIFORM HANDLE
         mProjMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uProjMatrix");
         mModelViewMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uModelViewMatrix");
         mNormalMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uNormalMatrix");
@@ -90,35 +92,38 @@ public class BubbleSphere {
         mLightHandle = GLES20.glGetUniformLocation(mProgram, "uLight");
         mLight2Handle = GLES20.glGetUniformLocation(mProgram, "uLight2");
 
+        // SET UNIFORMS
         GLES20.glUniformMatrix4fv(mProjMatrixHandle, 1, false, projMatrix, 0);
         GLES20.glUniformMatrix4fv(mModelViewMatrixHandle, 1, false, modelViewMatrix, 0);
         GLES20.glUniformMatrix4fv(mNormalMatrixHandle, 1, false, normalMatrix, 0);
-
         GLES20.glUniform3fv(mColorHandle, 1, color, 0);
         GLES20.glUniform3fv(mLightHandle, 1, light, 0);
         GLES20.glUniform3fv(mLight2Handle, 1, light2, 0);
 
-        // attributes
+        // INITIATE ATTRIBUTE HANDLES
         mPositionHandle = GLES20.glGetAttribLocation(mProgram, "aPosition");
         mNormalHandle = GLES20.glGetAttribLocation(mProgram, "aNormal");
 
+        // ENABLE CERTAIN VERTEX ATTRIBUTE
         GLES20.glEnableVertexAttribArray(mPositionHandle);
         GLES20.glEnableVertexAttribArray(mNormalHandle);
 
+        // SET ATTRIBUTES
         GLES20.glVertexAttribPointer(
                 mPositionHandle, COORDS_PER_VERTEX,
                 GLES20.GL_FLOAT, false,
                 VERTEX_STRIDE, mVertexBuffer);
-
         GLES20.glVertexAttribPointer(
                 mNormalHandle, COORDS_PER_VERTEX,
                 GLES20.GL_FLOAT, false,
                 VERTEX_STRIDE, mNormalBuffer);
 
         // DRAW THE SPHERE
-        GLES20.glDrawArrays(GLES20.GL_LINES, 0, vertices.length / 3);
-        GLES20.glLineWidth(2.0f);
+//        GLES20.glDrawArrays(GLES20.GL_LINES, 0, vertices.length / 3);
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0 , vertices.length/3);
+        GLES20.glLineWidth(4.0f);
 
+        // DISABLE CERTAIN VERTEX ATTRIBUTE
         GLES20.glDisableVertexAttribArray(mPositionHandle);
         GLES20.glDisableVertexAttribArray(mNormalHandle);
     }
@@ -207,7 +212,7 @@ public class BubbleSphere {
         }
     }
 
-    // FIXME DON'T KNOW HOW TO IMPLEMENT
+    // FIXME DON'T KNOW HOW
     private void calcNormals(){
 
     }
