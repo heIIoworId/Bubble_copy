@@ -106,7 +106,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mSphere = new Sphere();
         mSphere.color = new float[] {0.7f, 0.7f, 0.7f};
         // FIXME PARAM OF BUBBLE
-        float radius = 4f;
+        float radius = 2f;
         int level = 3;
         mBubble = new BubbleSphere(radius, level);
         mBubble.color = new float[] {0.3f, 0.8f, 0.9f};
@@ -115,7 +115,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 //        mParticles = GeomOperator.genParticles(mSphere.getVertices());
         mParticles = GeomOperator.genParticles(mBubble.getVertices());
         mSprings = GeomOperator.genSprings(mParticles);
-        mBubbleCore = new Particle(new float[]{0f, 0f, 0f});
+        mBubbleCore = new Particle(new float[]{0f, 2.5f, 0f});
         // FIXME BLOWER OUT
 //        mBlower = new Blower();
 //        mBlower.setBubbleCore(mBubbleCore);
@@ -231,7 +231,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         normalMatrix(mBubbleNormalMatrix, 0, mBubbleModelViewMatrix, 0);
 
         //UPDATE WORLD AND VERTICES OF SPHERE
-        mBlower.setBlowingDir(mViewRotationMatrix);
+        // FIXME BLOWER OUT
+//        mBlower.setBlowingDir(mViewRotationMatrix);
         mWorld.applyForce();
         float updatedVertices[] = GeomOperator.genVertices(mWorld.getParticles());
         mBubble.setVertices(updatedVertices);

@@ -12,9 +12,9 @@ import kr.ac.kaist.vclab.bubble.utils.SystemHelper;
 // A fundamental class to apply forces to particle.
 public class World {
 
-    private float gravity[] = {0f, -0.0005f, 0f};
+    private float gravity[] = {0f, -0.0009f, 0f};
     private float damping1 = 1.0f;
-    private float damping2 = 0.9f;
+    private float damping2 = 1.0f;
 
     ArrayList<Particle> particles;
     ArrayList<Spring> springs;
