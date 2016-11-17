@@ -39,7 +39,7 @@ public class World {
         // FIXME TEST OUT
         bubbleCore.applyForce(gravity);
         // FIXME BLOWER OUT
-//        blower.applyForce();
+        blower.applyForce();
     }
 
     public ArrayList<Particle> getParticles(){
