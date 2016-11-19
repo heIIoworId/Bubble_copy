@@ -28,7 +28,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private static final String TAG = "MyGLRenderer";
 
     Cube mCube;
-    Cubemap mCube2;
+    SkyBox mCube2;
     Sphere mSphere;
     private Square mSquare;
 
@@ -66,7 +66,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     private float[] mLight = new float[3];
     private float[] mLight2 = new float[3];
-    float scale = 0.4f;
+    //float scale = 0.4f;
+    float[] mCamera = new float[3];
 
     float[] move = new float[16];
     @Override
@@ -99,33 +100,32 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         // Initialize cube
         mCube = new Cube();
-        mCube.getCollision().scaleAxes(scale);
+      //  mCube.getCollision().scaleAxes(scale);
         mCube.color = new float[] {0.2f, 0.7f, 0.9f};
 
 
-        mCube2 = new Cubemap();
+        mCube2 = new SkyBox();
 
-        mCube2.getCollision().scaleAxes(scale);
+     //   mCube2.getCollision().scaleAxes(scale);
         mCube2.color = new float[] {0.2f, 0.7f, 0.9f};
         // Initialize cube
         mSphere = new Sphere();
-        mSphere.getCollision().scaleRadius(scale);
+     //   mSphere.getCollision().scaleRadius(scale);
         mSphere.color = new float[] {0.7f, 0.7f, 0.7f};
 
         // Initialize matrix
         Matrix.setIdentityM(mViewRotationMatrix, 0);
         Matrix.setIdentityM(mViewTranslationMatrix, 0);
-        Matrix.translateM(mViewTranslationMatrix, 0, 0, 0, -6f);
+        Matrix.translateM(mViewTranslationMatrix, 0, 0, 0, -10f);
 
         Matrix.setIdentityM(mCubeRotationMatrix, 0);
         Matrix.setIdentityM(mCubeTranslationMatrix, 0);
         Matrix.setIdentityM(mCube2RotationMatrix, 0);
         Matrix.setIdentityM(mCube2TranslationMatrix, 0);
-        Matrix.translateM(mCube2TranslationMatrix, 0, 1.5f, 0 ,0);
 
         Matrix.setIdentityM(mSphereRotationMatrix, 0);
         Matrix.setIdentityM(mSphereTranslationMatrix, 0);
-        Matrix.translateM(mSphereTranslationMatrix, 0, 0, 3, 0);
+        Matrix.translateM(mSphereTranslationMatrix, 0, 0, 5, 0);
 
         Matrix.setIdentityM(move, 0);
     }
@@ -147,16 +147,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
         //Matrix.translateM(mSphereTranslationMatrix,0 ,0 ,-0.01f,0);
         // Calculate view matrix
-        Matrix.setIdentityM(mViewMatrix, 0);
-        Matrix.multiplyMM(mTempMatrix, 0, mViewRotationMatrix, 0, mViewMatrix, 0);
-        System.arraycopy(mTempMatrix, 0, mViewMatrix, 0, 16);
-        Matrix.multiplyMM(mTempMatrix, 0, mViewTranslationMatrix, 0, mViewMatrix, 0);
-        System.arraycopy(mTempMatrix, 0, mViewMatrix, 0, 16);
-        float[] mCamera = new float[]{mViewTranslationMatrix[12], mViewTranslationMatrix[13], mViewTranslationMatrix[14]};
 
         // Calculate Square ModelMatrix
         Matrix.setIdentityM(mSquareModelMatrix, 0);
-        Matrix.translateM(mSquareModelMatrix, 0, 0, -1, 0);
+        Matrix.translateM(mSquareModelMatrix, 0, 0, -5, 0);
         Matrix.rotateM(mSquareModelMatrix, 0, -90, 1f, 0, 0);
         Matrix.scaleM(mSquareModelMatrix, 0, 2f, 2f, 2f);
 
@@ -167,7 +161,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.multiplyMM(mTempMatrix, 0, mCubeTranslationMatrix, 0, mCubeModelMatrix, 0);
         System.arraycopy(mTempMatrix, 0, mCubeModelMatrix, 0, 16);
 
-        Matrix.scaleM(mCubeModelMatrix, 0, scale, scale, scale);
+       // Matrix.scaleM(mCubeModelMatrix, 0, scale, scale, scale);
 
 
 
@@ -177,7 +171,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.multiplyMM(mTempMatrix, 0, mCube2TranslationMatrix, 0, mCube2ModelMatrix, 0);
         System.arraycopy(mTempMatrix, 0, mCube2ModelMatrix, 0, 16);
 
-        Matrix.scaleM(mCube2ModelMatrix, 0, scale*20, scale*20, scale*20);
+        Matrix.scaleM(mCube2ModelMatrix, 0, 20, 20, 20);
 
         // Calculate Sphere ModelMatrix
         Matrix.setIdentityM(mSphereModelMatrix, 0);
@@ -185,7 +179,13 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         System.arraycopy(mTempMatrix, 0, mSphereModelMatrix, 0, 16);
         Matrix.multiplyMM(mTempMatrix, 0, mSphereTranslationMatrix, 0, mSphereModelMatrix, 0);
         System.arraycopy(mTempMatrix, 0, mSphereModelMatrix, 0, 16);
-        Matrix.scaleM(mSphereModelMatrix, 0, scale, scale, scale);
+        //Matrix.scaleM(mSphereModelMatrix, 0, scale, scale, scale);
+
+        Matrix.setIdentityM(mViewMatrix, 0);
+        Matrix.multiplyMM(mTempMatrix, 0, mViewRotationMatrix, 0, mViewMatrix, 0);
+        System.arraycopy(mTempMatrix, 0, mViewMatrix, 0, 16);
+        Matrix.multiplyMM(mTempMatrix, 0, mViewTranslationMatrix, 0, mViewMatrix, 0);
+        System.arraycopy(mTempMatrix, 0, mViewMatrix, 0, 16);
 
         // Calculate ModelViewMatrix
         Matrix.multiplyMM(mSquareModelViewMatrix, 0, mViewMatrix, 0, mSquareModelMatrix, 0);
@@ -206,7 +206,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mCube.draw(mProjMatrix, mCubeModelViewMatrix, mCubeNormalMatrix, mLight, mLight2, mCube2.getCubeTex());
         mSquare.draw(mProjMatrix, mSquareModelViewMatrix, mSquareNormalMatrix, mLight, mLight2);
 
-        mSphere.draw(mProjMatrix, mSphereModelViewMatrix, mSphereNormalMatrix, mLight, mLight2,  mCube2.getCubeTex());
+        mSphere.draw(mProjMatrix, mSphereModelViewMatrix, mSphereModelMatrix, mViewMatrix, mSphereNormalMatrix, mLight, mLight2, mCamera,  mCube2.getCubeTex());
+
+
         mSphere.getCollision().move(mSphereModelMatrix);
         mCube.getCollision().move(mCubeModelMatrix);
         mSquare.getCollision1().move(mSquareModelMatrix);
@@ -237,7 +239,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         final float eyeX = 0.0f;
         final float eyeY = 0.0f;
         final float eyeZ = 4f;
-
+        mCamera[0] = eyeX;
+        mCamera[1] = eyeY;
+        mCamera[2] = eyeZ;
         // We are looking toward the distance
         final float lookX = 0.0f;
         final float lookY = 0.0f;
@@ -326,6 +330,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         float[] translation = new float[16];
         linear = MatOperator.matLinear(move);
         translation = MatOperator.matTranslation(move);
+        Matrix.setIdentityM(move,0);
 /*
         System.out.println("linear1-----------------");
         for(int i=0; i<4; i++){
@@ -348,39 +353,45 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.multiplyMM(mCubeTranslationMatrix, 0 , mCubeTranslationMatrix, 0 , translation, 0);
         Matrix.multiplyMM(temp, 0, mCubeTranslationMatrix, 0 , mCubeRotationMatrix, 0);
         */
-        Matrix.multiplyMM(mSphereRotationMatrix, 0 , mSphereRotationMatrix, 0 , linear, 0);
-        Matrix.multiplyMM(mSphereTranslationMatrix, 0 , mSphereTranslationMatrix, 0 , translation, 0);
-        Matrix.multiplyMM(temp, 0, mSphereTranslationMatrix, 0 , mSphereRotationMatrix, 0);
 
-        mSphere.getCollision().move(temp);
+        float[] temp1 = new float[16];
+        float[] inversetemp = new float[16];
+        Matrix.invertM(inversetemp,0,mViewRotationMatrix,0);
+        Matrix.setIdentityM(temp1, 0);
+        Matrix.multiplyMM(temp1,0, translation,0, inversetemp,0);
+        System.arraycopy(temp1, 0, translation, 0 , 16);
+        Matrix.multiplyMM(temp1, 0, mViewRotationMatrix, 0, translation, 0);
+        System.arraycopy(temp1, 0, translation, 0 , 16);
+
+
+        Matrix.multiplyMM(temp1,0, linear,0, inversetemp,0);
+        System.arraycopy(temp1, 0, linear, 0 , 16);
+        Matrix.multiplyMM(temp1, 0, mViewRotationMatrix, 0, linear, 0);
+        System.arraycopy(temp1, 0, linear, 0 , 16);
+
+
+        float[] temp2 = new float[16];
+        Matrix.multiplyMM(temp2, 0, mSphereTranslationMatrix, 0, translation, 0);
+        float[] temp3 = new float[16];
+        Matrix.multiplyMM(temp3, 0, mSphereRotationMatrix, 0, linear, 0);
+
+        Matrix.multiplyMM(temp1, 0, temp2, 0 , temp3, 0);
+
+        mSphere.getCollision().move(temp1);
         if(Intersect.intersect(mSphere.getCollision(), mCube.getCollision())){
             System.out.println("Collllllll!!!!!!!!!");
             Matrix.invertM(linear, 0, linear , 0);
             Matrix.invertM(translation, 0, translation , 0);
-
-//            Matrix.multiplyMM(mCubeRotationMatrix, 0 , mCubeRotationMatrix, 0 , linear, 0);
-//            Matrix.multiplyMM(mCubeTranslationMatrix, 0 , mCubeTranslationMatrix, 0 , translation, 0);
-
-            Matrix.multiplyMM(mSphereRotationMatrix, 0 , mSphereRotationMatrix, 0 , linear, 0);
-            Matrix.multiplyMM(mSphereTranslationMatrix, 0 , mSphereTranslationMatrix, 0 , translation, 0);
         }
         else if(Intersect.intersect(mSphere.getCollision(), mSquare.getCollision1())){
             System.out.println("Col22222lllllll!!!!!!!!!2");
-
-            Matrix.invertM(linear, 0, linear , 0);
-            Matrix.invertM(translation, 0, translation , 0);
-
-            Matrix.multiplyMM(mSphereRotationMatrix, 0 , mSphereRotationMatrix, 0 , linear, 0);
-            Matrix.multiplyMM(mSphereTranslationMatrix, 0 , mSphereTranslationMatrix, 0 , translation, 0);
         }
         else if(Intersect.intersect(mSphere.getCollision(), mSquare.getCollision2())){
             System.out.println("Col3333lllllll!!!!!!!!!333");
-
-            Matrix.invertM(linear, 0, linear , 0);
-            Matrix.invertM(translation, 0, translation , 0);
-
-            Matrix.multiplyMM(mSphereRotationMatrix, 0 , mSphereRotationMatrix, 0 , linear, 0);
-            Matrix.multiplyMM(mSphereTranslationMatrix, 0 , mSphereTranslationMatrix, 0 , translation, 0);
+        }
+        else{
+            System.arraycopy(temp2, 0, mSphereTranslationMatrix,0,16);
+            System.arraycopy(temp3, 0, mSphereRotationMatrix,0,16);
         }
         /*
         System.out.println("move1-----------------");

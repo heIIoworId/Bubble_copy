@@ -27,10 +27,16 @@ public class Sphere {
     private int mProjMatrixHandle;
     private int mModelViewMatrixHandle;
     private int mNormalMatrixHandle;
+    private int mModelMatrixHandle;
+    private int mViewMatrixHandle;
 
     private int mLightHandle;
     private int mLight2Handle;
     private int mColorHandle;
+
+    private int mEnvHandle;
+    private int mCameraHandle;
+
 
     private static final int COORDS_PER_VERTEX = 3;
     private static final int VERTEX_STRIDE = COORDS_PER_VERTEX * 4;
@@ -2459,9 +2465,11 @@ public class Sphere {
 
         // prepare shaders and OpenGL program
         int vertexShader = MyGLRenderer.loadShaderFromFile(
+//                GLES20.GL_VERTEX_SHADER, "bubble.vshader");
                 GLES20.GL_VERTEX_SHADER, "basic-gl2.vshader");
         int fragmentShader = MyGLRenderer.loadShaderFromFile(
-                GLES20.GL_FRAGMENT_SHADER, "diffuse-gl2.fshader");
+                //             GLES20.GL_FRAGMENT_SHADER, "bubble.fshader");
+                             GLES20.GL_FRAGMENT_SHADER, "diffuse-gl2.fshader");
 
         mProgram = GLES20.glCreateProgram();             // create empty OpenGL Program
         GLES20.glAttachShader(mProgram, vertexShader);   // add the vertex shader to program
@@ -2471,9 +2479,12 @@ public class Sphere {
 
     public void draw(float[] projMatrix,
                      float[] modelViewMatrix,
+                     float[] modelMatrix,
+                     float[] viewMatrix,
                      float[] normalMatrix,
                      float[] light,
                      float[] light2,
+                     float[] camera,
                      int[] cubeTex) {
         GLES20.glUseProgram(mProgram);
         GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
@@ -2482,19 +2493,25 @@ public class Sphere {
         // uniforms
         mProjMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uProjMatrix");
         mModelViewMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uModelViewMatrix");
+        mModelMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uModelMatrix");
+        mViewMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uViewMatrix");
         mNormalMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uNormalMatrix");
         mColorHandle = GLES20.glGetUniformLocation(mProgram, "uColor");
         mLightHandle = GLES20.glGetUniformLocation(mProgram, "uLight");
         mLight2Handle = GLES20.glGetUniformLocation(mProgram, "uLight2");
-        int mEnvHandle = GLES20.glGetUniformLocation(mProgram, "cubemap");
+        mEnvHandle = GLES20.glGetUniformLocation(mProgram, "cubemap");
+        mCameraHandle = GLES20.glGetUniformLocation(mProgram, "campos");
 
         GLES20.glUniformMatrix4fv(mProjMatrixHandle, 1, false, projMatrix, 0);
         GLES20.glUniformMatrix4fv(mModelViewMatrixHandle, 1, false, modelViewMatrix, 0);
+        GLES20.glUniformMatrix4fv(mModelMatrixHandle, 1, false, modelMatrix, 0);
+        GLES20.glUniformMatrix4fv(mViewMatrixHandle, 1, false, viewMatrix, 0);
         GLES20.glUniformMatrix4fv(mNormalMatrixHandle, 1, false, normalMatrix, 0);
 
         GLES20.glUniform3fv(mColorHandle, 1, color, 0);
         GLES20.glUniform3fv(mLightHandle, 1, light, 0);
         GLES20.glUniform3fv(mLight2Handle, 1, light2, 0);
+        GLES20.glUniform3fv(mCameraHandle, 1, camera, 0);
         GLES20.glUniform1i(mEnvHandle, 1);
 
         // attributes

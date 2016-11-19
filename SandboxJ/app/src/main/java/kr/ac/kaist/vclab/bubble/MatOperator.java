@@ -15,6 +15,14 @@ import java.util.Arrays;
  */
 public class MatOperator {
 
+    public static void print(float[] mat){
+        for(int i=0; i<4 ;i++){
+            for (int j=0; j<4; j++){
+                System.out.print(mat[i*4 +j] + " ");
+            }
+            System.out.println();
+        }
+    }
     public static  void normalMatrix(float[] dst, int dstOffset, float[] src, int srcOffset) {
         Matrix.invertM(dst, dstOffset, src, srcOffset);
         dst[12] = 0;

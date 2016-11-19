@@ -53,7 +53,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     public float[] mMapRotationMatrix = new float[16];
     public float[] mSeaRotationMatrix = new float[16];
     public float[] mSkyRotationMatrix = new float[16];
-    public float [] mSphereRotationMatrix = new float[16];
+    public float[] mSphereRotationMatrix = new float[16];
 
     // translation matrix (changed by touch events)
     public float[] mViewTranslationMatrix = new float[16];
@@ -61,7 +61,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     public float[] mMapTranslationMatrix = new float[16];
     public float[] mSeaTranslationMatrix = new float[16];
     public float[] mSkyTranslationMatrix = new float[16];
-    public float [] mSphereTranslationMatrix = new float[16];
+    public float[] mSphereTranslationMatrix = new float[16];
 
     // projection matrix
     private float[] mProjMatrix = new float[16];
@@ -95,7 +95,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private float[] mLight2 = new float[3];
 
     private float bubbleScale = 0.03f;
-    private float[] bubbleStart = new float[]{0,0,0};
+    private float[] bubbleStart = new float[]{0, 7.0f, -13.0f};
     private float cameraDistance = 2.0f;
 
     @Override
@@ -105,7 +105,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         // lights
         mLight = new float[]{5.0f, 10.0f, 6.0f};
-        mLight2 = new float[]{-4.0f, 7.0f, 8.0f};
+        // mLight2 = new float[]{-4.0f, 7.0f, 8.0f};
+        mLight2 = mLight;
 
         // objects
         mCube = new Cube();
@@ -125,7 +126,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // initialize rotation / translation matrix
         Matrix.setIdentityM(mViewRotationMatrix, 0);
         Matrix.setIdentityM(mViewTranslationMatrix, 0);
-        Matrix.translateM(mViewTranslationMatrix, 0, 0, -2.5f, -14.0f);
+        // Matrix.translateM(mViewTranslationMatrix, 0, 0, -6.5f, -30.0f); => Sphere's matrix will determine this!
 
         Matrix.setIdentityM(mCubeRotationMatrix, 0);
         Matrix.setIdentityM(mCubeTranslationMatrix, 0);
@@ -143,7 +144,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.setIdentityM(mSkyTranslationMatrix, 0);
         Matrix.translateM(mSkyTranslationMatrix, 0,
                 -skySizeX / 2.0f, -skySizeY / 2.0f, -skySizeZ / 2.0f);
-
 
         Matrix.setIdentityM(mSphereRotationMatrix, 0);
         Matrix.setIdentityM(mSphereTranslationMatrix, 0);
@@ -178,20 +178,19 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         float[] eye = new float[]{mSphereTranslationMatrix[12], mSphereTranslationMatrix[13], mSphereTranslationMatrix[14]};
 
-        float[] translation = new float[]{0,0,-1,0};
+        float[] translation = new float[]{0, 0, -1, 0};
         float[] change_translation = new float[4];
         Matrix.multiplyMV(change_translation, 0, mViewRotationMatrix, 0, translation, 0);
-        for (int i=0; i<3; i++){
-            change_translation[i]*=cameraDistance;
+        for (int i = 0; i < 3; i++) {
+            change_translation[i] *= cameraDistance;
             eye[i] += change_translation[i];
         }
 
         float[] look = new float[]{mSphereTranslationMatrix[12], mSphereTranslationMatrix[13], mSphereTranslationMatrix[14]};
 
-        float[] up = new float[] {0,1,0,0};
+        float[] up = new float[]{0, 1, 0, 0};
 
         Matrix.setLookAtM(mViewMatrix, 0, eye[0], eye[1], eye[2], look[0], look[1], look[2], up[0], up[1], up[2]);
-
 
 
         // calculate cube model matrix
