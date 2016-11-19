@@ -101,22 +101,30 @@ public class Intersect {
 
 
         float[] vec1 = new float[]{vectors[0], vectors[1], vectors[2]};
-        System.out.println("v1 "+ vec1[0] + " " + vec1[1]+ " " +vec1[2]);
+//        System.out.println("v1 "+ vec1[0] + " " + vec1[1]+ " " +vec1[2]);
         float[] vec21 = new float[]{vectors[4] - vectors[0], vectors[5] - vectors[1], vectors[6] - vectors[2]};
+//        System.out.println("v21 "+ vec21[0] + " " + vec21[1]+ " " +vec21[2]);
         float[] vec31 = new float[]{vectors[8] - vectors[0], vectors[9] - vectors[1], vectors[10] - vectors[2]};
+//        System.out.println("v31 "+ vec31[0] + " " + vec31[1]+ " " +vec31[2]);
         float[] normal = new float[3];
         VecOperator.cross(vec21, vec31, normal);
+//        System.out.println("normal "+ normal[0] + " " + normal[1]+ " " +normal[2]);
         normal = VecOperator.normalize(normal);
+//        System.out.println("normal "+ normal[0] + " " + normal[1]+ " " +normal[2]);
         //ax+by+cz = d , plane : {a,b,c,d}-
         float[] plane = new float[]{normal[0], normal[1], normal[2], VecOperator.dot(normal, vec1)};
+        System.out.println("plane" + +plane[0]+ " "+plane[1]+ " " +plane[2]+ " " +plane[3]);
 
         float distance = (VecOperator.dot(normal, sphereCenter) - plane[3]) / (VecOperator.dot(normal, normal));
+        System.out.println("distance" +  distance);
         if (distance > sphereCollision.GetRadius()) {
             return false;
         }
 
         float[] nearest = new float[3];
         nearest = VecOperator.scale(normal, -distance);
+        System.out.println("nearest"+ " " + nearest[0]+ " " + nearest[1] + " " + nearest[2]);
+
         nearest = VecOperator.sub(sphereCenter, nearest);
 
         float a = (nearest[0] * vec31[1] - nearest[1] * vec31[0]) / (vec21[0] * vec31[1] - vec21[1] * vec31[0]);

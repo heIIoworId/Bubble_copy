@@ -50,7 +50,7 @@ public class BoxCollision extends Collision {
         for(int i=0; i<4; i++){
             for(int j=0; j<4; j++){
                 if(i==3){
-                    originAxis[i*4+j] = 0;
+                    originAxis[i + j*4] = 0;
                 }
                 else {
                     switch (j) {
@@ -64,7 +64,7 @@ public class BoxCollision extends Collision {
                             originAxis[i + j*4] = axis3[i];
                             break;
                         default:
-                            originAxis[i * 4 + j] = 0;
+                            originAxis[i + j*4] = 0;
                     }
                 }
             }
@@ -76,8 +76,9 @@ public class BoxCollision extends Collision {
 
     @Override
     public void move(float[] transformation){
+        float[] translation = MatOperator.matTranslation(transformation);
         float[] linear = MatOperator.matLinear(transformation);
-        Matrix.multiplyMV(center, 0, transformation, 0, originalCenter, 0);
+        Matrix.multiplyMV(center, 0, translation, 0, originalCenter, 0);
         Matrix.multiplyMM(axes, 0, linear, 0, originAxis, 0 );
 
         for(int i=0; i<3; i++){
