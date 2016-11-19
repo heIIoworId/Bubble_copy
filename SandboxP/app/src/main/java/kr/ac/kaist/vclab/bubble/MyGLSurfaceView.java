@@ -88,7 +88,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
             switch (mode) {
                 case "world":
-                    //Matrix.translateM(mRenderer.mViewTranslationMatrix, 0, dx, -dy, 0);
+                    // Matrix.translateM(mRenderer.mViewTranslationMatrix, 0, dx, -dy, 0);
                     break;
                 case "cube":
                     Matrix.translateM(mRenderer.mCubeTranslationMatrix, 0, dx, -dy, 0);
