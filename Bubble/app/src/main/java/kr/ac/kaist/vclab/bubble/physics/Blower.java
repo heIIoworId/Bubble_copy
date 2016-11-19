@@ -27,7 +27,7 @@ public class Blower {
 
         float viewVector[] = new float[3];
         viewVector[0] = -temp[0];
-        viewVector[1] = -temp[1];
+        viewVector[1] = temp[1];
         viewVector[2] = temp[2];
 
         blowingDir = viewVector;

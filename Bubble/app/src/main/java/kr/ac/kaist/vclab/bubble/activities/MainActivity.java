@@ -95,6 +95,8 @@ public class MainActivity extends Activity implements SensorEventListener {
 
         //자이로스코프 센서(회전)
         gyroHandler.mGyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+        mSensorManager.registerListener(this, gyroHandler.mGyroscope, SensorManager.SENSOR_DELAY_FASTEST);
+
     }
 
     private void setButtonText(ToggleButton button, String text) {
@@ -134,7 +136,6 @@ public class MainActivity extends Activity implements SensorEventListener {
         // If your OpenGL application is memory intensive,
         // you should consider de-allocating objects that
         // consume significant memory here.
-        mSensorManager.registerListener(this, gyroHandler.mGyroscope, SensorManager.SENSOR_DELAY_FASTEST);
         mGLView.onPause();
     }
 

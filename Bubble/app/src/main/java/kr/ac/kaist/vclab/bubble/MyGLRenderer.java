@@ -180,15 +180,15 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mSprings = GeomOperator.genSprings(mParticles);
         mBubbleCore = new Particle(new float[]{0f, 0f, 0f});
         // FIXME BLOWER OUT
-//        mBlower = new Blower();
-//        mBlower.setBubbleCore(mBubbleCore);
+        mBlower = new Blower();
+        mBlower.setBubbleCore(mBubbleCore);
 
         mWorld = new World();
         mWorld.setParticles(mParticles);
         mWorld.setSprings(mSprings);
         mWorld.setBubbleCore(mBubbleCore);
         // FIXME BLOWER OUT
-//        mWorld.setBlower(mBlower);
+        mWorld.setBlower(mBlower);
 
         // INITIALIZE LIGHTS
         mLight = new float[]{2.0f, 3.0f, 14.0f};
@@ -337,7 +337,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         //UPDATE WORLD AND VERTICES OF SPHERE
         // FIXME BLOWER OUT
-//        mBlower.setBlowingDir(mViewMatrix);
+        mBlower.setBlowingDir(mViewMatrix);
         mWorld.applyForce();
         float updatedVertices[] = GeomOperator.genVertices(mWorld.getParticles());
         mBubble.setVertices(updatedVertices);
