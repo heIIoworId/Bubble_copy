@@ -7,6 +7,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
+import javax.microedition.khronos.opengles.GL;
+
 /**
  * Created by avantgarde on 2016-11-02.
  */
@@ -32,6 +34,7 @@ public class MapSquare {
 
     private int mTextureHandle;
     private int mTextureCoorHandle;
+    private int mModelMatrixHandle;
 
     private static final int COORDS_PER_VERTEX = 3;
     private static final int VERTEX_STRIDE = COORDS_PER_VERTEX * 4;
@@ -114,6 +117,7 @@ public class MapSquare {
     public void draw(float[] projMatrix,
                      float[] modelViewMatrix,
                      float[] normalMatrix,
+                     float[] modelMatrix,
                      float[] light,
                      float[] light2) {
         GLES20.glUseProgram(mProgram);
@@ -126,10 +130,12 @@ public class MapSquare {
         mLightHandle = GLES20.glGetUniformLocation(mProgram, "uLight");
         mLight2Handle = GLES20.glGetUniformLocation(mProgram, "uLight2");
         mTextureHandle = GLES20.glGetUniformLocation(mProgram, "uTextureUnit");
+        mModelMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uModelMatrix");
 
         GLES20.glUniformMatrix4fv(mProjMatrixHandle, 1, false, projMatrix, 0);
         GLES20.glUniformMatrix4fv(mModelViewMatrixHandle, 1, false, modelViewMatrix, 0);
         GLES20.glUniformMatrix4fv(mNormalMatrixHandle, 1, false, normalMatrix, 0);
+        GLES20.glUniformMatrix4fv(mModelMatrixHandle, 1 , false, modelMatrix, 0);
 
         GLES20.glUniform3fv(mColorHandle, 1, color, 0);
         GLES20.glUniform3fv(mLightHandle, 1, light, 0);

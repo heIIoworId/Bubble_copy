@@ -4,7 +4,9 @@ uniform vec3 uLight, uLight2, uColor;
 uniform sampler2D uTextureUnit;
 
 varying vec3 vNormal;
+varying vec3 wNormal;
 varying vec3 vPosition;
+varying vec3 wPosition;
 varying vec2 vTextureCoor;
 
 void main() {
@@ -34,15 +36,15 @@ void main() {
     vec4 textureColor = texture2D(uTextureUnit, vTextureCoor);
 
     // tri-planar mapping
-    vec3 blending = abs(vec3(0, 0, 1.0));
+    vec3 blending = abs(wNormal);
     blending = normalize(max(blending, 0.00001));
     float b = (blending.x + blending.y + blending.z);
     blending /= vec3(b, b, b);
 
     float scale = 0.05;
-    vec4 xaxis = texture2D(uTextureUnit, vPosition.yz * scale);
-    vec4 yaxis = texture2D(uTextureUnit, vPosition.xz * scale);
-    vec4 zaxis = texture2D(uTextureUnit, vPosition.xy * scale);
+    vec4 xaxis = texture2D(uTextureUnit, wPosition.yz * scale);
+    vec4 yaxis = texture2D(uTextureUnit, wPosition.xz * scale);
+    vec4 zaxis = texture2D(uTextureUnit, wPosition.xy * scale);
     vec4 tex = xaxis * blending.x + xaxis * blending.y + zaxis * blending.z;
 
     // color = texture + diffuse + blinn-phong

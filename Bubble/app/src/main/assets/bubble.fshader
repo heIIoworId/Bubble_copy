@@ -1,7 +1,7 @@
 precision mediump float;
 
 uniform vec3 uLight, uLight2, uColor;
-uniform sampler2D sampler;
+//uniform sampler2D sampler;
 uniform samplerCube cubemap;
 
 varying vec3 vNormal;
