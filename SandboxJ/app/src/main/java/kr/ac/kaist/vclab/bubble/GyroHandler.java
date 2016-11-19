@@ -22,7 +22,6 @@ public class GyroHandler implements SensorEventListener {
         gyroX = event.values[0] * gyroScale;
         gyroY = event.values[1] * gyroScale;
         gyroZ = event.values[2] * gyroScale;
-        //mGLView.rotateByGyroSensor(gyroX, gyroY, gyroZ);
 
     }
     public float[] getSensorValues(){

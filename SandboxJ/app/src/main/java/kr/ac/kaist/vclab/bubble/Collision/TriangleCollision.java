@@ -24,46 +24,61 @@ public class TriangleCollision extends Collision{
         for(int i=0; i<4; i++){
             for(int j=0; j<4; j++){
                 if(i==3){
-                    originVectors[i*4+j] = 0;
+                    originVectors[i + j*4] = 1;
                 }
                 else {
-                    switch (j % 4) {
+                    switch (j) {
                         case 0:
-                            originVectors[i * 4 + j] = a[i];
+                            originVectors[i + j*4] = a[i];
                             break;
                         case 1:
-                            originVectors[i * 4 + j] = b[i];
+                            originVectors[i + j*4] = b[i];
                             break;
                         case 2:
-                            originVectors[i * 4 + j] = c[i];
+                            originVectors[i + j*4] = c[i];
                             break;
                         default:
-                            originVectors[i * 4 + j] = 0;
+                            originVectors[i + j*4] = 0;
                     }
                 }
             }
         }
+//        System.out.println("--------------------");
+//        MatOperator.print(originVectors);
+//        System.out.println("--------------------");
+
         this.vector1 = a;
         this.vector2 = b;
         this.vector3 = c;
     }
 
     public void move(float[] transformation){
-        float[] linear = MatOperator.matLinear(transformation);
-        Matrix.multiplyMV(center, 0, transformation, 0, originalCenter, 0);
-        Matrix.multiplyMM(vectors, 0, linear, 0, originVectors, 0 );
+
+//        System.out.println("--------------------");
+//        System.out.println("trans");
+//        MatOperator.print(transformation);
+//        System.out.println("linear");
+//        MatOperator.print(linear);
+
+//        System.out.println("before");
+//        MatOperator.print(vectors);
+
+        Matrix.multiplyMM(vectors, 0, transformation, 0, originVectors, 0 );
+//        System.out.println("after");
+//        MatOperator.print(vectors);
+//        System.out.println("--------------------");
 
         for(int i=0; i<3; i++){
             for (int j=0; j<4; j++){
-                switch (j%4){
+                switch (j){
                     case 0:
-                        vector1[i] = vectors[i*4+j];
+                        vector1[i] = vectors[i+j*4];
                         break;
                     case 1:
-                        vector2[i] = vectors[i*4+j];
+                        vector2[i] = vectors[i+j*4];
                         break;
                     case 2:
-                        vector3[i] = vectors[i*4+j];
+                        vector3[i] = vectors[i+j*4];
                         break;
                     default:
                         break;
