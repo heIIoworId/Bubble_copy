@@ -105,7 +105,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         // lights
         mLight = new float[]{5.0f, 10.0f, 6.0f};
-        mLight2 = new float[]{-4.0f, 7.0f, 8.0f};
+        // mLight2 = new float[]{-4.0f, 7.0f, 8.0f};
+        mLight2 = mLight;
 
         // objects
         mCube = new Cube();

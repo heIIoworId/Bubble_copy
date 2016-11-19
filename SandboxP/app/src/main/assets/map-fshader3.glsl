@@ -33,14 +33,27 @@ void main() {
     // texture
     vec4 textureColor = texture2D(uTextureUnit, vTextureCoor);
 
+    // tri-planar mapping
+    vec3 blending = abs(vec3(0, 0, 1.0));
+    blending = normalize(max(blending, 0.00001));
+    float b = (blending.x + blending.y + blending.z);
+    blending /= vec3(b, b, b);
+
+    float scale = 0.05;
+    vec4 xaxis = texture2D(uTextureUnit, vPosition.yz * scale);
+    vec4 yaxis = texture2D(uTextureUnit, vPosition.xz * scale);
+    vec4 zaxis = texture2D(uTextureUnit, vPosition.xy * scale);
+    vec4 tex = xaxis * blending.x + xaxis * blending.y + zaxis * blending.z;
+
     // color = texture + diffuse + blinn-phong
-    vec3 intensity = textureColor.xyz * diffuse * lambertian
-                        + specular * specColor;
+    // vec3 intensity = textureColor.xyz * diffuse * lambertian
+    //                     + specular * specColor;
     // vec3 intensity = uColor * diffuse * lambertian + specular * specColor;
+    vec3 intensity = tex.xyz * diffuse * lambertian + specular * specColor;
 
     // haze
     vec4 haze = vec4(0.7, 0.7, 0.7, 1.0);
-    float ratio = 1 + vPosition.z/33;
+    float ratio = 1 + vPosition.z/33.0;
 
     gl_FragColor = ratio * vec4(intensity, 1.0) + (1 - ratio) * haze;
 }
