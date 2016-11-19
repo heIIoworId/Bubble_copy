@@ -1,56 +1,61 @@
 # Blowing Bubble
 
 ## 랩세션 조교님에게 질문
-* ~~161105 어떤 쉐이딩을 써야 journey같은 분위기가 나오는 지 물어보기.~~
+
+## 게임 진행 방법
+* 맵 곳곳에 위치한 아이템(물방울)을 다 먹기
+* 아이템을 오랫동안 먹지 못하면, 방울이 말라서 터짐
+* 얼마나 빨리 모든 아이템을 먹었는지 시간을 기록 --> 경쟁
+* 난이도 조절: 아이템 개수, 맵 복잡도
+* 맵 안/밖의 경계를 어떻게 시각적으로 표시할 것인가? 맵 큐브 밖은 위험해(용암 square 바닥에 깔기)
+* 맵 밖으로 나가면 어떻게? 방울이 더 빨리 마르게 하기(방울 빨간색)
+* 너무 높아지더라도 방울이 빠르게 마르게 하기(방울 파란색)
 
 ## 다음 발표 준비
 
 ### 훈민 
-* map texture mapping 구현해보기
-* 바다 구현하기
-* 하늘도 만들어보기
-* (시간나면) 산을 피해서 목적지 까지 줄줄이 놓여있는 아이템 (충돌시 사라짐)
+* tri-planar texture mapping
+* bump mapping(normal mapping)
+* 산을 피해서 스피어(아이템) 놓기
+* 맵 사이즈 키우기(x4)
+* 스카이박스 넓이로 용암 깔기
 
 ### 상균
-* sound pressure --> 물방울의 움직임으로 바꾸기
-* 버블 모델 다시 만들기 (vertice 연결 다시 해야함)
-* world gravity, dargging force 구현하기
-* 버블 deforming, blowing을 animation으로 만들기
-* spring-mass model들어간 sphere + cube map 합치기. 
+* global boolean 으로 soundhandler on/off 처리
+* media recorder 화면 켤 때 멈추는 거 해결하기 (state관리가 포인트)
+* 시간 지나면 버블 사이즈 줄어들게 하기, 아이템 먹으면 다시 커지게 하기
+* 아이템 모델링하기, 아이템은 충돌시 사라짐
+* 아이템 다 먹었는지 확인, 최종 시간 기록 구현(gameManager class)
+* (시간나면) 버블의 이동 trajectory를 가시화
+* 맵 밖으로 나가면 버블 색깔 바꾸기
 
 ### 종민
-* cube map 코드 자바로 옮기고, 알파 블랜딩 먹여보기
-* 맵 충돌 처리
-* (시간나면) 물방울을 따라다니는 카메라 코딩(뷰메트릭스 실시간으로 변경)
-* ~~현재 glview에서 불리는 cube랑 sphere를 renderer로 옮기기~~
-* ~~현재 surfaceview의 ontouchevent에 있는 collision detection도 renderer 이동 시키기~~
-
-## 계속 준비
-### 종민
-
-### 훈민
-
-### 상균
-* 버블의 이동 trajectory를 가시화
-* 시간이 지나면 버블 죽게하기? 
+* 버블-카메라 사이 거리 더 키우기
+* 버블-맵 충돌 처리
+* 버블-스피어(아이템) 충돌 처리
+* gyro 각도 90도에 view 180도 매핑(2배로 더 돌게)
+* 어느 순간 카메라 y 축이 뒤집히는 문제 해결
 
 ### 미정
-* 아이템 모델 만들기
-* 하늘 만들기 스카이박스
+* 효과음 및 배경음 넣기
+* journey, abzu, flower 게임 참고
 
 ## 완료
-* ~~161109 !종민 헤이즈 구현~~ 
-* ~~161109 !훈민 map surface normal 보정하기~~
-* ~~161109 !훈민 맵의 노멀벡터 y-axis로 가까이 모으기(?) (journey 같은 단순한 분위기)~~
+* 161119
+* ~~방울을 따라다니는 카메라 코딩(뷰메트릭스 실시간으로 변경)~~
+* ~~현재 glview에서 불리는 cube랑 sphere를 renderer로 옮기기~~
+* ~~현재 surfaceview의 ontouchevent에 있는 collision detection도 renderer 이동 시키기~~
+* ~~cube map 코드 자바로 옮기고, 알파 블랜딩 먹여보기~~
+* ~~sound pressure --> 물방울의 움직임으로 바꾸기~~
+* ~~버블 모델 다시 만들기 (vertice 연결 다시 해야함)~~
+* ~~world gravity, dargging force 구현하기~~
+* ~~버블 deforming, blowing을 animation으로 만들기~~
+* ~~spring-mass model들어간 sphere + cube map 합치기~~ 
+* ~~map texture mapping 구현해보기~~
+* ~~바다 구현하기~~
+* ~~하늘도 만들어보기~~
 
-## 아이디어
-* journey, abzu, flower 게임 참고
-* 맵을 뒤집어 위로 붙이면 동굴이 되니깐, 위로 올라가는 버블을 막을 수 있지 않을까? !훈민 그냥 위로 올라가면 기압이 낮아져서 터지게 해도?
-* 소닉 게임의 링을 먹는 것처럼. 버블도 물?을 먹게해서 시간이 지나 말라서 작아지는 것을 막을 수 있게?
-* 난이도를 지형의 복잡도로 결정하거나. 먹어야 할 물방울 아이템을 지형과 얼마나 가까운지로 결정.
-* 나무 모델 만드는 코드 작성
-
-## Contributors
-* Hun-Min Park
-* Sang-Gyun An
-* JongMin Jin
+* 161109
+* ~~!종민 헤이즈 구현~~ 
+* ~~!훈민 map surface normal 보정하기~~
+* ~~!훈민 맵의 노멀벡터 y-axis로 가까이 모으기(?) (journey 같은 단순한 분위기)~~
