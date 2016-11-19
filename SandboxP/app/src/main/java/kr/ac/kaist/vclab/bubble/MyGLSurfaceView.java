@@ -94,7 +94,8 @@ public class MyGLSurfaceView extends GLSurfaceView {
                     Matrix.translateM(mRenderer.mCubeTranslationMatrix, 0, dx, -dy, 0);
                     break;
                 case "map":
-                    Matrix.translateM(mRenderer.mMapTranslationMatrix, 0, dx, -dy, 0);
+                    Matrix.translateM(mRenderer.mMapTranslationMatrix, 0, -dx, -dy, 0);
+                    Matrix.translateM(mRenderer.mSeaTranslationMatrix, 0, -dx, -dy, 0);
                     break;
                 case "bubble":
                     float[] temp1 = new float[16];
