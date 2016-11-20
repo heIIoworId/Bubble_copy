@@ -13,9 +13,10 @@ void main() {
     vec3 normal = normalize(vNormal);
 
     // diffuse
-    float diffuse = max(0.0, dot(normal, tolight));
-    diffuse += max(0.0, dot(normal, tolight2));
+    // float diffuse = max(0.0, dot(normal, tolight));
+    // diffuse += max(0.0, dot(normal, tolight2));
     // vec3 intensity = uColor * diffuse;
+    float diffuse = 1.0; // turn off diffuse effect
 
     // texture
     vec4 textureColor = texture2D(uTextureUnit, vTextureCoor);
@@ -23,7 +24,7 @@ void main() {
 
     // haze
     vec4 haze = vec4(0.3, 0.3, 0.3, 1.0);
-    float ratio = 1 + vPosition.z/100.0;
+    float ratio = 1 + vPosition.z/250.0;
 
-    gl_FragColor = ratio * vec4(intensity, 0.3) + (1 - ratio) * haze;
+    gl_FragColor = ratio * vec4(intensity, 1.0) + (1 - ratio) * haze;
 }

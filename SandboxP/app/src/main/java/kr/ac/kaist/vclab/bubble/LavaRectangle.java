@@ -7,13 +7,11 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-import javax.microedition.khronos.opengles.GL;
-
 /**
- * Created by avantgarde on 2016-11-02.
+ * Created by avantgarde on 2016-11-07.
  */
 
-public class MapSquare {
+public class LavaRectangle {
     private final int mProgram;
     private FloatBuffer mVertexBuffer;
     private FloatBuffer mNormalBuffer;
@@ -34,41 +32,44 @@ public class MapSquare {
 
     private int mTextureHandle;
     private int mTextureCoorHandle;
-    private int mModelMatrixHandle;
 
     private static final int COORDS_PER_VERTEX = 3;
     private static final int VERTEX_STRIDE = COORDS_PER_VERTEX * 4;
 
-    private static MapGenerator mGenerator; // map generator instance
+    private static float[] vertices;
+    private static float[] normals;
+    private static float[] textureCoors;
 
-    public static float[] vertices;
-    public static float[] normals;
-    public static float[] textureCoors;
-    private static int mode;
+    float[] color = {0.0f, 0.0f, 1.0f};
 
-    float color[] = {0.33f, 0.42f, 0.18f};
 
-    public MapSquare(float sizeX, float sizeY, float sizeZ, // map size
-                     float unit, // dist. between points (=> resolution)
-                     float maxHeight, // max height
-                     float minHeight, // min height
-                     float complexity, // complexity
-                     float normalRate, // normal adjustment
-                     boolean fill) { // false if you want to see the skeleton only
-        mGenerator = new MapGenerator(
-                sizeX, sizeY, sizeZ,
-                unit,
-                maxHeight,
-                minHeight,
-                complexity,
-                normalRate,
-                fill
-        );
+    public LavaRectangle(float sizeX, float sizeZ) {
+        vertices = new float[]{
+                0.0f, 0.0f, 0.0f,
+                0.0f, 0.0f, sizeZ,
+                sizeX, 0.0f, sizeZ,
+                0.0f, 0.0f, 0.0f,
+                sizeX, 0.0f, sizeZ,
+                sizeX, 0.0f, 0.0f
+        };
 
-        vertices = mGenerator.getVertices();
-        normals = mGenerator.getNormals();
-        textureCoors = mGenerator.getTextureCoors();
-        mode = mGenerator.getMode();
+        normals = new float[]{
+                0.0f, 1.0f, 0.0f,
+                0.0f, 1.0f, 0.0f,
+                0.0f, 1.0f, 0.0f,
+                0.0f, 1.0f, 0.0f,
+                0.0f, 1.0f, 0.0f,
+                0.0f, 1.0f, 0.0f
+        };
+
+        textureCoors = new float[]{
+                0.0f, 0.0f, 0.0f,
+                0.0f, 1.0f, 0.0f,
+                1.0f, 1.0f, 0.0f,
+                0.0f, 0.0f, 0.0f,
+                1.0f, 1.0f, 0.0f,
+                1.0f, 0.0f, 0.0f
+        };
 
         ByteBuffer byteBuf1 = ByteBuffer.allocateDirect(vertices.length * 4);
         byteBuf1.order(ByteOrder.nativeOrder());
@@ -90,9 +91,9 @@ public class MapSquare {
 
         // prepare shaders and OpenGL program
         int vertexShader = MyGLRenderer.loadShaderFromFile(
-                GLES20.GL_VERTEX_SHADER, "map-vshader3.glsl");
+                GLES20.GL_VERTEX_SHADER, "lava-vshader.glsl");
         int fragmentShader = MyGLRenderer.loadShaderFromFile(
-                GLES20.GL_FRAGMENT_SHADER, "map-fshader3.glsl");
+                GLES20.GL_FRAGMENT_SHADER, "lava-fshader.glsl");
 
         mProgram = GLES20.glCreateProgram();             // create empty OpenGL Program
         GLES20.glAttachShader(mProgram, vertexShader);   // add the vertex shader to program
@@ -103,21 +104,16 @@ public class MapSquare {
         int[] textureHandles = new int[1];
         GLES20.glGenTextures(1, textureHandles, 0);
 
-        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE3);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandles[0]);
-        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, MyGLRenderer.loadImage("bluewater.jpg"), 0);
-        // GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
-        // GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
-        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
-        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_REPEAT);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_REPEAT);
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, MyGLRenderer.loadImage("lava.png"), 0);
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
     }
 
     public void draw(float[] projMatrix,
                      float[] modelViewMatrix,
                      float[] normalMatrix,
-                     float[] modelMatrix,
                      float[] light,
                      float[] light2) {
         GLES20.glUseProgram(mProgram);
@@ -130,12 +126,10 @@ public class MapSquare {
         mLightHandle = GLES20.glGetUniformLocation(mProgram, "uLight");
         mLight2Handle = GLES20.glGetUniformLocation(mProgram, "uLight2");
         mTextureHandle = GLES20.glGetUniformLocation(mProgram, "uTextureUnit");
-        mModelMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uModelMatrix");
 
         GLES20.glUniformMatrix4fv(mProjMatrixHandle, 1, false, projMatrix, 0);
         GLES20.glUniformMatrix4fv(mModelViewMatrixHandle, 1, false, modelViewMatrix, 0);
         GLES20.glUniformMatrix4fv(mNormalMatrixHandle, 1, false, normalMatrix, 0);
-        GLES20.glUniformMatrix4fv(mModelMatrixHandle, 1 , false, modelMatrix, 0);
 
         GLES20.glUniform3fv(mColorHandle, 1, color, 0);
         GLES20.glUniform3fv(mLightHandle, 1, light, 0);
@@ -167,10 +161,10 @@ public class MapSquare {
         );
 
         // set texture
-        GLES20.glUniform1i(mTextureHandle, 0);
+        GLES20.glUniform1i(mTextureHandle, 3);
 
-        // Draw the cube
-        GLES20.glDrawArrays(mode, 0, vertices.length / 3);
+        // Draw the rectangle
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertices.length / 3);
 
         GLES20.glDisableVertexAttribArray(mPositionHandle);
         GLES20.glDisableVertexAttribArray(mNormalHandle);
