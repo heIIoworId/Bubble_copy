@@ -35,8 +35,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private float skySizeX = 300.0f;
     private float skySizeY = 300.0f;
     private float skySizeZ = 300.0f;
-    private float lavaSizeX = 200.0f;
-    private float lavaSizeZ = 200.0f;
+    private float lavaSizeX = 270.0f;
+    private float lavaSizeZ = 270.0f;
 
     // objects
     private Cube mCube;
