@@ -26,20 +26,20 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     // presets
     private float mapSizeX = 90.0f;
-    private float mapSizeY = 10.0f;
+    private float mapSizeY = 25.0f;
     private float mapSizeZ = 90.0f;
     private float mapUnitLength = 1.5f;
-    private float mapMaxHeight = 28.0f;
-    private float mapMinHeight = -5.0f;
+    private float mapMaxHeight = 25.0f;
+    private float mapMinHeight = -11.5f;
     private float mapComplexity = 5.5f;
-    private float skySizeX = 300.0f;
-    private float skySizeY = 300.0f;
-    private float skySizeZ = 300.0f;
-    private float lavaSizeX = 270.0f;
-    private float lavaSizeZ = 270.0f;
+    private float skySizeX = 350.0f;
+    private float skySizeY = 350.0f;
+    private float skySizeZ = 350.0f;
+    private float lavaSizeX = 300.0f;
+    private float lavaSizeZ = 300.0f;
 
     // objects
-    private Cube mCube;
+    // private Cube mCube;
     private MapCube mMap;
     private SeaRectangle mSea;
     private SkyBox mSky;
@@ -116,7 +116,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mLight2 = mLight;
 
         // objects
-        mCube = new Cube();
+        // mCube = new Cube();
 
         mMap = new MapCube(
                 mapSizeX, mapSizeY, mapSizeZ,
@@ -281,7 +281,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                 mProjMatrix, 0,
                 -ratio, ratio, // left, right
                 -1.0f, 1.0f, // bottom, top
-                1.0f, 350.0f // near, far
+                1.0f, 370.0f // near, far
         );
     }
 
