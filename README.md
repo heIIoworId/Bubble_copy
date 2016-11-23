@@ -14,33 +14,34 @@
 ## 다음 발표 준비
 
 ### 훈민 
-* tri-planar texture mapping
+* ~~tri-planar texture mapping~~
 * bump mapping(normal mapping)
 * 산을 피해서 스피어(아이템) 놓기
-* 맵 사이즈 키우기(x4)
-* 스카이박스 넓이로 용암 깔기
+* ~~맵 사이즈 키우기(x4)~~
+* ~~스카이박스 넓이로 용암 깔기~~
 
 ### 상균
 * global boolean 으로 soundhandler on/off 처리
 * media recorder 화면 켤 때 멈추는 거 해결하기 (state관리가 포인트)
 * 시간 지나면 버블 사이즈 줄어들게 하기, 아이템 먹으면 다시 커지게 하기
+* 남은 아이템 개수 표시
 * 아이템 모델링하기, 아이템은 충돌시 사라짐
 * 아이템 다 먹었는지 확인, 최종 시간 기록 구현(gameManager class)
-* (시간나면) 버블의 이동 trajectory를 가시화
+* (시간나면) 버블의 이동 trajectory를 가시화 (BUBBLE CORE'S PAST LOCATION ARRAY?)(display only when bubble is moving)
 * 맵 밖으로 나가면 버블 색깔 바꾸기
-* 남은 아이템 개수 표시
 
 ### 종민
 * 버블-카메라 사이 거리 더 키우기
 * 버블-맵 충돌 처리
 * 버블-스피어(아이템) 충돌 처리
 * gyro 각도 90도에 view 180도 매핑(2배로 더 돌게)
-* 어느 순간 카메라 y 축이 뒤집히는 문제 해결
+* 어느 순간 카메라 y 축이 뒤집히는 문제 해결(gimbal lock, euler angles?? --> quaternion?)
 * 스카이박스 평범한 하늘 사진으로 바꾸기
 
 ### 미정
-* 효과음 및 배경음 넣기
+* 효과음(bubble) 및 배경음 넣기
 * journey, abzu, flower 게임 참고
+* 진동 넣기?
 
 ## 완료
 * 161119
