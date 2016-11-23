@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-import kr.ac.kaist.vclab.bubble.Generators.MapGenerator;
+import kr.ac.kaist.vclab.bubble.generators.MapGenerator;
 import kr.ac.kaist.vclab.bubble.MyGLRenderer;
 
 /**

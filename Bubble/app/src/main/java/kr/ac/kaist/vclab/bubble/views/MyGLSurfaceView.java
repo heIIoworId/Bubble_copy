@@ -95,8 +95,8 @@ public class MyGLSurfaceView extends GLSurfaceView {
                         System.arraycopy(temp1, 0, move, 0 , 16);
                         Matrix.multiplyMM(temp1, 0, mRenderer.mViewRotationMatrix, 0, move, 0);
                         System.arraycopy(temp1, 0, move, 0 , 16);
-                        Matrix.multiplyMM(temp1, 0, mRenderer.mSphereTranslationMatrix, 0, move, 0);
-                        System.arraycopy(temp1, 0, mRenderer.mSphereTranslationMatrix, 0 , 16);
+//                        Matrix.multiplyMM(temp1, 0, mRenderer.mSphereTranslationMatrix, 0, move, 0);
+//                        System.arraycopy(temp1, 0, mRenderer.mSphereTranslationMatrix, 0 , 16);
 
                     }
                     else if (count == 3){
@@ -111,8 +111,8 @@ public class MyGLSurfaceView extends GLSurfaceView {
                         System.arraycopy(temp1, 0, move, 0 , 16);
                         Matrix.multiplyMM(temp1, 0, mRenderer.mViewRotationMatrix, 0, move, 0);
                         System.arraycopy(temp1, 0, move, 0 , 16);
-                        Matrix.multiplyMM(temp1, 0, mRenderer.mSphereTranslationMatrix, 0, move, 0);
-                        System.arraycopy(temp1, 0, mRenderer.mSphereTranslationMatrix, 0 , 16);
+//                        Matrix.multiplyMM(temp1, 0, mRenderer.mSphereTranslationMatrix, 0, move, 0);
+//                        System.arraycopy(temp1, 0, mRenderer.mSphereTranslationMatrix, 0 , 16);
                     }
                     break;
 
