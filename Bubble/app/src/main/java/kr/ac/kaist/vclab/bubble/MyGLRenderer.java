@@ -42,8 +42,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     // TAG
     private static final String TAG = "MyGLRenderer";
 
-    // GET ENV SINGLETON INSTANCE
-    private Env env = Env.getInstance();
+    // ENV SINGLETON INSTANCE
+    private Env env;
 
     // PRESETS OF MAP
     private float mapSizeX = 30.0f; // X-size (widthX) of map cube
@@ -120,6 +120,11 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     @Override
     // CALLED WHEN SURFACE IS CREATED AT FIRST.
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
+
+
+        // GET ENV SINGLETON INSTANCE
+        // FIXME TO BE USED IN ...
+        env = Env.getInstance();
 
         // SET BACKGROUND COLOR
         GLES20.glClearColor(0.7f, 0.8f, 0.9f, 1.0f); // skyblue
