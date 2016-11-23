@@ -19,6 +19,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import kr.ac.kaist.vclab.bubble.activities.MainActivity;
+import kr.ac.kaist.vclab.bubble.environment.Env;
 import kr.ac.kaist.vclab.bubble.events.SoundHandler;
 import kr.ac.kaist.vclab.bubble.models.BubbleSphere;
 import kr.ac.kaist.vclab.bubble.models.Cube;
@@ -40,6 +41,9 @@ import kr.ac.kaist.vclab.bubble.utils.GeomOperator;
 public class MyGLRenderer implements GLSurfaceView.Renderer {
     // TAG
     private static final String TAG = "MyGLRenderer";
+
+    // GET ENV SINGLETON INSTANCE
+    private Env env = Env.getInstance();
 
     // PRESETS OF MAP
     private float mapSizeX = 30.0f; // X-size (widthX) of map cube
