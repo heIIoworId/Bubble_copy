@@ -19,8 +19,10 @@ public class MainActivity extends Activity implements SensorEventListener {
     private GyroHandler gyroHandler;
     private SensorManager mSensorManager;
 
-    private String[] labels = new String[]{"World", "Cube", "Map", "Bubble"};
-    private String[] modes = new String[]{"world", "cube", "map", "bubble"};
+    // private String[] labels = new String[]{"World", "Cube", "Map", "Bubble"};
+    // private String[] modes = new String[]{"world", "cube", "map", "bubble"};
+    private String[] labels = new String[]{"World", "Cube", "Map"};
+    private String[] modes = new String[]{"world", "cube", "map"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +31,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 
         // create mGLView and set it as the ContentView for this activity
         mGLView = new MyGLSurfaceView(this);
-        gyroHandler = new  GyroHandler();
+        gyroHandler = new GyroHandler();
 
         // layouts
         LinearLayout layout = new LinearLayout(this);
@@ -99,9 +101,11 @@ public class MainActivity extends Activity implements SensorEventListener {
         //자이로스코프 센서(회전)
         gyroHandler.mGyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
     }
+
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
+
     public void onSensorChanged(SensorEvent event) {
         Sensor sensor = event.sensor;
 
@@ -112,10 +116,11 @@ public class MainActivity extends Activity implements SensorEventListener {
         values = gyroHandler.getSensorValues();
         mGLView.rotateByGyroSensor(values[0], -values[1], -values[2]);
     }
+
     @Override
     protected void onPause() {
         super.onPause();
-        mSensorManager.registerListener(this, gyroHandler.mGyroscope,SensorManager.SENSOR_DELAY_FASTEST);
+        mSensorManager.registerListener(this, gyroHandler.mGyroscope, SensorManager.SENSOR_DELAY_FASTEST);
         mGLView.onPause();
     }
 

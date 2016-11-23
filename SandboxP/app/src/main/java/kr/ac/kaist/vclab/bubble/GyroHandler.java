@@ -18,14 +18,16 @@ public class GyroHandler implements SensorEventListener {
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
+
     public void onSensorChanged(SensorEvent event) {
         gyroX = event.values[0] * gyroScale;
         gyroY = event.values[1] * gyroScale;
         gyroZ = event.values[2] * gyroScale;
 
     }
-    public float[] getSensorValues(){
-        float [] values = new float[3];
+
+    public float[] getSensorValues() {
+        float[] values = new float[3];
         values[0] = gyroX;
         values[1] = gyroY;
         values[2] = gyroZ;

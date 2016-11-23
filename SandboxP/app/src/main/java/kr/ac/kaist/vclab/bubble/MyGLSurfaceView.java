@@ -88,7 +88,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
             switch (mode) {
                 case "world":
-                    // Matrix.translateM(mRenderer.mViewTranslationMatrix, 0, dx, -dy, 0);
+                    Matrix.translateM(mRenderer.mViewTranslationMatrix, 0, dx, -dy, 0);
                     break;
                 case "cube":
                     Matrix.translateM(mRenderer.mCubeTranslationMatrix, 0, dx, -dy, 0);
@@ -101,16 +101,16 @@ public class MyGLSurfaceView extends GLSurfaceView {
                     float[] temp1 = new float[16];
                     float[] move = new float[16];
                     float[] inversetemp = new float[16];
-                    Matrix.invertM(inversetemp,0,mRenderer.mViewRotationMatrix,0);
+                    Matrix.invertM(inversetemp, 0, mRenderer.mViewRotationMatrix, 0);
                     Matrix.setIdentityM(temp1, 0);
                     Matrix.setIdentityM(move, 0);
                     Matrix.translateM(move, 0, -dx, -dy, 0);
-                    Matrix.multiplyMM(temp1,0, move,0, inversetemp,0);
-                    System.arraycopy(temp1, 0, move, 0 , 16);
+                    Matrix.multiplyMM(temp1, 0, move, 0, inversetemp, 0);
+                    System.arraycopy(temp1, 0, move, 0, 16);
                     Matrix.multiplyMM(temp1, 0, mRenderer.mViewRotationMatrix, 0, move, 0);
-                    System.arraycopy(temp1, 0, move, 0 , 16);
+                    System.arraycopy(temp1, 0, move, 0, 16);
                     Matrix.multiplyMM(temp1, 0, mRenderer.mSphereTranslationMatrix, 0, move, 0);
-                    System.arraycopy(temp1, 0, mRenderer.mSphereTranslationMatrix, 0 , 16);
+                    System.arraycopy(temp1, 0, mRenderer.mSphereTranslationMatrix, 0, 16);
 
 //                    Matrix.translateM(mRenderer.mSphereTranslationMatrix, 0, dx, -dy, 0);
                     break;
@@ -141,16 +141,16 @@ public class MyGLSurfaceView extends GLSurfaceView {
                     float[] temp1 = new float[16];
                     float[] move = new float[16];
                     float[] inversetemp = new float[16];
-                    Matrix.invertM(inversetemp,0,mRenderer.mViewRotationMatrix,0);
+                    Matrix.invertM(inversetemp, 0, mRenderer.mViewRotationMatrix, 0);
                     Matrix.setIdentityM(temp1, 0);
                     Matrix.setIdentityM(move, 0);
                     Matrix.translateM(move, 0, 0, 0, -dy);
-                    Matrix.multiplyMM(temp1,0, move,0, inversetemp,0);
-                    System.arraycopy(temp1, 0, move, 0 , 16);
+                    Matrix.multiplyMM(temp1, 0, move, 0, inversetemp, 0);
+                    System.arraycopy(temp1, 0, move, 0, 16);
                     Matrix.multiplyMM(temp1, 0, mRenderer.mViewRotationMatrix, 0, move, 0);
-                    System.arraycopy(temp1, 0, move, 0 , 16);
+                    System.arraycopy(temp1, 0, move, 0, 16);
                     Matrix.multiplyMM(temp1, 0, mRenderer.mSphereTranslationMatrix, 0, move, 0);
-                    System.arraycopy(temp1, 0, mRenderer.mSphereTranslationMatrix, 0 , 16);
+                    System.arraycopy(temp1, 0, mRenderer.mSphereTranslationMatrix, 0, 16);
 
 //                    Matrix.translateM(mRenderer.mSphereTranslationMatrix, 0, dx, -dy, 0);
                     break;
@@ -166,18 +166,19 @@ public class MyGLSurfaceView extends GLSurfaceView {
         // dummy
         return true;
     }
-    public void rotateByGyroSensor(float gyroX, float gyroY, float gyroZ){
 
-        float [] rotate = new float[16];
+    public void rotateByGyroSensor(float gyroX, float gyroY, float gyroZ) {
+
+        float[] rotate = new float[16];
         Matrix.setIdentityM(rotate, 0);
 
-        Matrix.rotateM(rotate, 0, -gyroX , 1 , 0 ,0);
-        Matrix.rotateM(rotate, 0, -gyroY, 0, 1 ,0);
-        Matrix.rotateM(rotate, 0, -gyroZ, 0, 0 ,1);
+        Matrix.rotateM(rotate, 0, -gyroX, 1, 0, 0);
+        Matrix.rotateM(rotate, 0, -gyroY, 0, 1, 0);
+        Matrix.rotateM(rotate, 0, -gyroZ, 0, 0, 1);
 
-        float [] temp = new float[16];
-        Matrix.multiplyMM(temp, 0 , rotate, 0,  mRenderer.mViewRotationMatrix, 0);
-        System.arraycopy(temp,0, mRenderer.mViewRotationMatrix,0, 16);
+        float[] temp = new float[16];
+        Matrix.multiplyMM(temp, 0, rotate, 0, mRenderer.mViewRotationMatrix, 0);
+        System.arraycopy(temp, 0, mRenderer.mViewRotationMatrix, 0, 16);
         requestRender();
     }
 }
