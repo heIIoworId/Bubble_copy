@@ -25,6 +25,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private float[] bgColor = new float[]{0.7f, 0.8f, 0.9f, 1.0f};
 
     // presets
+    // ... map (& sea)
     private float mapSizeX = 90.0f;
     private float mapSizeY = 25.0f;
     private float mapSizeZ = 90.0f;
@@ -32,11 +33,21 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private float mapMaxHeight = 25.0f;
     private float mapMinHeight = -11.5f;
     private float mapComplexity = 5.5f;
+
+    // ... skybox
     private float skySizeX = 350.0f;
     private float skySizeY = 350.0f;
     private float skySizeZ = 350.0f;
-    private float lavaSizeX = 300.0f;
-    private float lavaSizeZ = 300.0f;
+
+    // ... lava
+    private float lavaSizeX = 350.0f;
+    private float lavaSizeZ = 350.0f;
+
+    // ... items
+    private int itemCount = 10;
+    private float itemRadius = 10.0f;
+    private float itemMinDist = 20.0f;
+    private float itemHeightOffset = 10.0f;
 
     // objects
     // private Cube mCube;
@@ -45,6 +56,11 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private SkyBox mSky;
     // private Sphere mSphere;
     private LavaRectangle mLava;
+    private ItemSphere[] mItem;
+
+    // item handlers
+    private ItemGenerator mItemGenerator = new ItemGenerator(itemCount, itemMinDist, itemHeightOffset);
+    private boolean[] itemDrawFlag; // true = draw ith item
 
     // view matrix
     private float[] mViewMatrix = new float[16];
@@ -57,6 +73,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     public float[] mSkyRotationMatrix = new float[16];
     public float[] mSphereRotationMatrix = new float[16];
     public float[] mLavaRotationMatrix = new float[16];
+    public float[][] mItemRotationMatrx = new float[itemCount][16];
 
     // translation matrix (changed by touch events)
     public float[] mViewTranslationMatrix = new float[16];
@@ -66,6 +83,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     public float[] mSkyTranslationMatrix = new float[16];
     public float[] mSphereTranslationMatrix = new float[16];
     public float[] mLavaTranslationMatrix = new float[16];
+    public float[][] mItemTranslationMatrix = new float[itemCount][16];
 
     // projection matrix
     private float[] mProjMatrix = new float[16];
@@ -77,6 +95,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private float[] mSkyModelMatrix = new float[16];
     private float[] mSphereModelMatrix = new float[16];
     private float[] mLavaModelMatrix = new float[16];
+    private float[][] mItemModelMatrix = new float[itemCount][16];
 
     // model-view matrix
     private float[] mCubeModelViewMatrix = new float[16];
@@ -85,6 +104,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private float[] mSkyModelViewMatrix = new float[16];
     private float[] mSphereModelViewMatrix = new float[16];
     private float[] mLavaModelViewMatrix = new float[16];
+    private float[][] mItemModelViewMatrix = new float[itemCount][16];
 
     // normal matrix
     private float[] mCubeNormalMatrix = new float[16];
@@ -93,6 +113,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private float[] mSkyNormalMatrix = new float[16];
     private float[] mSphereNormalMatrix = new float[16];
     private float[] mLavaNormalMatrix = new float[16];
+    private float[][] mItemNormalMatrix = new float[itemCount][16];
 
     // temporary matrix for calculation
     private float[] mTempMatrix = new float[16];
@@ -103,7 +124,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     private float bubbleScale = 0.03f;
     private float[] bubbleStart = new float[]{0, 7.0f, -13.0f};
-    private float cameraDistance = 2.0f;
+    // private float cameraDistance = 2.0f;
 
     @Override
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
@@ -159,7 +180,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         Matrix.setIdentityM(mLavaRotationMatrix, 0);
         Matrix.setIdentityM(mLavaTranslationMatrix, 0);
-        Matrix.translateM(mLavaTranslationMatrix, 0, -lavaSizeX / 2.0f, -35.0f, -lavaSizeZ / 2.0f);
+        Matrix.translateM(mLavaTranslationMatrix, 0, -lavaSizeX / 2.0f, -45.0f, -lavaSizeZ / 2.0f);
     }
 
     @Override
