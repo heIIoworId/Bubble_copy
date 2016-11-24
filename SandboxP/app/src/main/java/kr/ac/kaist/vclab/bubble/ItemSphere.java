@@ -2438,7 +2438,7 @@ public class ItemSphere {
             0.00000000000000f, 0.00000000000000f, -4.00000000000000f,
             1.23606800000000f, 0.00000000000000f, -3.80422800000000f,};
 
-    float color[] = {0.2f, 0.709803922f, 0.898039216f};
+    float color[] = {0.0f, 0.0f, 1.0f};
 
     public ItemSphere(float radius) {
         // Default radius size is 4 (guessed from the values above),

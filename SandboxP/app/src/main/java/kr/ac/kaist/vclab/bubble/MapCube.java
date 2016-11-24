@@ -39,7 +39,7 @@ public class MapCube {
     private static final int COORDS_PER_VERTEX = 3;
     private static final int VERTEX_STRIDE = COORDS_PER_VERTEX * 4;
 
-    private static MapGenerator mGenerator; // map generator instance
+    public static MapGenerator mGenerator; // map generator instance
 
     public static float[] vertices;
     public static float[] normals;

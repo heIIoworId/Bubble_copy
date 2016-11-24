@@ -59,7 +59,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private ItemSphere[] mItem;
 
     // item handlers
-    private ItemGenerator mItemGenerator = new ItemGenerator(itemCount, itemMinDist, itemHeightOffset);
+    private ItemGenerator mItemGenerator;
     private boolean[] itemDrawFlag; // true = draw ith item
 
     // view matrix
@@ -151,6 +151,15 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mSky = new SkyBox(skySizeX, skySizeY, skySizeZ);
         // mSphere = new Sphere();
         mLava = new LavaRectangle(lavaSizeX, lavaSizeZ);
+
+        mItemGenerator = new ItemGenerator(
+                itemCount,
+                itemMinDist,
+                itemHeightOffset,
+                mMap.mGenerator // This is already initialized, so we can safely pass this to mItemGenerator.
+        );
+
+        mItem = null;
 
         // initialize rotation / translation matrix
         Matrix.setIdentityM(mViewRotationMatrix, 0);
