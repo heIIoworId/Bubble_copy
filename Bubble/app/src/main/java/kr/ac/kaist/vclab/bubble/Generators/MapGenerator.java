@@ -1,4 +1,4 @@
-package kr.ac.kaist.vclab.bubble.Generators;
+package kr.ac.kaist.vclab.bubble.generators;
 
 import android.opengl.GLES20;
 
