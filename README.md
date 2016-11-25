@@ -21,7 +21,7 @@
 * ~~스카이박스 넓이로 용암 깔기~~
 
 ### 상균
-* global boolean 으로 soundhandler on/off 처리
+* ~~global boolean 으로 soundhandler on/off 처리~~
 * media recorder 화면 켤 때 멈추는 거 해결하기 (state관리가 포인트)
 * 시간 지나면 버블 사이즈 줄어들게 하기, 아이템 먹으면 다시 커지게 하기
 * 남은 아이템 개수 표시
