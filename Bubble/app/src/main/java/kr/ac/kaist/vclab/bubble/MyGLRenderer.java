@@ -108,6 +108,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private float[] mProjMatrix = new float[16];
     private float[] mTempMatrix = new float[16];
 
+    private long timestamp;
     // FIXME PARAM OF CAMERA
     float scale = 0.4f;
     float[] mCamera = new float[3];
@@ -120,7 +121,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     @Override
     // CALLED WHEN SURFACE IS CREATED AT FIRST.
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
-
+        timestamp = System.currentTimeMillis();
 
         // GET ENV SINGLETON INSTANCE
         // FIXME TO BE USED IN ...
@@ -219,7 +220,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onDrawFrame(GL10 unused) {
-
+        float curTime = (System.currentTimeMillis() - timestamp) /  1000000.0f;
+        System.out.println(curTime);
         // CLEAR COLOR & DEPTH BUFFERS
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
@@ -301,7 +303,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mBubble.draw(mProjMatrix, mBubbleModelViewMatrix, mBubbleModelMatrix,
                 mViewMatrix, mBubbleNormalMatrix, mLight, mLight2,
                 mCamera, mSkyBox.getCubeTex());
-        mSea.draw(mProjMatrix, mSeaModelViewMatrix, mSeaNormalMatrix, mLight, mLight2);
+        mSea.draw(mProjMatrix, mSeaModelViewMatrix, mSeaNormalMatrix, mLight, mLight2, curTime);
     }
 
     @Override
