@@ -1,6 +1,5 @@
 package kr.ac.kaist.vclab.bubble.models;
 
-import android.graphics.Bitmap;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 
@@ -220,9 +219,9 @@ public class SkyBox {
 
         // prepare shaders and OpenGL program
         int vertexShader = MyGLRenderer.loadShaderFromFile(
-                GLES20.GL_VERTEX_SHADER, "cubemap.vshader");
+                GLES20.GL_VERTEX_SHADER, "cubemap-vshader.glsl");
         int fragmentShader = MyGLRenderer.loadShaderFromFile(
-                GLES20.GL_FRAGMENT_SHADER, "cubemap.fshader");
+                GLES20.GL_FRAGMENT_SHADER, "cubemap-fshader.glsl");
 
         mProgram = GLES20.glCreateProgram();             // create empty OpenGL Program
         GLES20.glAttachShader(mProgram, vertexShader);   // add the vertex shader to program
