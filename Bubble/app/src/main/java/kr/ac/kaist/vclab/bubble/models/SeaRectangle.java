@@ -34,6 +34,7 @@ public class SeaRectangle {
 
     private int mTextureHandle;
     private int mTextureCoorHandle;
+    private int mTimeHandle;
 
     private static final int COORDS_PER_VERTEX = 3;
     private static final int VERTEX_STRIDE = COORDS_PER_VERTEX * 4;
@@ -42,6 +43,7 @@ public class SeaRectangle {
     private static float[] normals;
     private static float[] textureCoors;
 
+    private float[] move = new float[]{10.0f ,2.0f};
     float[] color = {0.0f, 0.0f, 1.0f};
 
 
@@ -117,9 +119,10 @@ public class SeaRectangle {
                      float[] modelViewMatrix,
                      float[] normalMatrix,
                      float[] light,
-                     float[] light2) {
+                     float[] light2,
+                     float curTime) {
         GLES20.glUseProgram(mProgram);
-
+        float[] curMove = new float[]{move[0] * curTime, move[1] * curTime};
         // uniforms
         mProjMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uProjMatrix");
         mModelViewMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uModelViewMatrix");
@@ -128,6 +131,7 @@ public class SeaRectangle {
         mLightHandle = GLES20.glGetUniformLocation(mProgram, "uLight");
         mLight2Handle = GLES20.glGetUniformLocation(mProgram, "uLight2");
         mTextureHandle = GLES20.glGetUniformLocation(mProgram, "uTextureUnit");
+        mTimeHandle = GLES20.glGetUniformLocation(mProgram, "uTime");
 
         GLES20.glUniformMatrix4fv(mProjMatrixHandle, 1, false, projMatrix, 0);
         GLES20.glUniformMatrix4fv(mModelViewMatrixHandle, 1, false, modelViewMatrix, 0);
@@ -136,6 +140,7 @@ public class SeaRectangle {
         GLES20.glUniform3fv(mColorHandle, 1, color, 0);
         GLES20.glUniform3fv(mLightHandle, 1, light, 0);
         GLES20.glUniform3fv(mLight2Handle, 1, light2, 0);
+        GLES20.glUniform2fv(mTimeHandle, 1, curMove, 0);
 
         // attributes
         mPositionHandle = GLES20.glGetAttribLocation(mProgram, "aPosition");
