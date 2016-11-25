@@ -2,6 +2,7 @@ precision mediump float;
 
 uniform vec3 uLight, uLight2, uColor;
 uniform sampler2D uTextureUnit;
+uniform vec2 uTime;
 
 varying vec3 vNormal;
 varying vec3 vPosition;
@@ -18,7 +19,15 @@ void main() {
     // vec3 intensity = uColor * diffuse;
 
     // texture
-    vec4 textureColor = texture2D(uTextureUnit, vTextureCoor);
+
+    vec2 hello = vTextureCoor + uTime;
+    if(hello.x >= 1.0f){
+        hello.x -= 1.0f;
+    }
+    if(hello.y >= 1.0f){
+        hello.y -= 1.0f;
+    }
+    vec4 textureColor = texture2D(uTextureUnit, hello);
     vec3 intensity = textureColor.xyz * diffuse;
 
     // haze
