@@ -6,6 +6,7 @@ package kr.ac.kaist.vclab.bubble.environment;
 public class Env {
 
     public static int stateMic;
+
     private static Env ourInstance = new Env();
     public static Env getInstance() {
         return ourInstance;
@@ -14,6 +15,5 @@ public class Env {
     // SETTING GLOBAL ENV VARIABLES
     private Env() {
         stateMic = 0; // 0: turn off, 1: turn on
-
     }
 }

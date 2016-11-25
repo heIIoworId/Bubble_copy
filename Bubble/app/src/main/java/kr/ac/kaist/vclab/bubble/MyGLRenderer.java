@@ -154,16 +154,18 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mSprings = GeomOperator.genSprings(mParticles);
         mBubbleCore = new Particle(bubbleStart);
 
-        // FIXME BLOWER OUT
-        mBlower = new Blower();
-        mBlower.setBubbleCore(mBubbleCore);
+        if(Env.stateMic == 1){
+            mBlower = new Blower();
+            mBlower.setBubbleCore(mBubbleCore);
+        }
 
         mWorld = new World();
         mWorld.setParticles(mParticles);
         mWorld.setSprings(mSprings);
         mWorld.setBubbleCore(mBubbleCore);
-        // FIXME BLOWER OUT
-        mWorld.setBlower(mBlower);
+        if(Env.stateMic == 1){
+            mWorld.setBlower(mBlower);
+        }
 
         // INITIALIZE LIGHTS
         mLight = new float[]{2.0f, 3.0f, 14.0f};
@@ -275,8 +277,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         normalMatrix(mSkyboxNormalMatrix, 0, mSkyboxModelViewMatrix, 0);
 
         //UPDATE WORLD AND VERTICES OF SPHERE
-        // FIXME BLOWER OUT
-        mBlower.setBlowingDir(mViewMatrix);
+        if(env.stateMic == 1){
+            mBlower.setBlowingDir(mViewMatrix);
+        }
         mWorld.applyForce();
         float updatedVertices[] = GeomOperator.genVertices(mWorld.getParticles());
         mBubble.setVertices(updatedVertices);

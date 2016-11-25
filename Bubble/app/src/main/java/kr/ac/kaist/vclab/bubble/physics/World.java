@@ -2,6 +2,8 @@ package kr.ac.kaist.vclab.bubble.physics;
 
 import java.util.ArrayList;
 
+import kr.ac.kaist.vclab.bubble.environment.Env;
+
 /**
  * Created by 84395 on 10/29/2016.
  */
@@ -18,6 +20,7 @@ public class World {
     ArrayList<Spring> springs;
     Particle bubbleCore;
     Blower blower;
+    Env env = Env.getInstance();
 
     public World(){
         particles = new ArrayList<>();
@@ -36,10 +39,10 @@ public class World {
         for (int i=0; i<springs.size(); i++){
             springs.get(i).applyForce();
         }
-        // FIXME TEST OUT
         bubbleCore.applyForce(gravity);
-        // FIXME BLOWER OUT
-        blower.applyForce();
+        if(env.stateMic == 1) {
+            blower.applyForce();
+        }
     }
 
     public ArrayList<Particle> getParticles(){
