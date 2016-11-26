@@ -10,7 +10,8 @@ import kr.ac.kaist.vclab.bubble.environment.GameEnv;
 
 public class ItemManager {
 
-    ArrayList<Item> items;
+    private ArrayList<Item> items;
+
     public ItemManager(ArrayList<Item> _items){
         items = _items;
     }
@@ -22,6 +23,6 @@ public class ItemManager {
                 num++;
             }
         }
-        GameEnv.getInstance().numOfCurrentItems = num;
+        GameEnv.getInstance().numOfAchievedItems = num;
     }
 }

@@ -20,6 +20,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import kr.ac.kaist.vclab.bubble.activities.MainActivity;
 import kr.ac.kaist.vclab.bubble.environment.Env;
+import kr.ac.kaist.vclab.bubble.environment.GameEnv;
 import kr.ac.kaist.vclab.bubble.events.SoundHandler;
 import kr.ac.kaist.vclab.bubble.models.BubbleSphere;
 import kr.ac.kaist.vclab.bubble.models.Cube;
@@ -111,7 +112,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     float[] mCamera = new float[3];
 
     // FIXME PARAM OF BUBBLE
-    private float bubbleScale = 0.09f;
+//    private float bubbleScale = 0.09f;
     private float[] bubbleStart = new float[]{0,0,0}; // STARTING LOCATION OF BUBBLE
     private float cameraDistance = 1.5f; // DISTANCE BTWN CAMERA & BUBBLE
 
@@ -124,9 +125,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         GLES20.glClearColor(0.7f, 0.8f, 0.9f, 1.0f); // skyblue
 
         // FIXME PARAM OF BUBBLE
-        float radius = 1.2f;
-        int level = 3; // RESOLUTION OF BUBBLE VERTICES
-        mBubble = new BubbleSphere(radius, level);
+        mBubble = new BubbleSphere(
+                GameEnv.getInstance().radiusOfBubble,
+                GameEnv.getInstance().levelOfBubble);
         mBubble.color = new float[] {0.3f, 0.8f, 0.9f};
 
         // ... map
