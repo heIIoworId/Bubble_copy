@@ -101,6 +101,8 @@ public class Intersect {
 
 
         float[] vec1 = new float[]{vectors[0], vectors[1], vectors[2]};
+        float[] vec2 = new float[]{vectors[4], vectors[5], vectors[6]};
+        float[] vec3 = new float[]{vectors[8], vectors[9], vectors[10]};
 //        System.out.println("v1 "+ vec1[0] + " " + vec1[1]+ " " +vec1[2]);
         float[] vec21 = new float[]{vectors[4] - vectors[0], vectors[5] - vectors[1], vectors[6] - vectors[2]};
 //        System.out.println("v21 "+ vec21[0] + " " + vec21[1]+ " " +vec21[2]);
@@ -111,11 +113,12 @@ public class Intersect {
 //        System.out.println("normal "+ normal[0] + " " + normal[1]+ " " +normal[2]);
         normal = VecOperator.normalize(normal);
 //        System.out.println("normal "+ normal[0] + " " + normal[1]+ " " +normal[2]);
-        //ax+by+cz = d , plane : {a,b,c,d}-
+        //ax+by+cz = d , plane : {a,b,c,d}
         float[] plane = new float[]{normal[0], normal[1], normal[2], VecOperator.dot(normal, vec1)};
         System.out.println("plane" + +plane[0]+ " "+plane[1]+ " " +plane[2]+ " " +plane[3]);
 
         float distance = (VecOperator.dot(normal, sphereCenter) - plane[3]) / (VecOperator.dot(normal, normal));
+        //fix : 절대값문제
         System.out.println("distance" +  distance);
         if (distance > sphereCollision.GetRadius()) {
             return false;
@@ -124,14 +127,98 @@ public class Intersect {
         float[] nearest = new float[3];
         nearest = VecOperator.scale(normal, -distance);
         System.out.println("nearest"+ " " + nearest[0]+ " " + nearest[1] + " " + nearest[2]);
+        System.out.println("sphere"+ " " + sphereCenter[0]+ " " + sphereCenter[1] + " " + sphereCenter[2]);
 
-        nearest = VecOperator.sub(sphereCenter, nearest);
-
-        float a = (nearest[0] * vec31[1] - nearest[1] * vec31[0]) / (vec21[0] * vec31[1] - vec21[1] * vec31[0]);
-        float b = (nearest[0] * vec21[1] - nearest[1] * vec21[0]) / (vec31[0] * vec21[1] - vec31[1] * vec21[0]);
+        nearest = VecOperator.add(sphereCenter, nearest);
         System.out.println("nearest"+ " " + nearest[0]+ " " + nearest[1] + " " + nearest[2]);
+
+        int first = 0;
+        int second = 1;
+        float denominator = vec21[first] * vec31[second] - vec21[second] * vec31[first];
+
+        while(denominator == 0.0f && first < 2){
+            first = (first + 1);
+            second = (second + 1)%3;
+            denominator = vec21[first] * vec31[second] - vec21[second] * vec31[first];
+        }
+        nearest = VecOperator.sub(nearest, vec1);
+
+        float a = (nearest[first] * vec31[second] - nearest[second] * vec31[first]) / denominator;
+        float b = (nearest[first] * vec21[second] - nearest[second] * vec21[first]) / -denominator;
+        System.out.println("aa " + a + " b " + b);
+        System.out.println("aa " + a + " b " + b);
+
+        System.out.println("nearest"+ " " + nearest[0]+ " " + nearest[1] + " " + nearest[2]);//
+        System.out.println("v1 "+ vec1[0] + " " + vec1[1]+ " " +vec1[2]);
+        System.out.println("v2 "+ vectors[4] + " " + vectors[5]+ " " +vectors[6]);
+        System.out.println("v3 "+ vectors[8] + " " + vectors[9]+ " " +vectors[10]);
+
+        System.out.println("v21 "+ vec21[0] + " " + vec21[1]+ " " +vec21[2]);
+        System.out.println("v31 "+ vec31[0] + " " + vec31[1]+ " " +vec31[2]);
+        System.out.println("first "+ first + " second" + second + " bde "+denominator);
         System.out.println("a " + a + " b " + b);
 
-        return a >= 0 && a <= 1 && b >=0 && b <= 1;
+        //nearest point is out of the plane
+        if(a < 0 || a > 1 || b <0 || b > 1){
+            return (Intersectline(vec1, vec2, normal, nearest, sphereCollision)
+                    ||Intersectline(vec2, vec3, normal, nearest, sphereCollision)
+                    ||Intersectline(vec3, vec1, normal, nearest, sphereCollision));
+        }
+        //nearest point is in the plane
+        else{
+            return VecOperator.getDistance(nearest, sphereCenter) < sphereCollision.GetRadius();
+        }
+    }
+    static boolean Intersectline(float[] vec1, float[] vec2, float[] normal, float[] nearest, SphereCollision sphereCollision){
+        float[] vec21 = new float[3];
+        vec21 = VecOperator.sub(vec2, vec1);
+        float[] tonearest = new float[3];
+        VecOperator.cross(vec21, normal, tonearest);
+        float a = 0;
+        boolean zero = false;
+        for(int i=0; i<3; i++){
+            if (vec21[i] == 0) {
+                a = (nearest[i] - vec1[i]) / tonearest[i];
+                zero = true;
+
+                float[] toline = new float[3];
+                toline = VecOperator.scale(tonearest, a);
+                float[] inline = new float[3];
+                inline = VecOperator.sub(nearest, toline);
+
+                if (IsinLine(vec1, vec2, inline)) {
+                    if (VecOperator.getDistance(inline, sphereCollision.GetCenter()) < sphereCollision.GetRadius()) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        if(zero){
+            return false;
+        }
+        else{
+            a = (vec21[1] *(nearest[0] - vec1[0]) - vec21[0] * (nearest[1] - vec1[1]))/(vec21[0] * tonearest[1] - vec21[1] * tonearest[0]);
+            float[] toline = new float[3];
+            toline = VecOperator.scale(tonearest, a);
+            float[] inline = new float[3];
+            inline = VecOperator.sub(nearest, toline);
+            if (IsinLine(vec1, vec2, inline)) {
+                if (VecOperator.getDistance(inline, sphereCollision.GetCenter()) < sphereCollision.GetRadius()) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+    static boolean IsinLine(float[] vec1, float[] vec2, float[] x){
+        for(int i=0; i<3; i++){
+            float max = Math.max(vec1[i], vec2[i]);
+            float min = Math.min(vec1[i], vec2[i]);
+            if(x[i] >max || x[i] < min){
+                return false;
+            }
+        }
+        return true;
     }
 }

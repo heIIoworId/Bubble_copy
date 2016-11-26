@@ -94,15 +94,16 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
                     } else if (count == 2) {
                         // Translate cube1
-                        SphereCollision s = mRenderer.mSphere.getCollision();
-                        BoxCollision b = mRenderer.mCube.getCollision();
-
-
                         float[] move = new float[16];
                         Matrix.setIdentityM(move, 0);
                         Matrix.translateM(move, 0, dx/100 , -dy/100 , 0);
                         mRenderer.move = move;
-
+                    }else if (count == 3) {
+                        // Translate cube1
+                        float[] move = new float[16];
+                        Matrix.setIdentityM(move, 0);
+                        Matrix.translateM(move, 0, 0, 0 , dy/100);
+                        mRenderer.move = move;
                     }
                     break;
 //                case 2:

@@ -119,7 +119,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.translateM(mViewTranslationMatrix, 0, 0, 0, -10f);
 
         Matrix.setIdentityM(mCubeRotationMatrix, 0);
+        Matrix.rotateM(mCubeRotationMatrix, 0, 70.0f, 1f,1f,2f);
         Matrix.setIdentityM(mCubeTranslationMatrix, 0);
+        Matrix.translateM(mCubeTranslationMatrix, 0, -5, 0, 0);
         Matrix.setIdentityM(mCube2RotationMatrix, 0);
         Matrix.setIdentityM(mCube2TranslationMatrix, 0);
 
@@ -229,7 +231,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         final float bottom = -1.0f;
         final float top = 1.0f;
         final float near = 1f;
-        final float far = 30.0f;
+        final float far = 50.0f;
 
         Matrix.frustumM(mProjMatrix, 0, left, right, bottom, top, near, far);
     }
