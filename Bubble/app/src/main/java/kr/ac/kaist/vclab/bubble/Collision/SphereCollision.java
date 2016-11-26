@@ -1,4 +1,4 @@
-package kr.ac.kaist.vclab.bubble.Collision;
+package kr.ac.kaist.vclab.bubble.collision;
 
 /**
  * Created by Jongmin on 2016-10-23.

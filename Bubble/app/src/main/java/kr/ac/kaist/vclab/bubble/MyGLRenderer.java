@@ -21,14 +21,10 @@ import javax.microedition.khronos.opengles.GL10;
 import kr.ac.kaist.vclab.bubble.activities.MainActivity;
 import kr.ac.kaist.vclab.bubble.environment.Env;
 import kr.ac.kaist.vclab.bubble.environment.GameEnv;
-import kr.ac.kaist.vclab.bubble.events.SoundHandler;
 import kr.ac.kaist.vclab.bubble.models.BubbleSphere;
-import kr.ac.kaist.vclab.bubble.models.Cube;
 import kr.ac.kaist.vclab.bubble.models.MapCube;
 import kr.ac.kaist.vclab.bubble.models.SeaRectangle;
 import kr.ac.kaist.vclab.bubble.models.SkyBox;
-import kr.ac.kaist.vclab.bubble.models.Sphere;
-import kr.ac.kaist.vclab.bubble.models.Square;
 import kr.ac.kaist.vclab.bubble.physics.Blower;
 import kr.ac.kaist.vclab.bubble.physics.Particle;
 import kr.ac.kaist.vclab.bubble.physics.Spring;
@@ -107,6 +103,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private float[] mTempMatrix = new float[16];
 
     private long timestamp;
+
     // FIXME PARAM OF CAMERA
     float scale = 0.4f;
     float[] mCamera = new float[3];
@@ -144,12 +141,11 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mSkyBox = new SkyBox();
 
         //INITIALIZE WORLD
-//        mParticles = GeomOperator.genParticles(mSphere.getVertices());
         mParticles = GeomOperator.genParticles(mBubble.getVertices());
         mSprings = GeomOperator.genSprings(mParticles);
         mBubbleCore = new Particle(bubbleStart);
 
-        if(Env.getInstance().stateMic == 1){
+        if(Env.getInstance().micStatus == 1){
             mBlower = new Blower();
             mBlower.setBubbleCore(mBubbleCore);
         }
@@ -158,7 +154,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mWorld.setParticles(mParticles);
         mWorld.setSprings(mSprings);
         mWorld.setBubbleCore(mBubbleCore);
-        if(Env.getInstance().stateMic == 1){
+        if(Env.getInstance().micStatus == 1){
             mWorld.setBlower(mBlower);
         }
 
@@ -178,42 +174,25 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.setIdentityM(mBubbleTranslationMatrix, 0);
         Matrix.translateM(mBubbleTranslationMatrix, 0, 0, 0, 0);
 
-        // ... map
+        // MAP MATRIX
         Matrix.setIdentityM(mMapRotationMatrix, 0);
         Matrix.setIdentityM(mMapTranslationMatrix, 0);
         Matrix.translateM(mMapTranslationMatrix, 0, -10.0f, -5.0f, -10.0f);
 
-        // ... sea
+        // SEA MATRIX
         Matrix.setIdentityM(mSeaRotationMatrix, 0);
         Matrix.setIdentityM(mSeaTranslationMatrix, 0);
         Matrix.translateM(mSeaTranslationMatrix, 0, -10.0f, -4.0f, -10.0f);
 
-        // ... skybox
+        // SKYBOX MATRIX
         Matrix.setIdentityM(mSkyboxRotationMatrix, 0);
         Matrix.setIdentityM(mSkyboxTranslationMatrix, 0);
 
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                while(true){
-//                    int vol = (int) soundHandler.getAmplitude();
-//                    System.out.println("vol: " + vol);
-//                    Message msg = mHandler.obtainMessage();
-//                    msg.what = 0;
-//                    msg.arg1 = vol;
-//                    mHandler.sendMessage(msg);
-//                    try {
-//                        Thread.sleep(800);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
-//        }).start();
     }
 
     @Override
     public void onDrawFrame(GL10 unused) {
+        // IFXME WHAT IS THIS?
         float curTime = (System.currentTimeMillis() - timestamp) /  1000000.0f;
         System.out.println(curTime);
         // CLEAR COLOR & DEPTH BUFFERS
@@ -273,7 +252,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         normalMatrix(mSkyboxNormalMatrix, 0, mSkyboxModelViewMatrix, 0);
 
         //UPDATE WORLD AND VERTICES OF SPHERE
-        if(Env.getInstance().stateMic == 1){
+        if(Env.getInstance().micStatus == 1){
             mBlower.setBlowingDir(mViewMatrix);
         }
         mWorld.applyForce();

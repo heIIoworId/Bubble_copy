@@ -7,7 +7,7 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 
-import kr.ac.kaist.vclab.bubble.Collision.SphereCollision;
+import kr.ac.kaist.vclab.bubble.collision.SphereCollision;
 import kr.ac.kaist.vclab.bubble.MyGLRenderer;
 import kr.ac.kaist.vclab.bubble.utils.VecOperator;
 

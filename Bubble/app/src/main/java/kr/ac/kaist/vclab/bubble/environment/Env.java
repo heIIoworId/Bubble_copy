@@ -5,7 +5,8 @@ package kr.ac.kaist.vclab.bubble.environment;
  */
 public class Env {
 
-    public static int stateMic;
+    public static int micStatus;
+    public static int dirtyModeStatus;
 
     private static Env ourInstance = new Env();
     public static Env getInstance() {
@@ -14,7 +15,7 @@ public class Env {
 
     // SETTING GLOBAL ENV VARIABLES
     private Env() {
-
-        stateMic = 0; // 0: turn off, 1: turn on
+        micStatus = 0; // 0: OFF, 1: ON
+        dirtyModeStatus = 0; // 0: OFF, 1: ON
     }
 }

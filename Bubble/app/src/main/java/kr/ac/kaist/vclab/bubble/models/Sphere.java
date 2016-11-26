@@ -6,7 +6,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-import kr.ac.kaist.vclab.bubble.Collision.SphereCollision;
+import kr.ac.kaist.vclab.bubble.collision.SphereCollision;
 import kr.ac.kaist.vclab.bubble.MyGLRenderer;
 
 

@@ -6,9 +6,8 @@ import android.opengl.GLUtils;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-
-import kr.ac.kaist.vclab.bubble.generators.MapGenerator;
 import kr.ac.kaist.vclab.bubble.MyGLRenderer;
+import kr.ac.kaist.vclab.bubble.generators.MapGenerator;
 
 /**
  * Created by avantgarde on 2016-11-02.

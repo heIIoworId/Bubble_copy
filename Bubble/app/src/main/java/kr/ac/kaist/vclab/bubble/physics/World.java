@@ -39,7 +39,7 @@ public class World {
             springs.get(i).applyForce();
         }
         bubbleCore.applyForce(gravity);
-        if(Env.getInstance().stateMic == 1) {
+        if(Env.getInstance().micStatus == 1) {
             blower.applyForce();
         }
     }

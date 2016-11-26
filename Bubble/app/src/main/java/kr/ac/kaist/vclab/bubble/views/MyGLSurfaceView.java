@@ -5,10 +5,8 @@ import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.view.MotionEvent;
 
-import kr.ac.kaist.vclab.bubble.Collision.BoxCollision;
-import kr.ac.kaist.vclab.bubble.Collision.Intersect;
-import kr.ac.kaist.vclab.bubble.Collision.SphereCollision;
 import kr.ac.kaist.vclab.bubble.MyGLRenderer;
+import kr.ac.kaist.vclab.bubble.environment.Env;
 
 /**
  * Created by sjjeon on 16. 9. 20.
@@ -36,9 +34,10 @@ public class MyGLSurfaceView extends GLSurfaceView {
         mRenderer = new MyGLRenderer();
         setRenderer(mRenderer);
 
-        // FIXME DIRTY MODE OUT
         // Render the view only when there is a change in the drawing data
-//        setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+        if(Env.getInstance().dirtyModeStatus == 1){
+            setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+        }
     }
 
     public MyGLRenderer getmRenderer() {
