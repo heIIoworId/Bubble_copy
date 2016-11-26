@@ -9,12 +9,10 @@ public class GameEnv {
 
     public static int numOfCurrentItems;
     public static int numOfTotalItems;
-    private static long startTime;
-    private static long currentTime;
-    private static float duration;
+    public static long startTime;
+    public static float radiusOfItem;
 
     private static GameEnv ourInstance = new GameEnv();
-
     public static GameEnv getInstance() {
         return ourInstance;
     }
@@ -23,11 +21,13 @@ public class GameEnv {
         numOfCurrentItems = 0;
         numOfTotalItems = 10;
         startTime = System.currentTimeMillis();
+        radiusOfItem = 2.0f;
+
     }
 
     public static float getDuration(){
-        currentTime = System.currentTimeMillis();
-        duration = (float) (currentTime - startTime);
+        long currentTime = System.currentTimeMillis();
+        float duration = (float) (currentTime - startTime);
         duration = duration / 1000.0f;
         Math.ceil(duration);
         return duration;

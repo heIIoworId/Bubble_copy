@@ -20,7 +20,6 @@ public class World {
     ArrayList<Spring> springs;
     Particle bubbleCore;
     Blower blower;
-    Env env = Env.getInstance();
 
     public World(){
         particles = new ArrayList<>();
@@ -40,7 +39,7 @@ public class World {
             springs.get(i).applyForce();
         }
         bubbleCore.applyForce(gravity);
-        if(env.stateMic == 1) {
+        if(Env.getInstance().stateMic == 1) {
             blower.applyForce();
         }
     }

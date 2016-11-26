@@ -42,9 +42,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     // TAG
     private static final String TAG = "MyGLRenderer";
 
-    // ENV SINGLETON INSTANCE
-    private Env env;
-
     // PRESETS OF MAP
     private float mapSizeX = 30.0f; // X-size (widthX) of map cube
     private float mapSizeY = 3.0f; // Y-size (thickness) of map cube
@@ -123,11 +120,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
         timestamp = System.currentTimeMillis();
 
-        // GET ENV SINGLETON INSTANCE
-        // FIXME TO BE USED IN ...
-        env = Env.getInstance();
-
-        // SET BACKGROUND COLOR
+         // SET BACKGROUND COLOR
         GLES20.glClearColor(0.7f, 0.8f, 0.9f, 1.0f); // skyblue
 
         // FIXME PARAM OF BUBBLE
@@ -155,7 +148,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mSprings = GeomOperator.genSprings(mParticles);
         mBubbleCore = new Particle(bubbleStart);
 
-        if(Env.stateMic == 1){
+        if(Env.getInstance().stateMic == 1){
             mBlower = new Blower();
             mBlower.setBubbleCore(mBubbleCore);
         }
@@ -164,7 +157,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mWorld.setParticles(mParticles);
         mWorld.setSprings(mSprings);
         mWorld.setBubbleCore(mBubbleCore);
-        if(Env.stateMic == 1){
+        if(Env.getInstance().stateMic == 1){
             mWorld.setBlower(mBlower);
         }
 
@@ -279,7 +272,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         normalMatrix(mSkyboxNormalMatrix, 0, mSkyboxModelViewMatrix, 0);
 
         //UPDATE WORLD AND VERTICES OF SPHERE
-        if(env.stateMic == 1){
+        if(Env.getInstance().stateMic == 1){
             mBlower.setBlowingDir(mViewMatrix);
         }
         mWorld.applyForce();

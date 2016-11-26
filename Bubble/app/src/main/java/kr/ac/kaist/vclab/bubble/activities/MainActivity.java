@@ -6,6 +6,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.ViewGroup;
@@ -13,6 +14,11 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import kr.ac.kaist.vclab.bubble.environment.GameEnv;
 import kr.ac.kaist.vclab.bubble.events.GyroHandler;
@@ -29,6 +35,11 @@ public class MainActivity extends Activity implements SensorEventListener {
     private GyroHandler gyroHandler;
     private SensorManager mSensorManager;
     private GameEnv gameEnv;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,7 +61,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         ToggleButton myButton1 = new ToggleButton(this);
         ToggleButton myButton2 = new ToggleButton(this);
 
-        gameEnv = GameEnv.getInstance();
+        // FIXME NEEDED TO BE RUN VIA A THREAD
         String duration = "" + gameEnv.getDuration();
         setButtonText(myButton1, duration);
         setButtonText(myButton2, "Button 2");
@@ -58,50 +69,47 @@ public class MainActivity extends Activity implements SensorEventListener {
         buttonLayout.addView(myButton1);
         buttonLayout.addView(myButton2);
 
-        final ToggleButton[] buttons = {myButton1, myButton2};
-
-        for (int i = 0; i < buttons.length; i++) {
-            final ToggleButton button = buttons[i];
-
-            final int finalI = i;
-            button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        for (ToggleButton toggleButton : buttons) {
-                            if (toggleButton != buttonView) {
-                                toggleButton.setChecked(false);
-                            }
-                            mGLView.mode = finalI;
-                        }
-                    }
-                }
-            });
-        }
-        myButton1.setChecked(true);
+        // COMMENT OUT FUNCTIONALITY OF BUTTONS
+//        final ToggleButton[] buttons = {myButton1, myButton2};
+//
+//        for (int i = 0; i < buttons.length; i++) {
+//            final ToggleButton button = buttons[i];
+//
+//            final int finalI = i;
+//            button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                @Override
+//                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                    if (isChecked) {
+//                        for (ToggleButton toggleButton : buttons) {
+//                            if (toggleButton != buttonView) {
+//                                toggleButton.setChecked(false);
+//                            }
+//                            mGLView.mode = finalI;
+//                        }
+//                    }
+//                }
+//            });
+//        }
+//        myButton1.setChecked(true);
 
         LinearLayout.LayoutParams glParams = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
         );
         glParams.weight = 1;
-
         LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
         );
-
         layout.addView(buttonLayout, buttonParams);
         layout.addView(mGLView, glParams);
-
         setContentView(layout);
 
-        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-
         //자이로스코프 센서(회전)
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         gyroHandler.mGyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
-        mSensorManager.registerListener(this, gyroHandler.mGyroscope, SensorManager.SENSOR_DELAY_FASTEST);
-
+        mSensorManager.registerListener(
+                this, gyroHandler.mGyroscope, SensorManager.SENSOR_DELAY_FASTEST);
     }
 
     private void setButtonText(ToggleButton button, String text) {
@@ -111,27 +119,17 @@ public class MainActivity extends Activity implements SensorEventListener {
     }
 
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
+        // FIXME WHAT IS THIS?
     }
 
     public void onSensorChanged(SensorEvent event) {
-        // System.out.println("ddddddgdaagd");
         Sensor sensor = event.sensor;
-        // System.out.println("dgdaagd");
         if (sensor.getType() == Sensor.TYPE_GYROSCOPE) {
             gyroHandler.onSensorChanged(event);
         }
-        float[] values = new float[3];
+        float values[] = new float[3];
         values = gyroHandler.getSensorValues();
         mGLView.rotateByGyroSensor(values[0], -values[1], -values[2]);
-/*
-        if (sensor.getType() == Sensor.TYPE_GYROSCOPE) {
-            gyroX = event.values[0] * gyroScale;
-            gyroY = event.values[1] * gyroScale;
-            gyroZ = event.values[2] * gyroScale;
-            mGLView.rotateByGyroSensor(gyroX, gyroY, gyroZ);
-        }
-        */
     }
 
     @Override
@@ -151,5 +149,41 @@ public class MainActivity extends Activity implements SensorEventListener {
         // If you de-allocated graphic objects for onPause()
         // this is a good place to re-allocate them.
         mGLView.onResume();
+    }
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("Main Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        client.disconnect();
     }
 }
