@@ -1,6 +1,7 @@
 # Blowing Bubble
 
 ## 랩세션 조교님에게 질문
+* 어느 순간 카메라 y 축이 뒤집히는 문제 해결(gimbal lock, euler angles?? --> quaternion?)
 
 ## 게임 진행 방법
 * 맵 곳곳에 위치한 아이템(물방울)을 다 먹기
@@ -15,17 +16,16 @@
 
 ### 훈민 
 * ~~tri-planar texture mapping~~
-* bump mapping(normal mapping)
+* bump mapping (normal mapping) (tri-planar와 조합하기)
 * 산을 피해서 스피어(아이템) 놓기
-* ~~맵 사이즈 키우기(x4)~~
-* ~~스카이박스 넓이로 용암 깔기~~
+* 화면을 손가락으로 눌렀을 떄 맵을 순간적으로 투명하게
 
 ### 상균
 * ~~global boolean 으로 soundhandler on/off 처리~~
-* 화면 상단의 두 메뉴 버튼 지우기
+* 화면 상단의 두 메뉴 버튼 지우기 --> 지우기 말고 활용
+* 남은 아이템 개수 표시 (쓰레드 새로 만들어서, 버튼 텍스트 업데이트)
 * media recorder 화면 켤 때 멈추는 거 해결하기 (state관리가 포인트)
 * 시간 지나면 버블 사이즈 줄어들게 하기, 아이템 먹으면 다시 커지게 하기
-* 남은 아이템 개수 표시
 * ~~아이템 모델링하기, 아이템은 충돌시 사라짐~~
 * ~~아이템 다 먹었는지 확인, 최종 시간 기록 구현(gameManager class)~~
 * (시간나면) 버블의 이동 trajectory를 가시화 (BUBBLE CORE'S PAST LOCATION ARRAY?)(display only when bubble is moving)(투명한 리본)
@@ -45,6 +45,10 @@
 * 진동 넣기?
 
 ## 완료
+* 161126
+* ~~맵 사이즈 키우기(x4)~~
+* ~~스카이박스 넓이로 용암 깔기~~
+
 * 161119
 * ~~방울을 따라다니는 카메라 코딩(뷰메트릭스 실시간으로 변경)~~
 * ~~현재 glview에서 불리는 cube랑 sphere를 renderer로 옮기기~~
