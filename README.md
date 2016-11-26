@@ -26,9 +26,9 @@
 * media recorder 화면 켤 때 멈추는 거 해결하기 (state관리가 포인트)
 * 시간 지나면 버블 사이즈 줄어들게 하기, 아이템 먹으면 다시 커지게 하기
 * 남은 아이템 개수 표시
-* 아이템 모델링하기, 아이템은 충돌시 사라짐
-* 아이템 다 먹었는지 확인, 최종 시간 기록 구현(gameManager class)
-* (시간나면) 버블의 이동 trajectory를 가시화 (BUBBLE CORE'S PAST LOCATION ARRAY?)(display only when bubble is moving)
+* ~~아이템 모델링하기, 아이템은 충돌시 사라짐~~
+* ~~아이템 다 먹었는지 확인, 최종 시간 기록 구현(gameManager class)~~
+* (시간나면) 버블의 이동 trajectory를 가시화 (BUBBLE CORE'S PAST LOCATION ARRAY?)(display only when bubble is moving)(투명한 리본)
 * 맵 밖으로 나가면 버블 색깔 바꾸기
 
 ### 종민
