@@ -14,6 +14,7 @@ public class Env {
 
     // SETTING GLOBAL ENV VARIABLES
     private Env() {
+
         stateMic = 0; // 0: turn off, 1: turn on
     }
 }

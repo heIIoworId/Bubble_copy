@@ -30,6 +30,7 @@ public class Item extends BubbleSphere {
         isHitted = true;
         makeItInvisible();
     }
+    // FIXME 아예 안그리는 쪽으로 구현하기
     private void makeItInvisible(){
         this.setVertices(new float[]{0f,0f,0f});
     }

@@ -12,8 +12,9 @@ public class GameEnv {
     public static int numOfTotalItems;
     // TIME INFO
     public static long startTime;
-    public static float radiusOfItem;
     public static float duration;
+    // ITEM INFO
+    public static float radiusOfItem;
     // BUBBLE INFO
     public static float radiusOfBubble;
     public static float minRadiusOfBubble;
