@@ -333,22 +333,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         linear = MatOperator.matLinear(move);
         translation = MatOperator.matTranslation(move);
         Matrix.setIdentityM(move,0);
-/*
-        System.out.println("linear1-----------------");
-        for(int i=0; i<4; i++){
-            for (int j=0; j<4; j++){
-                System.out.print(linear[i*4 + j] + " ");
-            }
-            System.out.println();
-        }
-        System.out.println("trans2-----------------");
-        for(int i=0; i<4; i++){
-            for (int j=0; j<4; j++){
-                System.out.print(translation[i*4 + j] + " ");
-            }
-            System.out.println();
-        }
-        */
+
         float[] temp = new float[16];
        /*
        Matrix.multiplyMM(mCubeRotationMatrix, 0 , mCubeRotationMatrix, 0 , linear, 0);
@@ -358,8 +343,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         float[] temp1 = new float[16];
         float[] inversetemp = new float[16];
-        Matrix.invertM(inversetemp,0,mViewRotationMatrix,0);
+        Matrix.invertM(inversetemp,0, mViewRotationMatrix,0);
         Matrix.setIdentityM(temp1, 0);
+
+       /*
         Matrix.multiplyMM(temp1,0, translation,0, inversetemp,0);
         System.arraycopy(temp1, 0, translation, 0 , 16);
         Matrix.multiplyMM(temp1, 0, mViewRotationMatrix, 0, translation, 0);
@@ -371,7 +358,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.multiplyMM(temp1, 0, mViewRotationMatrix, 0, linear, 0);
         System.arraycopy(temp1, 0, linear, 0 , 16);
 
-
+*/
         float[] temp2 = new float[16];
         Matrix.multiplyMM(temp2, 0, mSphereTranslationMatrix, 0, translation, 0);
         float[] temp3 = new float[16];
@@ -395,23 +382,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
             System.arraycopy(temp2, 0, mSphereTranslationMatrix,0,16);
             System.arraycopy(temp3, 0, mSphereRotationMatrix,0,16);
         }
-        /*
-        System.out.println("move1-----------------");
-        for(int i=0; i<4; i++){
-            for (int j=0; j<4; j++){
-                System.out.print(move[i*4 + j] + " ");
-            }
-            System.out.println();
-        }
-        Matrix.setIdentityM(move, 0);
-        System.out.println("move2-----------------");
-        for(int i=0; i<4; i++){
-            for (int j=0; j<4; j++){
-                System.out.print(move[i*4 + j] + " ");
-            }
-            System.out.println();
-        }
-        */
 
 
     }
