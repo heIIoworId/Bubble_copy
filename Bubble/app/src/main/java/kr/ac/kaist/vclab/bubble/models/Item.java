@@ -7,23 +7,30 @@ import kr.ac.kaist.vclab.bubble.environment.GameEnv;
  */
 
 // FIXME SG
-public class Item {
+public class Item extends BubbleSphere {
+
+    // FIXME WHO TO MAKE IT GLOW?
+    // FIXME HAVING TO CHANGE COLOR AS RANDOM
 
     private float center[];
-    private float radius;
     private boolean isHitted;
     private int itemType;
 
     public Item(float[] _center){
+        super(GameEnv.getInstance().radiusOfItem, 2);
         center = _center;
-        radius = GameEnv.getInstance().radiusOfItem;
         isHitted = false;
         itemType = 1; // 0: BAD, 1: GOOD
     }
 
-    public void hitted(){
-        isHitted = true;
+    public boolean getHitstatus(){
+        return isHitted;
     }
-
-
+    public void updateHitStatus(){
+        isHitted = true;
+        makeItInvisible();
+    }
+    private void makeItInvisible(){
+        this.setVertices(new float[]{0f,0f,0f});
+    }
 }
