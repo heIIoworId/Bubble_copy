@@ -1,6 +1,7 @@
 # Blowing Bubble
 
 ## 랩세션 조교님에게 질문
+* 어느 순간 카메라 y 축이 뒤집히는 문제 해결(gimbal lock, euler angles?? --> quaternion?)
 
 ## 게임 진행 방법
 * 맵 곳곳에 위치한 아이템(물방울)을 다 먹기
