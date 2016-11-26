@@ -11,8 +11,10 @@ import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import kr.ac.kaist.vclab.bubble.environment.GameEnv;
 import kr.ac.kaist.vclab.bubble.events.GyroHandler;
 import kr.ac.kaist.vclab.bubble.views.MyGLSurfaceView;
 
@@ -26,6 +28,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     private MyGLSurfaceView mGLView;
     private GyroHandler gyroHandler;
     private SensorManager mSensorManager;
+    private GameEnv gameEnv;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,7 +50,9 @@ public class MainActivity extends Activity implements SensorEventListener {
         ToggleButton myButton1 = new ToggleButton(this);
         ToggleButton myButton2 = new ToggleButton(this);
 
-        setButtonText(myButton1, "Button 1");
+        gameEnv = GameEnv.getInstance();
+        String duration = "" + gameEnv.getDuration();
+        setButtonText(myButton1, duration);
         setButtonText(myButton2, "Button 2");
 
         buttonLayout.addView(myButton1);

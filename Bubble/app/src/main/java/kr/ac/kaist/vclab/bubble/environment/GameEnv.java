@@ -28,6 +28,8 @@ public class GameEnv {
     public static float getDuration(){
         currentTime = System.currentTimeMillis();
         duration = (float) (currentTime - startTime);
+        duration = duration / 1000.0f;
+        Math.ceil(duration);
         return duration;
     }
 }
