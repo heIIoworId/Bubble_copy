@@ -15,7 +15,7 @@ public class Particle {
     private float acceleration[];
     private float damping = 1f;
 
-    public Particle(float x, float y, float z){
+/*    public Particle(float x, float y, float z){
         mass = 1.0f;
         location = new float[3];
         location[0] = x;
@@ -23,7 +23,7 @@ public class Particle {
         location[2] = z;
         velocity = new float[3];
         acceleration = new float[3];
-    }
+    }*/
 
     public Particle(float[] _location){
         mass = 1.0f;

@@ -17,6 +17,7 @@ import kr.ac.kaist.vclab.bubble.utils.VecOperator;
 
 public class BubbleSphere {
 
+    // GL PROGRAM AND BUFFERS
     private final int mProgram;
     private FloatBuffer mVertexBuffer;
     private FloatBuffer mNormalBuffer;
@@ -31,12 +32,10 @@ public class BubbleSphere {
     private int mNormalMatrixHandle;
     private int mModelMatrixHandle;
     private int mViewMatrixHandle;
-
     private int mLightHandle;
     private int mLight2Handle;
     private int mColorHandle;
-
-    private int mEnvHandle;
+    private int mEnvHandle; // CUBE MAP
     private int mCameraHandle;
 
     private static final int COORDS_PER_VERTEX = 3;

@@ -21,6 +21,8 @@ public class GameEnv {
     // SUCCESS INFO
     public static boolean isSuccess;
     public static boolean isFailure;
+    // BubbleCore INFO
+    public int lengthOfTrajectory;
 
     private static GameEnv ourInstance = new GameEnv();
     public static GameEnv getInstance() {
@@ -37,6 +39,7 @@ public class GameEnv {
         radiusOfBubble = 1.2f;
         minRadiusOfBubble = 0.3f;
         levelOfBubble = 3;
+        lengthOfTrajectory = 30;
     }
 
     public static void update(){
@@ -52,9 +55,5 @@ public class GameEnv {
         } else if (radiusOfBubble <= minRadiusOfBubble){
             isFailure = true;
         }
-    }
-
-    public static float getDuration(){
-        return duration;
     }
 }

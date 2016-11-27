@@ -1,8 +1,9 @@
-package kr.ac.kaist.vclab.bubble.models;
+package kr.ac.kaist.vclab.bubble.environment;
 
 import java.util.ArrayList;
 
 import kr.ac.kaist.vclab.bubble.environment.GameEnv;
+import kr.ac.kaist.vclab.bubble.models.Item;
 
 /**
  * Created by mnswpr on 11/26/2016.

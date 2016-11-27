@@ -21,6 +21,7 @@ import javax.microedition.khronos.opengles.GL10;
 import kr.ac.kaist.vclab.bubble.activities.MainActivity;
 import kr.ac.kaist.vclab.bubble.environment.Env;
 import kr.ac.kaist.vclab.bubble.environment.GameEnv;
+import kr.ac.kaist.vclab.bubble.models.BubbleCore;
 import kr.ac.kaist.vclab.bubble.models.BubbleSphere;
 import kr.ac.kaist.vclab.bubble.models.MapCube;
 import kr.ac.kaist.vclab.bubble.models.SeaRectangle;
@@ -59,7 +60,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private ArrayList<Particle> mParticles;
     private ArrayList<Spring> mSprings;
     private Blower mBlower;
-    private Particle mBubbleCore;
+    private BubbleCore mBubbleCore;
 
     //DECLARE LIGHTS
     private float[] mLight = new float[3];
@@ -143,7 +144,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         //INITIALIZE WORLD
         mParticles = GeomOperator.genParticles(mBubble.getVertices());
         mSprings = GeomOperator.genSprings(mParticles);
-        mBubbleCore = new Particle(bubbleStart);
+        mBubbleCore = new BubbleCore(bubbleStart);
 
         if(Env.getInstance().micStatus == 1){
             mBlower = new Blower();
