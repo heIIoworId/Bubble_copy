@@ -28,13 +28,9 @@ public class BubbleCore extends Particle {
     private int mProjMatrixHandle;
     private int mModelViewMatrixHandle;
     private int mNormalMatrixHandle;
-    private int mModelMatrixHandle;
-    private int mViewMatrixHandle;
     private int mLightHandle;
     private int mLight2Handle;
     private int mColorHandle;
-    private int mEnvHandle; // CUBE MAP
-    private int mCameraHandle;
 
     private static final int COORDS_PER_VERTEX = 3;
     private static final int VERTEX_STRIDE = COORDS_PER_VERTEX * 4;
@@ -100,11 +96,16 @@ public class BubbleCore extends Particle {
                 GLES20.GL_FLOAT, false,
                 VERTEX_STRIDE, mVertexBuffer);
 
-        // Draw the cube
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, trajectory.length / 3);
 //        GLES20.glDrawArrays(GLES20.GL_LINE_LOOP, 0, vertices.length / 3);
 
         GLES20.glDisableVertexAttribArray(mPositionHandle);
+    }
+
+    //FIXME SG
+    public void updateTrajectory(){
+        float currentLocation[] = this.getLocation();
+        // TODO
     }
 
     public void initVertexBuffer(){
