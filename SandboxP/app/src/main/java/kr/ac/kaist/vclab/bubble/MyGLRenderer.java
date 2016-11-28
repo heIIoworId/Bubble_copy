@@ -22,7 +22,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class MyGLRenderer implements GLSurfaceView.Renderer {
     // background color
-    private float[] bgColor = new float[]{0.7f, 0.8f, 0.9f, 1.0f};
+    private float[] bgColor = new float[]{0.3f, 0.3f, 1.0f, 1.0f};
 
     // presets
     // ... map (& sea)
@@ -139,6 +139,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // objects
         // mCube = new Cube();
 
+        /*
         mMap = new MapCube(
                 mapSizeX, mapSizeY, mapSizeZ,
                 mapUnitLength,
@@ -146,18 +147,21 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                 mapComplexity,
                 1.0f, true
         );
+        */
 
-        mSea = new SeaRectangle(mapSizeX, mapSizeZ);
-        mSky = new SkyBox(skySizeX, skySizeY, skySizeZ);
+        // mSea = new SeaRectangle(mapSizeX, mapSizeZ);
+        // mSky = new SkyBox(skySizeX, skySizeY, skySizeZ);
         // mSphere = new Sphere();
         mLava = new LavaRectangle(lavaSizeX, lavaSizeZ);
 
+        /*
         mItemGenerator = new ItemGenerator(
                 itemCount,
                 itemMinDist,
                 itemHeightOffset,
                 mMap.mGenerator // This is already initialized, so we can safely pass this to mItemGenerator.
         );
+        */
 
         mItem = null;
 
@@ -287,15 +291,15 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // draw the objects
         GLES20.glEnable(GLES20.GL_CULL_FACE);
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
-        mMap.draw(mProjMatrix, mMapModelViewMatrix, mMapNormalMatrix, mMapModelMatrix, mLight, mLight2);
-        mSky.draw(mProjMatrix, mSkyModelViewMatrix, mSkyNormalMatrix, mLight, mLight2);
+        // mMap.draw(mProjMatrix, mMapModelViewMatrix, mMapNormalMatrix, mMapModelMatrix, mLight, mLight2);
+        // mSky.draw(mProjMatrix, mSkyModelViewMatrix, mSkyNormalMatrix, mLight, mLight2);
         mLava.draw(mProjMatrix, mLavaModelViewMatrix, mLavaNormalMatrix, mLight, mLight2);
-        GLES20.glDisable(GLES20.GL_CULL_FACE);
+        // GLES20.glDisable(GLES20.GL_CULL_FACE);
 
         GLES20.glEnable(GLES20.GL_BLEND);
         GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
         // mSphere.draw(mProjMatrix, mSphereModelViewMatrix, mSphereNormalMatrix, mLight, mLight2);
-        mSea.draw(mProjMatrix, mSeaModelViewMatrix, mSeaNormalMatrix, mLight, mLight2);
+        // mSea.draw(mProjMatrix, mSeaModelViewMatrix, mSeaNormalMatrix, mLight, mLight2);
         GLES20.glDisable(GLES20.GL_BLEND);
     }
 

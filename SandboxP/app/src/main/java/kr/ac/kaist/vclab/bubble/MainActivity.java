@@ -2,10 +2,10 @@ package kr.ac.kaist.vclab.bubble;
 
 import android.app.Activity;
 import android.content.Context;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
+// import android.hardware.Sensor;
+// import android.hardware.SensorEvent;
+// import android.hardware.SensorEventListener;
+// import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.ViewGroup;
@@ -13,11 +13,11 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ToggleButton;
 
-public class MainActivity extends Activity implements SensorEventListener {
+public class MainActivity extends Activity {
     public static Context context;
     private MyGLSurfaceView mGLView;
-    private GyroHandler gyroHandler;
-    private SensorManager mSensorManager;
+    // private GyroHandler gyroHandler;
+    // private SensorManager mSensorManager;
 
     // private String[] labels = new String[]{"World", "Cube", "Map", "Bubble"};
     // private String[] modes = new String[]{"world", "cube", "map", "bubble"};
@@ -31,7 +31,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 
         // create mGLView and set it as the ContentView for this activity
         mGLView = new MyGLSurfaceView(this);
-        gyroHandler = new GyroHandler();
+        // gyroHandler = new GyroHandler();
 
         // layouts
         LinearLayout layout = new LinearLayout(this);
@@ -97,15 +97,18 @@ public class MainActivity extends Activity implements SensorEventListener {
 
         setContentView(layout);
 
-        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        // mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         //자이로스코프 센서(회전)
-        gyroHandler.mGyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+        // gyroHandler.mGyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
     }
 
+    /*
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
+    */
 
+    /*
     public void onSensorChanged(SensorEvent event) {
         Sensor sensor = event.sensor;
 
@@ -116,11 +119,12 @@ public class MainActivity extends Activity implements SensorEventListener {
         values = gyroHandler.getSensorValues();
         mGLView.rotateByGyroSensor(values[0], -values[1], -values[2]);
     }
+    */
 
     @Override
     protected void onPause() {
         super.onPause();
-        mSensorManager.registerListener(this, gyroHandler.mGyroscope, SensorManager.SENSOR_DELAY_FASTEST);
+        // mSensorManager.registerListener(this, gyroHandler.mGyroscope, SensorManager.SENSOR_DELAY_FASTEST);
         mGLView.onPause();
     }
 
