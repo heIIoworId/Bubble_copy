@@ -21,10 +21,11 @@ public class GameEnv {
     public static float radiusOfItem = 2.0f;
 
     // BUBBLE INFO
+    public static float scaleOfBubble = 1.0f; // FIXME SG (SCALING BUBBLE ACCORDING TO TIME PASS)
     public static float radiusOfBubble = 1.2f;
     public static float minRadiusOfBubble = 0.3f;
     public static int levelOfBubble = 3;
-    public int lengthOfTrajectory = 30;
+    public int lengthOfTrajectory = 300;
     public float dampingOfInnerBubble = 1.0f;
     public float dampingOfBubbleCore = 0.95f;
 

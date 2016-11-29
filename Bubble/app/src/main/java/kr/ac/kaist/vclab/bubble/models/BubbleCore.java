@@ -97,7 +97,7 @@ public class BubbleCore extends Particle {
                 GLES20.GL_FLOAT, false,
                 VERTEX_STRIDE, mVertexBuffer);
 
-        GLES20.glDrawArrays(GLES20.GL_LINE_STRIP, 0, trajectory.length / 3);
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, trajectory.length / 3);
 //        GLES20.glDrawArrays(GLES20.GL_LINE_LOOP, 0, vertices.length / 3);
 
         GLES20.glDisableVertexAttribArray(mPositionHandle);

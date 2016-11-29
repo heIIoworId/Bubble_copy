@@ -118,7 +118,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     float[] mCamera = new float[3];
 
     // FIXME PARAM OF BUBBLE
-//    private float bubbleScale = 0.09f;
     private float[] initialLocationOfBubble = new float[]{0,0,0};
     private float distOfBubbleAndCamera = 1.5f;
 
@@ -300,7 +299,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                 mViewMatrix, mBubbleNormalMatrix, mLight, mLight2,
                 mCamera, mSkyBox.getCubeTex());
         // FIXME SG (TEMPORAL COMMENT OUT)
-        mSea.draw(mProjMatrix, mSeaModelViewMatrix, mSeaNormalMatrix, mLight, mLight2, curTime);
+        //mSea.draw(mProjMatrix, mSeaModelViewMatrix, mSeaNormalMatrix, mLight, mLight2, curTime);
     }
 
     @Override
