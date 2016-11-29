@@ -61,12 +61,12 @@ public class BubbleCore extends Particle {
         GLES20.glLinkProgram(mProgram);
     }
 
-    // FIXME SG WORKING ON 161127
-    public void draw(float[] projMatrix,
-                     float[] modelViewMatrix,
-                     float[] normalMatrix,
-                     float[] light,
-                     float[] light2) {
+    // FIXME SG (working on)
+    public void drawTrajectory(float[] projMatrix,
+                               float[] modelViewMatrix,
+                               float[] normalMatrix,
+                               float[] light,
+                               float[] light2) {
 
         GLES20.glUseProgram(mProgram);
 
@@ -96,16 +96,24 @@ public class BubbleCore extends Particle {
                 GLES20.GL_FLOAT, false,
                 VERTEX_STRIDE, mVertexBuffer);
 
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, trajectory.length / 3);
+        GLES20.glDrawArrays(GLES20.GL_LINE_STRIP, 0, trajectory.length / 3);
 //        GLES20.glDrawArrays(GLES20.GL_LINE_LOOP, 0, vertices.length / 3);
 
         GLES20.glDisableVertexAttribArray(mPositionHandle);
     }
 
-    //FIXME SG
+    //FIXME SG (working on)
     public void updateTrajectory(){
         float currentLocation[] = this.getLocation();
-        // TODO
+        for(int i = 0; i < currentLocation.length; i++){
+            trajectoryArrayList.add(currentLocation[i]);
+            if(trajectoryArrayList.size() > GameEnv.getInstance().lengthOfTrajectory){
+                trajectoryArrayList.remove(0);
+            }
+        }
+        for(int i = 0; i < trajectoryArrayList.size(); i++){
+            trajectory[i] = trajectoryArrayList.get(i);
+        }
     }
 
     public void initVertexBuffer(){

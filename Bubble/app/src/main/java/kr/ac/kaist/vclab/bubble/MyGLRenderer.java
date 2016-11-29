@@ -78,6 +78,14 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private float[] mBubbleModelViewMatrix = new float[16];
     private float[] mBubbleNormalMatrix = new float[16];
 
+    // FIXME SG (WORKING ON)
+    // MATRICES FOR mBubbleCore
+    public float[] mBubbleCoreRotationMatrix = new float[16];
+    public float[] mBubbleCoreTranslationMatrix = new float[16];
+    private float[] mBubbleCoreModelMatrix = new float[16];
+    private float[] mBubbleCoreModelViewMatrix = new float[16];
+    private float[] mBubbleCoreNormalMatrix = new float[16];
+
     // MATRICES FOR mMap
     public float[] mMapRotationMatrix = new float[16];
     public float[] mMapTranslationMatrix = new float[16];
@@ -112,7 +120,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     // FIXME PARAM OF BUBBLE
 //    private float bubbleScale = 0.09f;
     private float[] bubbleStart = new float[]{0,0,0}; // STARTING LOCATION OF BUBBLE
-    private float cameraDistance = 1.5f; // DISTANCE BTWN CAMERA & BUBBLE
+    private float distOfBubbleAndCamera = 1.5f; // DISTANCE BTWN CAMERA & BUBBLE
 
     @Override
     // CALLED WHEN SURFACE IS CREATED AT FIRST.
@@ -268,7 +276,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // ... gl_cull_face (culling)
         GLES20.glEnable(GLES20.GL_CULL_FACE);
         mSkyBox.draw(mProjMatrix, mSkyboxModelViewMatrix, mSkyboxNormalMatrix, mLight, mLight2);
-
         mMap.draw(mProjMatrix, mMapModelViewMatrix, mMapNormalMatrix, mLight, mLight2);
 
         // ... gl_blend (alpha blending)
@@ -411,7 +418,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         float[] change_translation = new float[4];
         Matrix.multiplyMV(change_translation, 0, mViewRotationMatrix, 0, translation, 0);
         for (int i=0; i<3; i++){
-            change_translation[i]*=cameraDistance;
+            change_translation[i]*= distOfBubbleAndCamera;
             eye[i] += change_translation[i];
         }
 
