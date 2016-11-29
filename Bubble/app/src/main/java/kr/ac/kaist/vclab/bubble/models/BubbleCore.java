@@ -117,8 +117,8 @@ public class BubbleCore extends Particle {
         }
 
         // FIXME TESTING
-        System.out.println("test");
-        SystemHelper.printFloatArray(trajectory);
+//        System.out.println("test");
+//        SystemHelper.printFloatArray(trajectory);
     }
 
     public void initVertexBuffer(){

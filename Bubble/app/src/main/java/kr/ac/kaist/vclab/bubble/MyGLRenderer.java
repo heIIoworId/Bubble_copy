@@ -114,7 +114,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private long timestamp;
 
     // FIXME PARAM OF CAMERA
-    float scale = 0.4f;
+//    float scale = 1f;
     float[] mCamera = new float[3];
 
     // FIXME PARAM OF BUBBLE
@@ -204,8 +204,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onDrawFrame(GL10 unused) {
-        // IFXME WHAT IS THIS?
+
+        // FIXME WHAT IS THIS?
         float curTime = (System.currentTimeMillis() - timestamp) /  1000000.0f;
+
         // CLEAR COLOR & DEPTH BUFFERS
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
@@ -223,13 +225,15 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         float curLocation[] = mBubbleCore.getLocation();
         Matrix.translateM(
                 mBubbleTranslationMatrix, 0, curLocation[0], curLocation[1], curLocation[2]);
-
         Matrix.setIdentityM(mBubbleModelMatrix, 0);
         Matrix.multiplyMM(mTempMatrix, 0, mBubbleRotationMatrix, 0, mBubbleModelMatrix, 0);
         System.arraycopy(mTempMatrix, 0, mBubbleModelMatrix, 0, 16);
         Matrix.multiplyMM(mTempMatrix, 0, mBubbleTranslationMatrix, 0, mBubbleModelMatrix, 0);
         System.arraycopy(mTempMatrix, 0, mBubbleModelMatrix, 0, 16);
-        Matrix.scaleM(mBubbleModelMatrix, 0, scale, scale, scale);
+        Matrix.scaleM(mBubbleModelMatrix, 0,
+                GameEnv.getInstance().getScaleOfBubble(),
+                GameEnv.getInstance().getScaleOfBubble(),
+                GameEnv.getInstance().getScaleOfBubble());
         Matrix.multiplyMM(mBubbleModelViewMatrix, 0, mViewMatrix, 0, mBubbleModelMatrix, 0);
         normalMatrix(mBubbleNormalMatrix, 0, mBubbleModelViewMatrix, 0);
 

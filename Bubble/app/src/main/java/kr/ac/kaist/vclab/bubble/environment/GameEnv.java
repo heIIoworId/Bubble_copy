@@ -8,52 +8,87 @@ package kr.ac.kaist.vclab.bubble.environment;
 public class GameEnv {
 
     // TIME INFO
-    public static long startTime = System.currentTimeMillis();
-    public static float duration;
+    private static long startTime;
 
     // SUCCESS INFO
-    public static boolean isSuccess = false;
-    public static boolean isFailure = false;
+    public static int successStatus;
 
     // ITEM INFO
-    public static int numOfAchievedItems = 0;
-    public static int numOfTotalItems = 10;
-    public static float radiusOfItem = 2.0f;
+    // FIXME SG (방금 새로운 아이템을 먹었는지 확인하는 BOOL 필요) --> BUBBLE 크기 정상화
+    public static int numOfAchievedItems;
+    public static int numOfTotalItems;
+    public static float radiusOfItem;
 
     // BUBBLE INFO
-    public static float scaleOfBubble = 1.0f; // FIXME SG (SCALING BUBBLE ACCORDING TO TIME PASS)
-    public static float radiusOfBubble = 1.2f;
-    public static float minRadiusOfBubble = 0.3f;
-    public static int levelOfBubble = 3;
-    public int lengthOfTrajectory = 300;
-    public float dampingOfInnerBubble = 1.0f;
-    public float dampingOfBubbleCore = 0.95f;
+    private static float scaleOfBubble;
+    private static float minScaleOfBubble;
+    private static float shrinkRatio;
+    public static float radiusOfBubble;
+    public static float minRadiusOfBubble;
+    public static int levelOfBubble;
+    public int lengthOfTrajectory;
+    public float dampingOfInnerBubble;
+    public float dampingOfBubbleCore;
 
     // WORLD INFO
     public static float[] gravity = new float[]{0f, -0.0006f, 0f};
-
-
 
     private static GameEnv ourInstance = new GameEnv();
     public static GameEnv getInstance() {
         return ourInstance;
     }
-
     private GameEnv() {
+        // TIME INFO
+        startTime = System.currentTimeMillis();
+
+        // SUCCESS INFO
+        successStatus = 0; // -1: FAIL, 0: NOTHING, 1: SUCCESS
+
+        // ITEM INFO
+        numOfAchievedItems = 0;
+        numOfTotalItems = 10;
+        radiusOfItem = 2.0f;
+
+        // BUBBLE INFO
+        scaleOfBubble = 0.4f;
+        minScaleOfBubble = 0.15f;
+        shrinkRatio = 0.9985f;
+        radiusOfBubble = 1.2f;
+        minRadiusOfBubble = 0.3f;
+        levelOfBubble = 3;
+        lengthOfTrajectory = 90;
+        dampingOfInnerBubble = 1.0f;
+        dampingOfBubbleCore = 0.95f;
     }
 
-    public static void update(){
-        //UPDATE DURATION
-        long currentTime = System.currentTimeMillis();
-        duration = (float) (currentTime - startTime);
-        duration = duration / 1000.0f;
-        Math.ceil(duration);
+    public static long getDuration(){
+        long duration;
+        duration = System.currentTimeMillis() - startTime;
+        return duration;
+    }
 
-        //UPDATE SUCCESS STATUS
-        if(radiusOfBubble > minRadiusOfBubble && numOfTotalItems - numOfAchievedItems == 0){
-            isSuccess = true;
-        } else if (radiusOfBubble <= minRadiusOfBubble){
-            isFailure = true;
+    private static void updateScaleOfBubble(){
+        if(scaleOfBubble > minScaleOfBubble){
+            scaleOfBubble = scaleOfBubble * shrinkRatio;
         }
+    }
+
+    public static float getScaleOfBubble(){
+        updateScaleOfBubble();
+        return scaleOfBubble;
+    }
+
+    private static void updateSuccessStatus(){
+        if(scaleOfBubble <= minScaleOfBubble){
+            successStatus = -1; // FAIL
+        } else if(numOfTotalItems - numOfAchievedItems == 0){
+            successStatus = 1;
+        }
+    }
+
+    // FIXME SG (NOT USED YET)
+    public static int getSuccessStatus(){
+        updateSuccessStatus();
+        return successStatus;
     }
 }
