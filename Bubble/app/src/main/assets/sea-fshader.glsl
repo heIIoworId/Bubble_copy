@@ -2,7 +2,7 @@ precision mediump float;
 
 uniform vec3 uLight, uLight2, uColor;
 uniform sampler2D uTextureUnit;
-uniform vec2 uTime;
+uniform vec4 textureColor = texture2D(uTextureUnit, vTextureCoor);
 
 varying vec3 vNormal;
 varying vec3 vPosition;

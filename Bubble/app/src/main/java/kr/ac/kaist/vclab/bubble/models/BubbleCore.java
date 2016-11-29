@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import kr.ac.kaist.vclab.bubble.MyGLRenderer;
 import kr.ac.kaist.vclab.bubble.environment.GameEnv;
 import kr.ac.kaist.vclab.bubble.physics.Particle;
+import kr.ac.kaist.vclab.bubble.utils.SystemHelper;
 
 /**
  * Created by 84395 on 11/27/2016.
@@ -114,6 +115,10 @@ public class BubbleCore extends Particle {
         for(int i = 0; i < trajectoryArrayList.size(); i++){
             trajectory[i] = trajectoryArrayList.get(i);
         }
+
+        // FIXME TESTING
+        System.out.println("test");
+        SystemHelper.printFloatArray(trajectory);
     }
 
     public void initVertexBuffer(){

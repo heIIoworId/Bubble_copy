@@ -24,12 +24,14 @@ public class GameEnv {
     public static float radiusOfBubble = 1.2f;
     public static float minRadiusOfBubble = 0.3f;
     public static int levelOfBubble = 3;
-    public int lengthOfTrajectory = 40;
+    public int lengthOfTrajectory = 30;
     public float dampingOfInnerBubble = 1.0f;
     public float dampingOfBubbleCore = 0.95f;
 
     // WORLD INFO
     public static float[] gravity = new float[]{0f, -0.0006f, 0f};
+
+
 
     private static GameEnv ourInstance = new GameEnv();
     public static GameEnv getInstance() {
