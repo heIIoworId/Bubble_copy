@@ -119,8 +119,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     // FIXME PARAM OF BUBBLE
 //    private float bubbleScale = 0.09f;
-    private float[] bubbleStart = new float[]{0,0,0}; // STARTING LOCATION OF BUBBLE
-    private float distOfBubbleAndCamera = 1.5f; // DISTANCE BTWN CAMERA & BUBBLE
+    private float[] initialLocationOfBubble = new float[]{0,0,0};
+    private float distOfBubbleAndCamera = 1.5f;
 
     @Override
     // CALLED WHEN SURFACE IS CREATED AT FIRST.
@@ -152,7 +152,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         //INITIALIZE WORLD
         mParticles = GeomOperator.genParticles(mBubble.getVertices());
         mSprings = GeomOperator.genSprings(mParticles);
-        mBubbleCore = new BubbleCore(bubbleStart);
+        mBubbleCore = new BubbleCore(initialLocationOfBubble);
 
         if(Env.getInstance().micStatus == 1){
             mBlower = new Blower();
@@ -173,7 +173,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         // INITIALIZE MATRICES
         resetViewMatrix();
-        // ... view
+        // INIT VIEW MATRIX
         Matrix.setIdentityM(mViewRotationMatrix, 0);
         Matrix.setIdentityM(mViewTranslationMatrix, 0);
         Matrix.translateM(mViewTranslationMatrix, 0, 0, 0, -14.0f);
@@ -183,20 +183,24 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.setIdentityM(mBubbleTranslationMatrix, 0);
         Matrix.translateM(mBubbleTranslationMatrix, 0, 0, 0, 0);
 
-        // MAP MATRIX
+        // INIT BUBBLECORE MATRIX
+        Matrix.setIdentityM(mBubbleCoreRotationMatrix, 0);
+        Matrix.setIdentityM(mBubbleCoreTranslationMatrix, 0);
+        Matrix.translateM(mBubbleCoreTranslationMatrix, 0, 0, 0, 0);
+
+        // INIT MAP MATRIX
         Matrix.setIdentityM(mMapRotationMatrix, 0);
         Matrix.setIdentityM(mMapTranslationMatrix, 0);
         Matrix.translateM(mMapTranslationMatrix, 0, -10.0f, -5.0f, -10.0f);
 
-        // SEA MATRIX
+        // INIT SEA MATRIX
         Matrix.setIdentityM(mSeaRotationMatrix, 0);
         Matrix.setIdentityM(mSeaTranslationMatrix, 0);
         Matrix.translateM(mSeaTranslationMatrix, 0, -10.0f, -4.0f, -10.0f);
 
-        // SKYBOX MATRIX
+        // INIT SKYBOX MATRIX
         Matrix.setIdentityM(mSkyboxRotationMatrix, 0);
         Matrix.setIdentityM(mSkyboxTranslationMatrix, 0);
-
     }
 
     @Override
@@ -213,7 +217,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         System.arraycopy(mTempMatrix, 0, mViewMatrix, 0, 16);
         Matrix.multiplyMM(mTempMatrix, 0, mViewTranslationMatrix, 0, mViewMatrix, 0);
         System.arraycopy(mTempMatrix, 0, mViewMatrix, 0, 16);
-
         // UPDATE VIEW MATRIX TO FOLLOW BUBBLE
         updateView();
 
@@ -231,6 +234,15 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.scaleM(mBubbleModelMatrix, 0, scale, scale, scale);
         Matrix.multiplyMM(mBubbleModelViewMatrix, 0, mViewMatrix, 0, mBubbleModelMatrix, 0);
         normalMatrix(mBubbleNormalMatrix, 0, mBubbleModelViewMatrix, 0);
+
+        // CALCULATE mBubbleCore MATRIX
+        Matrix.setIdentityM(mBubbleCoreModelMatrix, 0);
+        Matrix.multiplyMM(mTempMatrix, 0, mBubbleCoreRotationMatrix, 0, mBubbleCoreModelMatrix, 0);
+        System.arraycopy(mTempMatrix, 0, mBubbleCoreModelMatrix, 0, 16);
+        Matrix.multiplyMM(mTempMatrix, 0, mBubbleCoreTranslationMatrix, 0, mBubbleCoreModelMatrix, 0);
+        System.arraycopy(mTempMatrix, 0, mBubbleCoreModelMatrix, 0, 16);
+        Matrix.multiplyMM(mBubbleCoreModelViewMatrix, 0, mViewMatrix, 0, mBubbleCoreModelMatrix, 0);
+        normalMatrix(mBubbleCoreNormalMatrix, 0, mBubbleCoreModelViewMatrix, 0);
 
         // CALCULATE MAP MODELMATRIX
         Matrix.setIdentityM(mMapModelMatrix, 0);
@@ -260,6 +272,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         normalMatrix(mSeaNormalMatrix, 0, mSeaModelViewMatrix, 0);
         normalMatrix(mSkyboxNormalMatrix, 0, mSkyboxModelViewMatrix, 0);
 
+        // FIXME SG (ANY NEED OF UPDATING mBubbleTranslationMatrix and mBubbleCoreTranslationMatrix?)
         //UPDATE WORLD AND VERTICES OF SPHERE
         if(Env.getInstance().micStatus == 1){
             mBlower.setBlowingDir(mViewMatrix);
@@ -267,7 +280,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mWorld.applyForce();
         float updatedVertices[] = GeomOperator.genVertices(mWorld.getParticles());
         mBubble.setVertices(updatedVertices);
-        //FIXME UPDATE NORMALS OF SPHERE
+        //FIXME SG (UPDATE NORMALS OF SPHERE)
 
         // DRAW
         // ... gl_depth_test (depth test)
@@ -277,6 +290,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         GLES20.glEnable(GLES20.GL_CULL_FACE);
         mSkyBox.draw(mProjMatrix, mSkyboxModelViewMatrix, mSkyboxNormalMatrix, mLight, mLight2);
         mMap.draw(mProjMatrix, mMapModelViewMatrix, mMapNormalMatrix, mLight, mLight2);
+        mBubbleCore.updateTrajectory();
+        mBubbleCore.drawTrajectory(mProjMatrix, mBubbleCoreModelViewMatrix, mBubbleCoreNormalMatrix,
+                mLight, mLight2);
 
         // ... gl_blend (alpha blending)
         GLES20.glEnable(GLES20.GL_BLEND);

@@ -35,7 +35,7 @@ public class BubbleCore extends Particle {
     private static final int COORDS_PER_VERTEX = 3;
     private static final int VERTEX_STRIDE = COORDS_PER_VERTEX * 4;
 
-    public float[] color;
+    private float[] color = {0.2f, 0.709803922f, 0.898039216f};
 
     private float trajectory[];
     private ArrayList<Float> trajectoryArrayList;
