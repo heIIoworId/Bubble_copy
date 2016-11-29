@@ -3,6 +3,7 @@ package kr.ac.kaist.vclab.bubble.physics;
 import java.util.ArrayList;
 
 import kr.ac.kaist.vclab.bubble.environment.Env;
+import kr.ac.kaist.vclab.bubble.environment.GameEnv;
 
 /**
  * Created by 84395 on 10/29/2016.
@@ -11,10 +12,6 @@ import kr.ac.kaist.vclab.bubble.environment.Env;
 
 // A fundamental class to apply forces to particle.
 public class World {
-
-    private float gravity[] = {0f, -0.0002f, 0f};
-    private float damping1 = 1.0f;
-    private float damping2 = 0.95f;
 
     ArrayList<Particle> particles;
     ArrayList<Spring> springs;
@@ -30,15 +27,15 @@ public class World {
 
         // SET DAMPING RATIO
         for(int i = 0; i<particles.size(); i++){
-            particles.get(i).setDamping(damping1);
+            particles.get(i).setDamping(GameEnv.getInstance().dampingOfInnerBubble);
         }
-        bubbleCore.setDamping(damping2);
+        bubbleCore.setDamping(GameEnv.getInstance().dampingOfBubbleCore);
 
         // APPLY FORCE
         for (int i=0; i<springs.size(); i++){
             springs.get(i).applyForce();
         }
-        bubbleCore.applyForce(gravity);
+        bubbleCore.applyForce(GameEnv.getInstance().gravity);
         if(Env.getInstance().micStatus == 1) {
             blower.applyForce();
         }

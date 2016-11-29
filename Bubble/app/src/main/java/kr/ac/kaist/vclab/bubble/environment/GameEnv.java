@@ -7,22 +7,29 @@ package kr.ac.kaist.vclab.bubble.environment;
 // FIXME SG
 public class GameEnv {
 
-    // ITEM INFO
-    public static int numOfAchievedItems;
-    public static int numOfTotalItems;
-    public static float radiusOfItem;
     // TIME INFO
-    public static long startTime;
+    public static long startTime = System.currentTimeMillis();
     public static float duration;
-    // BUBBLE INFO
-    public static float radiusOfBubble;
-    public static float minRadiusOfBubble;
-    public static int levelOfBubble;
+
     // SUCCESS INFO
-    public static boolean isSuccess;
-    public static boolean isFailure;
-    // BubbleCore INFO
-    public int lengthOfTrajectory;
+    public static boolean isSuccess = false;
+    public static boolean isFailure = false;
+
+    // ITEM INFO
+    public static int numOfAchievedItems = 0;
+    public static int numOfTotalItems = 10;
+    public static float radiusOfItem = 2.0f;
+
+    // BUBBLE INFO
+    public static float radiusOfBubble = 1.2f;
+    public static float minRadiusOfBubble = 0.3f;
+    public static int levelOfBubble = 3;
+    public int lengthOfTrajectory = 40;
+    public float dampingOfInnerBubble = 1.0f;
+    public float dampingOfBubbleCore = 0.95f;
+
+    // WORLD INFO
+    public static float[] gravity = new float[]{0f, -0.0006f, 0f};
 
     private static GameEnv ourInstance = new GameEnv();
     public static GameEnv getInstance() {
@@ -30,16 +37,6 @@ public class GameEnv {
     }
 
     private GameEnv() {
-        numOfAchievedItems = 0;
-        numOfTotalItems = 10;
-        startTime = System.currentTimeMillis();
-        radiusOfItem = 2.0f;
-        isSuccess = false;
-        isFailure = false;
-        radiusOfBubble = 1.2f;
-        minRadiusOfBubble = 0.3f;
-        levelOfBubble = 3;
-        lengthOfTrajectory = 30;
     }
 
     public static void update(){
