@@ -95,9 +95,9 @@ public class MapCube {
 
         // prepare shaders and OpenGL program
         int vertexShader = MyGLRenderer.loadShaderFromFile(
-                GLES20.GL_VERTEX_SHADER, "map-vshader4.glsl");
+                GLES20.GL_VERTEX_SHADER, "map-vshader5.glsl");
         int fragmentShader = MyGLRenderer.loadShaderFromFile(
-                GLES20.GL_FRAGMENT_SHADER, "map-fshader4.glsl");
+                GLES20.GL_FRAGMENT_SHADER, "map-fshader5.glsl");
 
         mProgram = GLES20.glCreateProgram();             // create empty OpenGL Program
         GLES20.glAttachShader(mProgram, vertexShader);   // add the vertex shader to program
