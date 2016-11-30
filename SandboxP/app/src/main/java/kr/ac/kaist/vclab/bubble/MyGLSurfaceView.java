@@ -10,7 +10,7 @@ import android.view.MotionEvent;
  */
 
 public class MyGLSurfaceView extends GLSurfaceView {
-    private final MyGLRenderer mRenderer;
+    public final MyGLRenderer mRenderer;
 
     private float mPreviousX;
     private float mPreviousY;

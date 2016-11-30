@@ -45,7 +45,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private float lavaHeight = -45.0f;
 
     // ... items
-    public int itemCount = 10;
+    public int itemCount = 15;
     private float itemRadius = 1.5f;
     private float itemMinDist = 20.0f;
     private float itemHeightOffset = 10.0f;
@@ -59,7 +59,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     // item handlers
     private ItemGenerator mItemGenerator = null;
-    private boolean[] itemDrawFlag = new boolean[itemCount]; // true = draw ith item
+
+    // flags
+    public boolean[] itemDrawFlag = new boolean[itemCount]; // true = draw ith item
+    public boolean mapBlendFlag = false;
 
     // view matrix
     private float[] mViewMatrix = new float[16];
@@ -318,9 +321,12 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // draw the objects
         GLES20.glEnable(GLES20.GL_CULL_FACE);
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
-        mMap.draw(mProjMatrix, mMapModelViewMatrix, mMapNormalMatrix, mMapModelMatrix, mLight, mLight2);
         mSky.draw(mProjMatrix, mSkyModelViewMatrix, mSkyNormalMatrix, mLight, mLight2);
         mLava.draw(mProjMatrix, mLavaModelViewMatrix, mLavaNormalMatrix, mLight, mLight2);
+
+        if (!mapBlendFlag) {
+            mMap.draw(mProjMatrix, mMapModelViewMatrix, mMapNormalMatrix, mMapModelMatrix, mLight, mLight2);
+        }
 
         for (int i = 0; i < itemCount; i++) {
             if (itemDrawFlag[i]) {
@@ -332,6 +338,11 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         GLES20.glEnable(GLES20.GL_BLEND);
         GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+
+        if (mapBlendFlag) {
+            mMap.draw(mProjMatrix, mMapModelViewMatrix, mMapNormalMatrix, mMapModelMatrix, mLight, mLight2);
+        }
+
         // mSphere.draw(mProjMatrix, mSphereModelViewMatrix, mSphereNormalMatrix, mLight, mLight2);
         mSea.draw(mProjMatrix, mSeaModelViewMatrix, mSeaNormalMatrix, mLight, mLight2);
         GLES20.glDisable(GLES20.GL_BLEND);
