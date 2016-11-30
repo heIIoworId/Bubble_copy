@@ -1,5 +1,10 @@
 package kr.ac.kaist.vclab.bubble.environment;
 
+import java.util.ArrayList;
+
+import kr.ac.kaist.vclab.bubble.models.BubbleSphere;
+import kr.ac.kaist.vclab.bubble.models.Item;
+
 /**
  * Created by mnswpr on 11/23/2016.
  */
@@ -14,20 +19,25 @@ public class GameEnv {
     public static int successStatus;
 
     // ITEM INFO
-    // FIXME SG (방금 새로운 아이템을 먹었는지 확인하는 BOOL 필요) --> BUBBLE 크기 정상화
+    public static boolean isNewItem;
     public static int numOfAchievedItems;
     public static int numOfTotalItems;
     public static float radiusOfItem;
 
     // BUBBLE INFO
+    public static float[] initialLocationOfBubble;
+    public static float radiusOfBubble;
+    public static float[] colorOfBubble;
+    private static float initialScaleOfBubble;
     private static float scaleOfBubble;
     private static float minScaleOfBubble;
     private static float shrinkRatio;
-    public static float radiusOfBubble;
-    public static float minRadiusOfBubble;
     public static int levelOfBubble;
+    public static float dampingOfInnerBubble;
+    public static float distOfBubbleAndCamera;
+
+    // BUBBLE CORE INFO
     public int lengthOfTrajectory;
-    public float dampingOfInnerBubble;
     public float dampingOfBubbleCore;
 
     // WORLD INFO
@@ -45,19 +55,25 @@ public class GameEnv {
         successStatus = 0; // -1: FAIL, 0: NOTHING, 1: SUCCESS
 
         // ITEM INFO
+        isNewItem = false;
         numOfAchievedItems = 0;
         numOfTotalItems = 10;
         radiusOfItem = 2.0f;
 
         // BUBBLE INFO
-        scaleOfBubble = 0.4f;
+        initialLocationOfBubble = new float[]{0,0,0};
+        radiusOfBubble = 1.2f;
+        colorOfBubble = new float[] {0.3f, 0.8f, 0.9f};
+        initialScaleOfBubble = 0.4f;
+        scaleOfBubble = initialScaleOfBubble;
         minScaleOfBubble = 0.15f;
         shrinkRatio = 0.9985f;
-        radiusOfBubble = 1.2f;
-        minRadiusOfBubble = 0.3f;
         levelOfBubble = 3;
-        lengthOfTrajectory = 90;
         dampingOfInnerBubble = 1.0f;
+        distOfBubbleAndCamera = 1.5f;
+
+        // BUBBLE CORE INFO
+        lengthOfTrajectory = 90;
         dampingOfBubbleCore = 0.95f;
     }
 
@@ -68,7 +84,10 @@ public class GameEnv {
     }
 
     private static void updateScaleOfBubble(){
-        if(scaleOfBubble > minScaleOfBubble){
+        if(isNewItem){
+            scaleOfBubble = initialScaleOfBubble;
+            isNewItem = false;
+        } else if(scaleOfBubble > minScaleOfBubble){
             scaleOfBubble = scaleOfBubble * shrinkRatio;
         }
     }

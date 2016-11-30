@@ -30,8 +30,6 @@ public class SphereCollision extends Collision {
         if (scale > 0) {
             radius *= scale;
         }
-
-        // System.out.println(radius + " scale");
     }
 
     boolean IsCollided(BoxCollision target) {

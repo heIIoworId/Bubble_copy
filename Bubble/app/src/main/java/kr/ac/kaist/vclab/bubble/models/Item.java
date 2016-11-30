@@ -9,9 +9,8 @@ import kr.ac.kaist.vclab.bubble.environment.GameEnv;
 // FIXME SG
 public class Item extends BubbleSphere {
 
-    // FIXME HOW TO MAKE IT GLOW?
-    // FIXME HAVING TO CHANGE COLOR AS RANDOM
-
+    // FIXME SG (HOW TO MAKE IT GLOW?)
+    // FIXME SG (HAVING TO CHANGE COLOR AS RANDOM)
     private float center[];
     private boolean isHitted;
     private int itemType;
@@ -30,7 +29,7 @@ public class Item extends BubbleSphere {
         isHitted = true;
         makeItInvisible();
     }
-    // FIXME RE-IMPLEMENT IT NOT TO DRAW
+    // FIXME SG (RE-IMPLEMENT IT NOT TO DRAW)
     private void makeItInvisible(){
         this.setVertices(new float[]{0f,0f,0f});
     }

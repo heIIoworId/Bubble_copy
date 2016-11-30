@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import kr.ac.kaist.vclab.bubble.collision.SphereCollision;
 import kr.ac.kaist.vclab.bubble.MyGLRenderer;
+import kr.ac.kaist.vclab.bubble.environment.GameEnv;
 import kr.ac.kaist.vclab.bubble.utils.VecOperator;
 
 /**
@@ -163,6 +164,15 @@ public class BubbleSphere {
 
         GLES20.glDisableVertexAttribArray(mPositionHandle);
         GLES20.glDisableVertexAttribArray(mNormalHandle);
+    }
+
+    public void updateAchievedItems(){
+        //FIXME JM collision detection 넣기
+        boolean newCollision = false;
+        if(newCollision){
+            GameEnv.getInstance().isNewItem = true;
+        }
+
     }
 
     private void subdivide(float[] _vertex1, float[] _vertex2, float[] _vertex3, int level, float radius){

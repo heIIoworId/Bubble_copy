@@ -23,13 +23,14 @@ import kr.ac.kaist.vclab.bubble.environment.Env;
 import kr.ac.kaist.vclab.bubble.environment.GameEnv;
 import kr.ac.kaist.vclab.bubble.models.BubbleCore;
 import kr.ac.kaist.vclab.bubble.models.BubbleSphere;
+import kr.ac.kaist.vclab.bubble.models.Item;
 import kr.ac.kaist.vclab.bubble.models.MapCube;
 import kr.ac.kaist.vclab.bubble.models.SeaRectangle;
 import kr.ac.kaist.vclab.bubble.models.SkyBox;
 import kr.ac.kaist.vclab.bubble.physics.Blower;
 import kr.ac.kaist.vclab.bubble.physics.Particle;
 import kr.ac.kaist.vclab.bubble.physics.Spring;
-import kr.ac.kaist.vclab.bubble.physics.World;
+import kr.ac.kaist.vclab.bubble.physics.PhysicalWorld;
 import kr.ac.kaist.vclab.bubble.utils.GeomOperator;
 
 /**
@@ -54,9 +55,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     public SeaRectangle mSea;
     public SkyBox mSkyBox;
     private BubbleSphere mBubble;
+    private ArrayList<Item> mItems;
 
     // DECLARE PHYSICAL ENTITIES
-    private World mWorld;
+    private PhysicalWorld mPhysicalWorld;
     private ArrayList<Particle> mParticles;
     private ArrayList<Spring> mSprings;
     private Blower mBlower;
@@ -77,6 +79,13 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private float[] mBubbleModelMatrix = new float[16];
     private float[] mBubbleModelViewMatrix = new float[16];
     private float[] mBubbleNormalMatrix = new float[16];
+
+    // MATRICES FOR mItems
+    public float [][] mItemRotationMatrix = new float[GameEnv.getInstance().numOfTotalItems][16];
+    public float [][] mItemTranslationMatrix = new float[GameEnv.getInstance().numOfTotalItems][16];
+    private float[][] mItemModelMatrix = new float[GameEnv.getInstance().numOfTotalItems][16];
+    private float[][] mItemModelViewMatrix = new float[GameEnv.getInstance().numOfTotalItems][16];
+    private float[][] mItemNormalMatrix = new float[GameEnv.getInstance().numOfTotalItems][16];
 
     // FIXME SG (WORKING ON)
     // MATRICES FOR mBubbleCore
@@ -114,12 +123,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private long timestamp;
 
     // FIXME PARAM OF CAMERA
-//    float scale = 1f;
     float[] mCamera = new float[3];
-
-    // FIXME PARAM OF BUBBLE
-    private float[] initialLocationOfBubble = new float[]{0,0,0};
-    private float distOfBubbleAndCamera = 1.5f;
 
     @Override
     // CALLED WHEN SURFACE IS CREATED AT FIRST.
@@ -129,11 +133,11 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // SET BACKGROUND COLOR
         GLES20.glClearColor(0.7f, 0.8f, 0.9f, 1.0f); // skyblue
 
-        // FIXME PARAM OF BUBBLE
+        // INIT BUBBLE
         mBubble = new BubbleSphere(
                 GameEnv.getInstance().radiusOfBubble,
                 GameEnv.getInstance().levelOfBubble);
-        mBubble.color = new float[] {0.3f, 0.8f, 0.9f};
+        mBubble.color = GameEnv.getInstance().colorOfBubble;
 
         // ... map
         mMap = new MapCube(
@@ -151,19 +155,19 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         //INITIALIZE WORLD
         mParticles = GeomOperator.genParticles(mBubble.getVertices());
         mSprings = GeomOperator.genSprings(mParticles);
-        mBubbleCore = new BubbleCore(initialLocationOfBubble);
+        mBubbleCore = new BubbleCore(GameEnv.getInstance().initialLocationOfBubble);
 
         if(Env.getInstance().micStatus == 1){
             mBlower = new Blower();
             mBlower.setBubbleCore(mBubbleCore);
         }
 
-        mWorld = new World();
-        mWorld.setParticles(mParticles);
-        mWorld.setSprings(mSprings);
-        mWorld.setBubbleCore(mBubbleCore);
+        mPhysicalWorld = new PhysicalWorld();
+        mPhysicalWorld.setParticles(mParticles);
+        mPhysicalWorld.setSprings(mSprings);
+        mPhysicalWorld.setBubbleCore(mBubbleCore);
         if(Env.getInstance().micStatus == 1){
-            mWorld.setBlower(mBlower);
+            mPhysicalWorld.setBlower(mBlower);
         }
 
         // INITIALIZE LIGHTS
@@ -279,8 +283,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         if(Env.getInstance().micStatus == 1){
             mBlower.setBlowingDir(mViewMatrix);
         }
-        mWorld.applyForce();
-        float updatedVertices[] = GeomOperator.genVertices(mWorld.getParticles());
+        mPhysicalWorld.applyForce();
+        float updatedVertices[] = GeomOperator.genVertices(mPhysicalWorld.getParticles());
         mBubble.setVertices(updatedVertices);
         //FIXME SG (UPDATE NORMALS OF SPHERE)
 
@@ -330,7 +334,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         dst[14] = 0;
 
         float[] temp = Arrays.copyOf(dst, 16);
-
         Matrix.transposeM(dst, dstOffset, temp, 0);
     }
 
@@ -437,7 +440,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         float[] change_translation = new float[4];
         Matrix.multiplyMV(change_translation, 0, mViewRotationMatrix, 0, translation, 0);
         for (int i=0; i<3; i++){
-            change_translation[i]*= distOfBubbleAndCamera;
+            change_translation[i]*= GameEnv.getInstance().distOfBubbleAndCamera;
             eye[i] += change_translation[i];
         }
 

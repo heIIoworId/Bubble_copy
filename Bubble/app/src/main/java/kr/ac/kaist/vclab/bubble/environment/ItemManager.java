@@ -13,8 +13,17 @@ public class ItemManager {
 
     private ArrayList<Item> items;
 
-    public ItemManager(ArrayList<Item> _items){
-        items = _items;
+    // FIXME SG (ItemGenerator과 연결해서 renderer에서 구현)
+    public ItemManager(float[] positions){
+        items = new ArrayList<>();
+        for(int i = 0; i<positions.length; i = i+3){
+            float[] center = new float[3];
+            center[0] = positions[i];
+            center[1] = positions[i+1];
+            center[2] = positions[i+2];
+            Item tempItem  = new Item(center);
+            items.add(tempItem);
+        }
     }
 
     public void updateNumOfCurrentItem(){

@@ -62,7 +62,7 @@ public class BubbleCore extends Particle {
         GLES20.glLinkProgram(mProgram);
     }
 
-    // FIXME SG (working on)
+    // FIXME SG (NOT WORKING YET)
     public void drawTrajectory(float[] projMatrix,
                                float[] modelViewMatrix,
                                float[] normalMatrix,
@@ -103,7 +103,6 @@ public class BubbleCore extends Particle {
         GLES20.glDisableVertexAttribArray(mPositionHandle);
     }
 
-    //FIXME SG (working on)
     public void updateTrajectory(){
         float currentLocation[] = this.getLocation();
         for(int i = 0; i < currentLocation.length; i++){
