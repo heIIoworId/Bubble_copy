@@ -21,18 +21,13 @@ public class Item extends GeneralSphere {
         itemType = 1; // 0: BAD, 1: GOOD
     }
 
-    public boolean getHitstatus(){
+    public boolean checkHitStatus(){
         return isHitted;
     }
-    public void updateHitStatus(){
-        isHitted = true;    
-        makeItInvisible();
+    public void markAsHitted(){
+        isHitted = true;
     }
     public float[] getCenter(){
         return center;
-    }
-    // FIXME SG (RE-IMPLEMENT IT NOT TO DRAW)
-    private void makeItInvisible(){
-        this.setVertices(new float[]{0f,0f,0f});
     }
 }

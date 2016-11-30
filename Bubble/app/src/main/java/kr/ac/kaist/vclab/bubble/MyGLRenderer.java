@@ -327,8 +327,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mBubbleCore.drawTrace(mProjMatrix, mBubbleCoreModelViewMatrix, mBubbleCoreNormalMatrix,
                 mLight, mLight2);
         for(int i = 0; i<GameEnv.getInstance().numOfTotalItems; i++){
-            mItems.get(i).draw(mProjMatrix, mItemModelViewMatrix[i], mItemNormalMatrix[i],
-                    mLight, mLight2);
+            if(!mItems.get(i).checkHitStatus()) {
+                mItems.get(i).draw(mProjMatrix, mItemModelViewMatrix[i], mItemNormalMatrix[i],
+                        mLight, mLight2);
+            }
         }
 
         // ... gl_blend (alpha blending)

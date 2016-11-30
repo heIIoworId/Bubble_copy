@@ -119,6 +119,7 @@ public class BubbleCore extends Particle {
         GLES20.glDisableVertexAttribArray(mPositionHandle);
     }
 
+    // FIXME SG (HAVE TO SHORTEN TRACE ACCORDING TO TIME PASS)
     public void updateTraceVertices(){
         float currentLocation[] = this.getLocation();
         for(int i = 0; i < currentLocation.length; i++){
