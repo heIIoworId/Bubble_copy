@@ -231,7 +231,7 @@ public class SkyBox {
 
         //texture
         GLES20.glGenTextures(1, cubeTex, 0);
-        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE4);
         GLES20.glEnable(GLES20.GL_TEXTURE_CUBE_MAP);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_CUBE_MAP, cubeTex[0]);
 
@@ -244,7 +244,7 @@ public class SkyBox {
         GLES20.glTexParameteri ( GLES20.GL_TEXTURE_CUBE_MAP, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST );
         GLES20.glTexParameteri ( GLES20.GL_TEXTURE_CUBE_MAP, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST );
 
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_CUBE_MAP, 1);
+        // GLES20.glBindTexture(GLES20.GL_TEXTURE_CUBE_MAP, 1);
     }
 
     public void draw(float[] projMatrix,
@@ -276,7 +276,7 @@ public class SkyBox {
         GLES20.glUniform3fv(mLightHandle, 1, light, 0);
         GLES20.glUniform3fv(mLight2Handle, 1, light2, 0);
 
-        GLES20.glUniform1i(mSampleHandle, 1);
+        GLES20.glUniform1i(mSampleHandle, 4);
 
 
 

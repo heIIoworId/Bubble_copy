@@ -55,13 +55,13 @@ public class GameEnv {
 
         // ITEM INFO
         numOfAchievedItems = 0;
-        numOfTotalItems = 10;
-        radiusOfItem = 0.2f;
+        numOfTotalItems = 15;
+        radiusOfItem = 0.6f;
         levelOfItem = 1;
         colorOfItem = new float[]{0f, 0f, 0.9f};
 
         // BUBBLE INFO
-        initialLocationOfBubble = new float[]{0,0,0};
+        initialLocationOfBubble = new float[]{0,5.0f,0};
         radiusOfBubble = 1.2f;
         colorOfBubble = new float[] {0.3f, 0.8f, 0.9f};
         initialScaleOfBubble = 0.4f;

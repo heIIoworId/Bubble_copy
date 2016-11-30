@@ -254,7 +254,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     public void onDrawFrame(GL10 unused) {
 
         // FIXME WHAT IS THIS?
-//        float curTime = (System.currentTimeMillis() - GameEnv.getInstance().startTime) /  1000000.0f;
+        float curTime = (System.currentTimeMillis() - GameEnv.getInstance().startTime) /  1000000.0f;
 
         // CLEAR COLOR & DEPTH BUFFERS
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
@@ -370,7 +370,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                 mViewMatrix, mBubbleNormalMatrix, mLight, mLight2,
                 mCamera, mSkyBox.getCubeTex());
         // FIXME SG (TEMPORAL COMMENT OUT)
-        //mSea.draw(mProjMatrix, mSeaModelViewMatrix, mSeaNormalMatrix, mLight, mLight2, curTime);
+        mSea.draw(mProjMatrix, mSeaModelViewMatrix, mSeaNormalMatrix, mLight, mLight2, curTime);
+        GLES20.glDisable(GLES20.GL_BLEND);
     }
 
     @Override
