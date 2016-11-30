@@ -185,7 +185,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         // INIT SEA (same x, z size as map)
         mSea = new SeaRectangle(mapSizeX, mapSizeZ);
-        mSkyBox = new SkyBox();
+        mSkyBox = new SkyBox(GameEnv.getInstance().imgFolder);
 
         // INIT WORLD
         mParticles = GeomOperator.genParticles(mBubble.getVertices());
@@ -517,7 +517,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                 mBubbleTranslationMatrix[13],
                 mBubbleTranslationMatrix[14]};
 
-        float[] up = new float[] {0,1,0,0};
+        float[] up = new float[4] ;
+        float[] temp = new float[]{0,1,0,0};
+        Matrix.multiplyMV(up, 0, mViewRotationMatrix, 0 ,temp, 0);
 
         Matrix.setLookAtM(mViewMatrix, 0,
                 eye[0], eye[1], eye[2],
@@ -531,21 +533,12 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         float z = mBubbleTranslationMatrix[14];
         float r = mBubbleCore.getCollision().getRadius();
         TriangleCollision[] collisions = mMap.getCollisions();
-        //          x = Math.min(x - r, -mapSizeX/2) + mapSizeX/2;
-//            z = Math.min(z - r, -mapSizeZ/2) + mapSizeZ/2;
+
         int dimX = (int) (mapSizeX / mapUnitLength);
         int dimZ = (int) (mapSizeZ / mapUnitLength);
-        /*
-        System.out.println((int)Math.max((x-r + mapSizeX/2)/mapUnitLength, 0)+ " " + Math.min((x+r + mapSizeX/2)/mapUnitLength, dimX) );
-        System.out.println((int)Math.max((z-r + mapSizeZ/2)/mapUnitLength, 0)+ " " + Math.min((z+r + mapSizeZ/2)/mapUnitLength, dimZ) );
-        System.out.println(x + " " + mBubbleTranslationMatrix[13] + " " + z);
-        System.out.println(r);
-        System.out.println("------------------------------");
-        */
+
         for(int i=(int)Math.max((x-r + mapSizeX/2)/mapUnitLength, 0); i<Math.min((x+r + mapSizeX/2)/mapUnitLength, dimX); i++) {
             for (int j=(int)Math.max((z-r + mapSizeZ/2)/mapUnitLength, 0); j<Math.min((z+r + mapSizeZ/2)/mapUnitLength, dimZ); j++) {
-                //System.out.println("\n"+i + ", " + j+ "-------------------");
-                //System.out.println(x + " " + mBubbleTranslationMatrix[13] + " " + z);
                 TriangleCollision collision = collisions[i * dimZ * 2 + j * 2];
                 collision.move(mMapModelMatrix);
                 if(Intersect.intersect(mBubbleCore.getCollision(), collision)){

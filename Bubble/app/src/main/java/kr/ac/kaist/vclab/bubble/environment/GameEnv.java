@@ -5,6 +5,8 @@ package kr.ac.kaist.vclab.bubble.environment;
  */
 
 public class GameEnv {
+    // SKYBOX INFO
+    public static String imgFolder;
     // GYRO INFO
     public static float gyroScale;
 
@@ -51,6 +53,9 @@ public class GameEnv {
     private GameEnv() {
         // GYRO INFO
         gyroScale = 3.0f;
+
+        // SKYBOX INFO
+        imgFolder = "sky2";
 
         // TIME INFO
         startTime = System.currentTimeMillis();
