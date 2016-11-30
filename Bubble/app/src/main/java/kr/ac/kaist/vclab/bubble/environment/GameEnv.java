@@ -61,7 +61,7 @@ public class GameEnv {
         colorOfItem = new float[]{0f, 0f, 0.9f};
 
         // BUBBLE INFO
-        initialLocationOfBubble = new float[]{0,5.0f,0};
+        initialLocationOfBubble = new float[]{0,9.0f,0};
         radiusOfBubble = 1.2f;
         colorOfBubble = new float[] {0.3f, 0.8f, 0.9f};
         initialScaleOfBubble = 0.4f;

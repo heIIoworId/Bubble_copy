@@ -264,15 +264,17 @@ public class BubbleSphere {
 
         Item[] items = ItemManager.getInstance().items;
         for(int i = 0; i < items.length; i++){
-            // FIXME JM SG ITEM이 SPHERE가 아님
-//            if(itemCollisionDetector.isCollided(items[i])){
-//                // REMOVE ITEM
-//                items[i].markAsHitted();
-//                // RESET RADIUS
-//                GameEnv.getInstance().scaleOfBubble = GameEnv.getInstance().initialScaleOfBubble;
-//                // UPDATE ACHIEVED ITEM LIST
-//                GameEnv.getInstance().numOfAchievedItems++;
-//            }
+            boolean isCollide = itemCollisionDetector.isCollided(
+                    center, GameEnv.getInstance().bubbleDetectionRadius,
+                    items[i].getCenter(), GameEnv.getInstance().radiusOfItem);
+            if(isCollide){
+                // REMOVE ITEM
+                items[i].markAsHitted();
+                // RESET RADIUS
+                GameEnv.getInstance().scaleOfBubble = GameEnv.getInstance().initialScaleOfBubble;
+                // UPDATE ACHIEVED ITEM LIST
+                GameEnv.getInstance().numOfAchievedItems++;
+            }
         }
     }
 
