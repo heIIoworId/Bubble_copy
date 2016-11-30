@@ -30,7 +30,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private float mapSizeY = 25.0f;
     private float mapSizeZ = 90.0f;
     private float mapUnitLength = 1.5f;
-    private float mapMaxHeight = 25.0f;
+    private float mapMaxHeight = 26.5f;
     private float mapMinHeight = -11.5f;
     private float mapComplexity = 5.5f;
 
@@ -45,8 +45,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private float lavaHeight = -45.0f;
 
     // ... items
-    private int itemCount = 10;
-    private float itemRadius = 4.0f;
+    public int itemCount = 10;
+    private float itemRadius = 1.5f;
     private float itemMinDist = 20.0f;
     private float itemHeightOffset = 10.0f;
 

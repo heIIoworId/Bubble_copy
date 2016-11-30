@@ -65,8 +65,17 @@ public class MyGLSurfaceView extends GLSurfaceView {
                 case "map":
                     Matrix.multiplyMM(mTemp2Matrix, 0, mTempMatrix, 0, mRenderer.mMapRotationMatrix, 0);
                     System.arraycopy(mTemp2Matrix, 0, mRenderer.mMapRotationMatrix, 0, 16);
+
                     Matrix.multiplyMM(mTemp2Matrix, 0, mTempMatrix, 0, mRenderer.mSeaRotationMatrix, 0);
                     System.arraycopy(mTemp2Matrix, 0, mRenderer.mSeaRotationMatrix, 0, 16);
+
+                    for (int i = 0; i < mRenderer.itemCount; i++) {
+                        Matrix.multiplyMM(mTemp2Matrix, 0, mTempMatrix, 0, mRenderer.mItemRotationMatrix[i], 0);
+                        System.arraycopy(mTemp2Matrix, 0, mRenderer.mItemRotationMatrix[i], 0, 16);
+                        Matrix.multiplyMM(mTemp2Matrix, 0, mTempMatrix, 0, mRenderer.mItemRotationMatrix[i], 0);
+                        System.arraycopy(mTemp2Matrix, 0, mRenderer.mItemRotationMatrix[i], 0, 16);
+                    }
+
                     break;
                 case "bubble":
                     Matrix.multiplyMM(mTemp2Matrix, 0, mTempMatrix, 0, mRenderer.mSphereRotationMatrix, 0);
@@ -96,6 +105,11 @@ public class MyGLSurfaceView extends GLSurfaceView {
                 case "map":
                     Matrix.translateM(mRenderer.mMapTranslationMatrix, 0, -dx, -dy, 0);
                     Matrix.translateM(mRenderer.mSeaTranslationMatrix, 0, -dx, -dy, 0);
+
+                    for (int i = 0; i < mRenderer.itemCount; i++) {
+                        Matrix.translateM(mRenderer.mItemTranslationMatrix[i], 0, -dx, -dy, 0);
+                    }
+
                     break;
                 case "bubble":
                     float[] temp1 = new float[16];
