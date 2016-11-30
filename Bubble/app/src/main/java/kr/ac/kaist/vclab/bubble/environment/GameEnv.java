@@ -1,19 +1,13 @@
 package kr.ac.kaist.vclab.bubble.environment;
 
-import java.util.ArrayList;
-
-import kr.ac.kaist.vclab.bubble.models.BubbleSphere;
-import kr.ac.kaist.vclab.bubble.models.Item;
-
 /**
  * Created by mnswpr on 11/23/2016.
  */
 
-// FIXME SG
 public class GameEnv {
 
     // TIME INFO
-    private static long startTime;
+    public static long startTime;
 
     // SUCCESS INFO
     public static int successStatus;
@@ -39,9 +33,9 @@ public class GameEnv {
     public static float distOfBubbleAndCamera;
 
     // BUBBLE CORE INFO
-    public int lengthOfTrajectory;
     public float dampingOfBubbleCore;
-    public float[] trajectoryColor;
+    public int lengthOfTrace;
+    public float[] traceColor;
 
     // WORLD INFO
     public static float[] gravity = new float[]{0f, -0.0006f, 0f};
@@ -62,8 +56,8 @@ public class GameEnv {
         isNewItem = false;
         numOfAchievedItems = 0;
         numOfTotalItems = 10;
-        radiusOfItem = 2.0f;
-        levelOfItem = 2;
+        radiusOfItem = 0.2f;
+        levelOfItem = 1;
         colorOfItem = new float[]{0f, 0f, 0.9f};
 
         // BUBBLE INFO
@@ -79,10 +73,9 @@ public class GameEnv {
         distOfBubbleAndCamera = 1.5f;
 
         // BUBBLE CORE INFO
-        lengthOfTrajectory = 90;
+        lengthOfTrace = 300;
         dampingOfBubbleCore = 0.95f;
-        trajectoryColor = new float[]{0.9f, 0f, 0f};
-
+        traceColor = new float[]{0.9f, 0f, 0f};
     }
 
     public static long getDuration(){

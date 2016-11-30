@@ -65,9 +65,12 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private Blower mBlower;
     private BubbleCore mBubbleCore;
 
-    //DECLARE LIGHTS
+    // DECLARE LIGHTS
     private float[] mLight = new float[3];
     private float[] mLight2 = new float[3];
+
+    // DECLARE POSITION OF CAMERA
+    float[] mCamera = new float[3];
 
     // MATRICES FOR VIEW
     private float[] mViewMatrix = new float[16];
@@ -120,16 +123,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private float[] mProjMatrix = new float[16];
     private float[] mTempMatrix = new float[16];
 
-    private long timestamp;
-
-    // FIXME PARAM OF CAMERA
-    float[] mCamera = new float[3];
-
     @Override
     // CALLED WHEN SURFACE IS CREATED AT FIRST.
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
-        timestamp = System.currentTimeMillis();
-
         // SET BACKGROUND COLOR
         GLES20.glClearColor(0.7f, 0.8f, 0.9f, 1.0f); // skyblue
 
@@ -141,6 +137,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         // INIT ITEMS
         float[] positions = ItemGenerator.getPositionsOfItems();
+        mItems = new ArrayList<>();
         for(int i = 0; i<positions.length; i = i+3){
             float[] center = new float[3];
             center[0] = positions[i];
@@ -230,7 +227,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     public void onDrawFrame(GL10 unused) {
 
         // FIXME WHAT IS THIS?
-        float curTime = (System.currentTimeMillis() - timestamp) /  1000000.0f;
+//        float curTime = (System.currentTimeMillis() - GameEnv.getInstance().startTime) /  1000000.0f;
 
         // CLEAR COLOR & DEPTH BUFFERS
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
@@ -267,7 +264,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
             Matrix.multiplyMM(mTempMatrix, 0, mItemRotationMatrix[i], 0, mItemModelMatrix[i], 0);
             System.arraycopy(mTempMatrix, 0, mItemModelMatrix[i], 0, 16);
             Matrix.multiplyMM(mTempMatrix, 0, mItemTranslationMatrix[i], 0, mItemModelMatrix[i], 0);
-            System.arraycopy(mTempMatrix, 0, mItemModelMatrix, 0, 16);
+            System.arraycopy(mTempMatrix, 0, mItemModelMatrix[i], 0, 16);
             Matrix.multiplyMM(mItemModelViewMatrix[i], 0, mViewMatrix, 0, mItemModelMatrix[i], 0);
             normalMatrix(mItemNormalMatrix[i], 0, mItemModelViewMatrix[i], 0);
         }
@@ -326,8 +323,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         GLES20.glEnable(GLES20.GL_CULL_FACE);
         mSkyBox.draw(mProjMatrix, mSkyboxModelViewMatrix, mSkyboxNormalMatrix, mLight, mLight2);
         mMap.draw(mProjMatrix, mMapModelViewMatrix, mMapNormalMatrix, mLight, mLight2);
-        mBubbleCore.updateTrajectory();
-        mBubbleCore.drawTrajectory(mProjMatrix, mBubbleCoreModelViewMatrix, mBubbleCoreNormalMatrix,
+        mBubbleCore.updateTraceVertices();
+        mBubbleCore.drawTrace(mProjMatrix, mBubbleCoreModelViewMatrix, mBubbleCoreNormalMatrix,
                 mLight, mLight2);
         for(int i = 0; i<GameEnv.getInstance().numOfTotalItems; i++){
             mItems.get(i).draw(mProjMatrix, mItemModelViewMatrix[i], mItemNormalMatrix[i],

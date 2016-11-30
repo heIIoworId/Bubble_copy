@@ -6,11 +6,9 @@ import kr.ac.kaist.vclab.bubble.environment.GameEnv;
  * Created by mnswpr on 11/23/2016.
  */
 
-// FIXME SG
 public class Item extends GeneralSphere {
 
     // FIXME SG (HOW TO MAKE IT GLOW?)
-    // FIXME SG (HAVING TO CHANGE COLOR AS RANDOM)
     private float center[];
     private boolean isHitted;
     private int itemType;
@@ -27,7 +25,7 @@ public class Item extends GeneralSphere {
         return isHitted;
     }
     public void updateHitStatus(){
-        isHitted = true;
+        isHitted = true;    
         makeItInvisible();
     }
     public float[] getCenter(){

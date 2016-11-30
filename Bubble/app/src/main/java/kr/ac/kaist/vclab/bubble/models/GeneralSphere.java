@@ -16,8 +16,6 @@ import kr.ac.kaist.vclab.bubble.utils.VecOperator;
  * Created by mnswpr on 11/16/2016.
  */
 
-
-// FIXME SG (NEED TO CLEAN UP ACCORDING TO NEWLY MADE SHADERS)
 public class GeneralSphere {
 
     // GL PROGRAM AND BUFFERS

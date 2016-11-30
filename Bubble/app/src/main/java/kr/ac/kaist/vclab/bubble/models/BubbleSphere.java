@@ -261,7 +261,7 @@ public class BubbleSphere {
         return sphereCollision;
     }
 
-    //FIXME UPDATE NORMALS ACCORDING TO VERTICES
+    //FIXME SG (UPDATE NORMALS ACCORDING TO VERTICES)
     public void updateNormals(){
 
     }
