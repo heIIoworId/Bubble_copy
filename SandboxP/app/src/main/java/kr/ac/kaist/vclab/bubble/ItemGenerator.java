@@ -64,6 +64,10 @@ public class ItemGenerator {
                 }
             }
 
+            if (safeY < 0) {
+                safeY = 0;
+            }
+
             posList[index][1] = safeY + radius + mRandomY.nextFloat() * heightOffset;
         }
 

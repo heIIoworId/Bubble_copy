@@ -16,13 +16,6 @@ void main() {
     vec3 normal = normalize(vNormal);
     float scale = 0.05;
 
-    // normal (bump) mapping
-    /*
-    vec4 bumpX = texture2D(uTextureNormalUnit, wPosition.yz * scale) * 2.0 - 1.0;
-    vec4 bumpY = texture2D(uTextureNormalUnit, wPosition.xy * scale) * 2.0 - 1.0;
-    vec4 bumpZ = texture2D(uTextureNormalUnit, wPosition.yz * scale) * 2.0 - 1.0;
-    */
-
     // diffuse
     float diffuse = max(0.0, dot(normal, tolight));
     diffuse += max(0.0, dot(normal, tolight2));
@@ -45,6 +38,11 @@ void main() {
     blending = normalize(max(blending, 0.00001));
     float b = (blending.x + blending.y + blending.z);
     blending /= vec3(b, b, b);
+
+    // normal (bump) mapping
+    vec4 bumpX = texture2D(uTextureNormalUnit, wPosition.yz * scale) * 2.0 - 1.0;
+    vec4 bumpY = texture2D(uTextureNormalUnit, wPosition.xy * scale) * 2.0 - 1.0;
+    vec4 bumpZ = texture2D(uTextureNormalUnit, wPosition.yz * scale) * 2.0 - 1.0;
 
     vec4 xaxis = texture2D(uTextureUnit, wPosition.yz * scale);
     vec4 yaxis = texture2D(uTextureUnit, wPosition.xz * scale);
