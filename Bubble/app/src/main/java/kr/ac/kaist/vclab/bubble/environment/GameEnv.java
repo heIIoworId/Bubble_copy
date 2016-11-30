@@ -1,19 +1,13 @@
 package kr.ac.kaist.vclab.bubble.environment;
 
-import java.util.ArrayList;
-
-import kr.ac.kaist.vclab.bubble.models.BubbleSphere;
-import kr.ac.kaist.vclab.bubble.models.Item;
-
 /**
  * Created by mnswpr on 11/23/2016.
  */
 
-// FIXME SG
 public class GameEnv {
 
     // TIME INFO
-    private static long startTime;
+    public static long startTime;
 
     // SUCCESS INFO
     public static int successStatus;
@@ -23,6 +17,8 @@ public class GameEnv {
     public static int numOfAchievedItems;
     public static int numOfTotalItems;
     public static float radiusOfItem;
+    public static int levelOfItem;
+    public static float[] colorOfItem;
 
     // BUBBLE INFO
     public static float[] initialLocationOfBubble;
@@ -37,13 +33,15 @@ public class GameEnv {
     public static float distOfBubbleAndCamera;
 
     // BUBBLE CORE INFO
-    public int lengthOfTrajectory;
     public float dampingOfBubbleCore;
+    public int lengthOfTrace;
+    public float[] traceColor;
 
     // WORLD INFO
     public static float[] gravity = new float[]{0f, -0.0006f, 0f};
 
     private static GameEnv ourInstance = new GameEnv();
+
     public static GameEnv getInstance() {
         return ourInstance;
     }
@@ -58,7 +56,9 @@ public class GameEnv {
         isNewItem = false;
         numOfAchievedItems = 0;
         numOfTotalItems = 10;
-        radiusOfItem = 2.0f;
+        radiusOfItem = 0.2f;
+        levelOfItem = 1;
+        colorOfItem = new float[]{0f, 0f, 0.9f};
 
         // BUBBLE INFO
         initialLocationOfBubble = new float[]{0,0,0};
@@ -73,8 +73,9 @@ public class GameEnv {
         distOfBubbleAndCamera = 1.5f;
 
         // BUBBLE CORE INFO
-        lengthOfTrajectory = 90;
+        lengthOfTrace = 300;
         dampingOfBubbleCore = 0.95f;
+        traceColor = new float[]{0.9f, 0f, 0f};
     }
 
     public static long getDuration(){
@@ -83,31 +84,23 @@ public class GameEnv {
         return duration;
     }
 
-    private static void updateScaleOfBubble(){
+    public static float getScaleOfBubble(){
         if(isNewItem){
             scaleOfBubble = initialScaleOfBubble;
             isNewItem = false;
         } else if(scaleOfBubble > minScaleOfBubble){
             scaleOfBubble = scaleOfBubble * shrinkRatio;
         }
-    }
-
-    public static float getScaleOfBubble(){
-        updateScaleOfBubble();
         return scaleOfBubble;
     }
 
-    private static void updateSuccessStatus(){
+    // FIXME SG (NOT USED YET)
+    public static int getSuccessStatus(){
         if(scaleOfBubble <= minScaleOfBubble){
             successStatus = -1; // FAIL
         } else if(numOfTotalItems - numOfAchievedItems == 0){
             successStatus = 1;
         }
-    }
-
-    // FIXME SG (NOT USED YET)
-    public static int getSuccessStatus(){
-        updateSuccessStatus();
         return successStatus;
     }
 }

@@ -2536,11 +2536,6 @@ public class Sphere {
         initVertexBuffer();
     }
 
-    //FIXME UPDATE NORMALS ACCORDING TO VERTICES
-    public void updateNormals() {
-
-    }
-
     public void initVertexBuffer() {
         ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
         byteBuf.order(ByteOrder.nativeOrder());

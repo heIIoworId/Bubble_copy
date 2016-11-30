@@ -21,6 +21,7 @@ import javax.microedition.khronos.opengles.GL10;
 import kr.ac.kaist.vclab.bubble.activities.MainActivity;
 import kr.ac.kaist.vclab.bubble.environment.Env;
 import kr.ac.kaist.vclab.bubble.environment.GameEnv;
+import kr.ac.kaist.vclab.bubble.generators.ItemGenerator;
 import kr.ac.kaist.vclab.bubble.models.BubbleCore;
 import kr.ac.kaist.vclab.bubble.models.BubbleSphere;
 import kr.ac.kaist.vclab.bubble.models.Item;
@@ -64,9 +65,12 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private Blower mBlower;
     private BubbleCore mBubbleCore;
 
-    //DECLARE LIGHTS
+    // DECLARE LIGHTS
     private float[] mLight = new float[3];
     private float[] mLight2 = new float[3];
+
+    // DECLARE POSITION OF CAMERA
+    float[] mCamera = new float[3];
 
     // MATRICES FOR VIEW
     private float[] mViewMatrix = new float[16];
@@ -87,7 +91,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private float[][] mItemModelViewMatrix = new float[GameEnv.getInstance().numOfTotalItems][16];
     private float[][] mItemNormalMatrix = new float[GameEnv.getInstance().numOfTotalItems][16];
 
-    // FIXME SG (WORKING ON)
     // MATRICES FOR mBubbleCore
     public float[] mBubbleCoreRotationMatrix = new float[16];
     public float[] mBubbleCoreTranslationMatrix = new float[16];
@@ -120,16 +123,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private float[] mProjMatrix = new float[16];
     private float[] mTempMatrix = new float[16];
 
-    private long timestamp;
-
-    // FIXME PARAM OF CAMERA
-    float[] mCamera = new float[3];
-
     @Override
     // CALLED WHEN SURFACE IS CREATED AT FIRST.
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
-        timestamp = System.currentTimeMillis();
-
         // SET BACKGROUND COLOR
         GLES20.glClearColor(0.7f, 0.8f, 0.9f, 1.0f); // skyblue
 
@@ -139,7 +135,20 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                 GameEnv.getInstance().levelOfBubble);
         mBubble.color = GameEnv.getInstance().colorOfBubble;
 
-        // ... map
+        // INIT ITEMS
+        float[] positions = ItemGenerator.getPositionsOfItems();
+        mItems = new ArrayList<>();
+        for(int i = 0; i<positions.length; i = i+3){
+            float[] center = new float[3];
+            center[0] = positions[i];
+            center[1] = positions[i+1];
+            center[2] = positions[i+2];
+            Item tempItem  = new Item(center);
+            tempItem.color = GameEnv.getInstance().colorOfItem;
+            mItems.add(tempItem);
+        }
+
+        // INIT MAP
         mMap = new MapCube(
                 mapSizeX, mapSizeY, mapSizeZ,
                 mapUnitLength,
@@ -148,11 +157,11 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                 1.0f, true
         );
 
-        // ... sea (same x, z size as map)
+        // INIT SEA (same x, z size as map)
         mSea = new SeaRectangle(mapSizeX, mapSizeZ);
         mSkyBox = new SkyBox();
 
-        //INITIALIZE WORLD
+        // INIT WORLD
         mParticles = GeomOperator.genParticles(mBubble.getVertices());
         mSprings = GeomOperator.genSprings(mParticles);
         mBubbleCore = new BubbleCore(GameEnv.getInstance().initialLocationOfBubble);
@@ -184,7 +193,15 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // INIT BUBBLE MATRIX
         Matrix.setIdentityM(mBubbleRotationMatrix, 0);
         Matrix.setIdentityM(mBubbleTranslationMatrix, 0);
-        Matrix.translateM(mBubbleTranslationMatrix, 0, 0, 0, 0);
+
+        // INIT ITEMS MARICES
+        for(int i = 0; i < GameEnv.getInstance().numOfTotalItems; i++){
+            Matrix.setIdentityM(mItemRotationMatrix[i], 0);
+            Matrix.setIdentityM(mItemTranslationMatrix[i], 0);
+            float center[] = mItems.get(i).getCenter();
+            Matrix.translateM(
+                    mItemTranslationMatrix[i], 0, center[0], center[1], center[2]);
+        }
 
         // INIT BUBBLECORE MATRIX
         Matrix.setIdentityM(mBubbleCoreRotationMatrix, 0);
@@ -210,12 +227,12 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     public void onDrawFrame(GL10 unused) {
 
         // FIXME WHAT IS THIS?
-        float curTime = (System.currentTimeMillis() - timestamp) /  1000000.0f;
+//        float curTime = (System.currentTimeMillis() - GameEnv.getInstance().startTime) /  1000000.0f;
 
         // CLEAR COLOR & DEPTH BUFFERS
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
-        // CALCULATE VIEW MATRIX
+        // CALC VIEW MATRIX
         Matrix.setIdentityM(mViewMatrix, 0);
         Matrix.multiplyMM(mTempMatrix, 0, mViewRotationMatrix, 0, mViewMatrix, 0);
         System.arraycopy(mTempMatrix, 0, mViewMatrix, 0, 16);
@@ -224,7 +241,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // UPDATE VIEW MATRIX TO FOLLOW BUBBLE
         updateView();
 
-        // CALCULATE BUBBLE MATRIX
+        // CALC BUBBLE MATRIX
         Matrix.setIdentityM(mBubbleTranslationMatrix, 0);
         float curLocation[] = mBubbleCore.getLocation();
         Matrix.translateM(
@@ -241,7 +258,18 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.multiplyMM(mBubbleModelViewMatrix, 0, mViewMatrix, 0, mBubbleModelMatrix, 0);
         normalMatrix(mBubbleNormalMatrix, 0, mBubbleModelViewMatrix, 0);
 
-        // CALCULATE mBubbleCore MATRIX
+        // CALC mItems MATRICES
+        for(int i = 0; i<GameEnv.getInstance().numOfTotalItems; i++){
+            Matrix.setIdentityM(mItemModelMatrix[i], 0);
+            Matrix.multiplyMM(mTempMatrix, 0, mItemRotationMatrix[i], 0, mItemModelMatrix[i], 0);
+            System.arraycopy(mTempMatrix, 0, mItemModelMatrix[i], 0, 16);
+            Matrix.multiplyMM(mTempMatrix, 0, mItemTranslationMatrix[i], 0, mItemModelMatrix[i], 0);
+            System.arraycopy(mTempMatrix, 0, mItemModelMatrix[i], 0, 16);
+            Matrix.multiplyMM(mItemModelViewMatrix[i], 0, mViewMatrix, 0, mItemModelMatrix[i], 0);
+            normalMatrix(mItemNormalMatrix[i], 0, mItemModelViewMatrix[i], 0);
+        }
+
+        // CALC mBubbleCore MATRIX
         Matrix.setIdentityM(mBubbleCoreModelMatrix, 0);
         Matrix.multiplyMM(mTempMatrix, 0, mBubbleCoreRotationMatrix, 0, mBubbleCoreModelMatrix, 0);
         System.arraycopy(mTempMatrix, 0, mBubbleCoreModelMatrix, 0, 16);
@@ -250,7 +278,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.multiplyMM(mBubbleCoreModelViewMatrix, 0, mViewMatrix, 0, mBubbleCoreModelMatrix, 0);
         normalMatrix(mBubbleCoreNormalMatrix, 0, mBubbleCoreModelViewMatrix, 0);
 
-        // CALCULATE MAP MODELMATRIX
+        // CALC MAP MODELMATRIX
         Matrix.setIdentityM(mMapModelMatrix, 0);
         Matrix.multiplyMM(mTempMatrix, 0, mMapRotationMatrix, 0, mMapModelMatrix, 0);
         System.arraycopy(mTempMatrix, 0, mMapModelMatrix, 0, 16);
@@ -259,7 +287,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.multiplyMM(mMapModelViewMatrix, 0, mViewMatrix, 0, mMapModelMatrix, 0);
         normalMatrix(mMapNormalMatrix, 0, mMapModelViewMatrix, 0);
 
-        // CALCULATE SEA MODELMATRIX
+        // CALC SEA MODELMATRIX
         Matrix.setIdentityM(mSeaModelMatrix, 0);
         Matrix.multiplyMM(mTempMatrix, 0, mSeaRotationMatrix, 0, mSeaModelMatrix, 0);
         System.arraycopy(mTempMatrix, 0, mSeaModelMatrix, 0, 16);
@@ -268,7 +296,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.multiplyMM(mSeaModelViewMatrix, 0, mViewMatrix, 0, mSeaModelMatrix, 0);
         Matrix.multiplyMM(mSkyboxModelViewMatrix, 0, mViewMatrix, 0, mSkyboxModelMatrix, 0);
 
-        // CALCULATE SKYBOX MODELMATRIX
+        // CALC SKYBOX MODELMATRIX
         Matrix.setIdentityM(mSkyboxModelMatrix, 0);
         Matrix.multiplyMM(mTempMatrix, 0, mSkyboxRotationMatrix, 0, mSkyboxModelMatrix, 0);
         System.arraycopy(mTempMatrix, 0, mSkyboxModelMatrix, 0, 16);
@@ -278,7 +306,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         normalMatrix(mSeaNormalMatrix, 0, mSeaModelViewMatrix, 0);
         normalMatrix(mSkyboxNormalMatrix, 0, mSkyboxModelViewMatrix, 0);
 
-        // FIXME SG (ANY NEED OF UPDATING mBubbleTranslationMatrix and mBubbleCoreTranslationMatrix?)
         //UPDATE WORLD AND VERTICES OF SPHERE
         if(Env.getInstance().micStatus == 1){
             mBlower.setBlowingDir(mViewMatrix);
@@ -296,9 +323,15 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         GLES20.glEnable(GLES20.GL_CULL_FACE);
         mSkyBox.draw(mProjMatrix, mSkyboxModelViewMatrix, mSkyboxNormalMatrix, mLight, mLight2);
         mMap.draw(mProjMatrix, mMapModelViewMatrix, mMapNormalMatrix, mLight, mLight2);
-        mBubbleCore.updateTrajectory();
-        mBubbleCore.drawTrajectory(mProjMatrix, mBubbleCoreModelViewMatrix, mBubbleCoreNormalMatrix,
+        mBubbleCore.updateTraceVertices();
+        mBubbleCore.drawTrace(mProjMatrix, mBubbleCoreModelViewMatrix, mBubbleCoreNormalMatrix,
                 mLight, mLight2);
+        for(int i = 0; i<GameEnv.getInstance().numOfTotalItems; i++){
+            if(!mItems.get(i).checkHitStatus()) {
+                mItems.get(i).draw(mProjMatrix, mItemModelViewMatrix[i], mItemNormalMatrix[i],
+                        mLight, mLight2);
+            }
+        }
 
         // ... gl_blend (alpha blending)
         GLES20.glEnable(GLES20.GL_BLEND);

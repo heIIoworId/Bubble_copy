@@ -24,10 +24,11 @@
 
 ### 상균
 * 남은 아이템 개수 표시 ~~(쓰레드 새로 만들어서, 버튼 텍스트 업데이트)~~ 카메라 앞에 rect 만들어서 mapping하거나, 안드로이드 viewOverlay 활용 생각
-* 시간 지나면 버블 사이즈 줄어들게 하기, 아이템 먹으면 다시 커지게 하기 (사이즈에 따라서 색 변화?)
-* (시간나면) 버블의 이동 trajectory를 가시화 (BUBBLE CORE'S PAST LOCATION ARRAY?)(display only when bubble is moving)(투명한 리본)
+* ~~시간 지나면 버블 사이즈 줄어들게 하기, 아이템 먹으면 다시 커지게 하기~~ 
+* ~~(시간나면) 버블의 이동 trajectory를 가시화~~ (display only when bubble is moving)
 * 맵 밖으로 나가면 버블 색깔 바꾸기
 * media recorder 화면 켤 때 멈추는 거 해결하기 (state관리가 포인트)
+* 아이템-버블 충돌 처리
 * ~~global boolean 으로 soundhandler on/off 처리~~
 * ~~아이템 모델링하기, 아이템은 충돌시 사라짐~~
 * ~~아이템 다 먹었는지 확인, 최종 시간 기록 구현(gameManager class)~~
@@ -35,7 +36,6 @@
 ### 종민
 * 버블-카메라 사이 거리 더 키우기
 * 버블-맵 충돌 처리
-* 버블-스피어(아이템) 충돌 처리
 * gyro 각도 90도에 view 180도 매핑(2배로 더 돌게)
 * 어느 순간 카메라 y 축이 뒤집히는 문제 해결(gimbal lock, euler angles?? --> quaternion?)
 * 스카이박스 평범한 하늘 사진으로 바꾸기

@@ -167,7 +167,7 @@ public class BubbleSphere {
     }
 
     public void updateAchievedItems(){
-        //FIXME JM collision detection 넣기
+        //FIXME SG JM collision detection 넣기
         boolean newCollision = false;
         if(newCollision){
             GameEnv.getInstance().isNewItem = true;
@@ -261,7 +261,7 @@ public class BubbleSphere {
         return sphereCollision;
     }
 
-    //FIXME UPDATE NORMALS ACCORDING TO VERTICES
+    //FIXME SG (UPDATE NORMALS ACCORDING TO VERTICES)
     public void updateNormals(){
 
     }
