@@ -84,31 +84,23 @@ public class GameEnv {
         return duration;
     }
 
-    private static void updateScaleOfBubble(){
+    public static float getScaleOfBubble(){
         if(isNewItem){
             scaleOfBubble = initialScaleOfBubble;
             isNewItem = false;
         } else if(scaleOfBubble > minScaleOfBubble){
             scaleOfBubble = scaleOfBubble * shrinkRatio;
         }
-    }
-
-    public static float getScaleOfBubble(){
-        updateScaleOfBubble();
         return scaleOfBubble;
     }
-
-    private static void updateSuccessStatus(){
+    
+    // FIXME SG (NOT USED YET)
+    public static int getSuccessStatus(){
         if(scaleOfBubble <= minScaleOfBubble){
             successStatus = -1; // FAIL
         } else if(numOfTotalItems - numOfAchievedItems == 0){
             successStatus = 1;
         }
-    }
-
-    // FIXME SG (NOT USED YET)
-    public static int getSuccessStatus(){
-        updateSuccessStatus();
         return successStatus;
     }
 }
