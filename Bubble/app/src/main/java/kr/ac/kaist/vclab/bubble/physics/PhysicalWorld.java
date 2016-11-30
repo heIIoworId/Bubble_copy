@@ -24,12 +24,14 @@ public class PhysicalWorld {
     }
 
     public void applyForce(){
-
         // SET DAMPING RATIO
         for(int i = 0; i<particles.size(); i++){
             particles.get(i).setDamping(GameEnv.getInstance().dampingOfInnerBubble);
         }
         bubbleCore.setDamping(GameEnv.getInstance().dampingOfBubbleCore);
+        if(GameEnv.getInstance().collisionFlag == 1){
+            return;
+        }
 
         // APPLY FORCE
         for (int i=0; i<springs.size(); i++){

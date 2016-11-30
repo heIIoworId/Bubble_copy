@@ -542,13 +542,13 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                 TriangleCollision collision = collisions[i * dimZ * 2 + j * 2];
                 collision.move(mMapModelMatrix);
                 if(Intersect.intersect(mBubbleCore.getCollision(), collision)){
-                    System.out.println("hi "+ mBubbleCore.getCollision().getRadius());
+                    GameEnv.getInstance().collisionFlag = 1;
                     return;
                 }
                 collision = collisions[i * dimZ * 2 + j * 2 + 1];
                 collision.move(mMapModelMatrix);
                 if(Intersect.intersect(mBubbleCore.getCollision(), collision)){
-                    System.out.println("hi "+ mBubbleCore.getCollision().getRadius());
+                    GameEnv.getInstance().collisionFlag = 1;
                     return;
                 }
             }

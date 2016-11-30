@@ -15,7 +15,7 @@ public class Env {
 
     // SETTING GLOBAL ENV VARIABLES
     private Env() {
-        micStatus = 0; // 0: OFF, 1: ON
+        micStatus = 1; // 0: OFF, 1: ON
         dirtyModeStatus = 0; // 0: OFF, 1: ON
     }
 }

@@ -5,6 +5,8 @@ package kr.ac.kaist.vclab.bubble.environment;
  */
 
 public class GameEnv {
+    // FLAG
+    public static int collisionFlag;
     // SKYBOX INFO
     public static String imgFolder;
     // GYRO INFO
@@ -51,6 +53,9 @@ public class GameEnv {
         return ourInstance;
     }
     private GameEnv() {
+        // FLAG
+        collisionFlag = 0;
+
         // GYRO INFO
         gyroScale = 3.0f;
 

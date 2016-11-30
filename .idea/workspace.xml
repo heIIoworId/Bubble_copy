@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c7bb732b-0bff-4c4a-b962-053bd4b4fee7" name="Default" comment="">
+    <list default="true" id="c7bb732b-0bff-4c4a-b962-053bd4b4fee7" name="Default" comment="Add Collision">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/MyGLRenderer.java" afterPath="$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/MyGLRenderer.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/environment/Env.java" afterPath="$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/environment/Env.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/environment/GameEnv.java" afterPath="$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/environment/GameEnv.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/models/SkyBox.java" afterPath="$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/models/SkyBox.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/physics/Blower.java" afterPath="$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/physics/Blower.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/physics/PhysicalWorld.java" afterPath="$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/physics/PhysicalWorld.java" />
     </list>
     <ignored path="kaist_cs482_2016_team4.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -114,10 +114,20 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SkyBox.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="SkyBox.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/models/SkyBox.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-3534">
+            <state relative-caret-position="1197">
+              <caret line="209" column="48" selection-start-line="209" selection-start-column="48" selection-end-line="209" selection-end-column="48" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PhysicalWorld.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/physics/PhysicalWorld.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-378">
               <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
@@ -133,20 +143,6 @@
                 <element signature="imports" expanded="false" />
                 <element signature="e#6168#6169#0" expanded="false" />
                 <element signature="e#6206#6207#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MyGLSurfaceView.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/views/MyGLSurfaceView.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="false" />
-                <element signature="e#1170#1171#0" expanded="false" />
-                <element signature="e#1202#1203#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -414,7 +410,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="models" />
+              <option name="myItemId" value="physics" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -549,7 +545,14 @@
       <option name="project" value="LOCAL" />
       <updated>1480518417614</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Add Collision">
+      <created>1480519384618</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1480519384618</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -604,16 +607,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/generators/MapGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/models/MapCube.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1009,7 +1002,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/models/SkyBox.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3534">
+        <state relative-caret-position="1197">
+          <caret line="209" column="48" selection-start-line="209" selection-start-column="48" selection-end-line="209" selection-end-column="48" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/physics/PhysicalWorld.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-378">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
