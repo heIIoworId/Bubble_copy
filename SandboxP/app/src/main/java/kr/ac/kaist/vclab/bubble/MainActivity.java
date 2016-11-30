@@ -21,8 +21,8 @@ public class MainActivity extends Activity {
 
     // private String[] labels = new String[]{"World", "Cube", "Map", "Bubble"};
     // private String[] modes = new String[]{"world", "cube", "map", "bubble"};
-    private String[] labels = new String[]{"World", "Cube", "Map"};
-    private String[] modes = new String[]{"world", "cube", "map"};
+    private String[] labels = new String[]{"World", "Map"};
+    private String[] modes = new String[]{"world", "map"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,32 +41,41 @@ public class MainActivity extends Activity {
         buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
         buttonLayout.setGravity(Gravity.CENTER);
 
-        // buttons
-        final ToggleButton[] buttons = new ToggleButton[labels.length];
+        // buttons - for changing the mode
+        final ToggleButton[] modeButtons = new ToggleButton[labels.length];
 
         for (int i = 0; i < labels.length; i++) {
-            buttons[i] = new ToggleButton(this);
+            modeButtons[i] = new ToggleButton(this);
 
-            buttons[i].setText(labels[i]);
-            buttons[i].setTextOn(labels[i]);
-            buttons[i].setTextOff(labels[i]);
+            modeButtons[i].setText(labels[i]);
+            modeButtons[i].setTextOn(labels[i]);
+            modeButtons[i].setTextOff(labels[i]);
         }
 
         for (int i = 0; i < labels.length; i++) {
-            buttonLayout.addView(buttons[i]);
+            buttonLayout.addView(modeButtons[i]);
         }
+
+        // button - for set hint on / off
+        final ToggleButton hintButton = new ToggleButton(this);
+
+        hintButton.setText("Hint");
+        hintButton.setTextOn("HintOn");
+        hintButton.setTextOff("HintOff");
+
+        buttonLayout.addView(hintButton);
 
         // listener
         for (int i = 0; i < labels.length; i++) {
             final String modeChoosed = modes[i];
 
-            buttons[i].setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            modeButtons[i].setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
                         for (int j = 0; j < labels.length; j++) {
-                            if (buttons[j] != buttonView) {
-                                buttons[j].setChecked(false);
+                            if (modeButtons[j] != buttonView) {
+                                modeButtons[j].setChecked(false);
                             }
 
                             mGLView.mode = modeChoosed;
@@ -76,8 +85,22 @@ public class MainActivity extends Activity {
             });
         }
 
+        hintButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    mGLView.mRenderer.mapBlendFlag = true;
+                    mGLView.requestRender();
+                } else {
+                    mGLView.mRenderer.mapBlendFlag = false;
+                    mGLView.requestRender();
+                }
+            }
+        });
+
         // default checked button
-        buttons[0].setChecked(true);
+        modeButtons[0].setChecked(true);
+        hintButton.setChecked(false);
 
         // layout params
         LinearLayout.LayoutParams glParams = new LinearLayout.LayoutParams(
