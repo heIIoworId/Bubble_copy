@@ -158,7 +158,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         );
 
         // INIT ITEMS
-        // FIXME HM SG (아이템 위치 받기)
         float[][] coors = mItemGenerator.getPositions();
         float[] positions = new float[coors.length * 3];
 
@@ -253,7 +252,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onDrawFrame(GL10 unused) {
 
-        // FIXME WHAT IS THIS?
         float curTime = (System.currentTimeMillis() - GameEnv.getInstance().startTime) /  1000000.0f;
 
         // CLEAR COLOR & DEPTH BUFFERS
@@ -352,6 +350,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         GLES20.glEnable(GLES20.GL_CULL_FACE);
         mSkyBox.draw(mProjMatrix, mSkyboxModelViewMatrix, mSkyboxNormalMatrix, mLight, mLight2);
         mMap.draw(mProjMatrix, mMapModelViewMatrix, mMapNormalMatrix, mMapModelMatrix, mLight, mLight2);
+
         mBubbleCore.updateTraceVertices();
         mBubbleCore.drawTrace(mProjMatrix, mBubbleCoreModelViewMatrix, mBubbleCoreNormalMatrix,
                 mLight, mLight2);
@@ -369,7 +368,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mBubble.draw(mProjMatrix, mBubbleModelViewMatrix, mBubbleModelMatrix,
                 mViewMatrix, mBubbleNormalMatrix, mLight, mLight2,
                 mCamera, mSkyBox.getCubeTex());
-        // FIXME SG (TEMPORAL COMMENT OUT)
+        // FIXME CAN'T SEE SEA
         mSea.draw(mProjMatrix, mSeaModelViewMatrix, mSeaNormalMatrix, mLight, mLight2, curTime);
         GLES20.glDisable(GLES20.GL_BLEND);
     }
