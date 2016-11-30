@@ -47,8 +47,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     // ... items
     public int itemCount = 15;
     private float itemRadius = 1.5f;
-    private float itemMinDist = 20.0f;
-    private float itemHeightOffset = 10.0f;
+    private float itemMinDist = 5.0f;
+    private float itemHeightOffset = 5.0f;
 
     // objects
     private MapCube mMap;
@@ -157,6 +157,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // after we initialize mMap.
         mItemGenerator = new ItemGenerator(
                 itemCount,
+                itemRadius,
                 itemMinDist,
                 itemHeightOffset,
                 mMap.mGenerator // This is already initialized, so we can safely pass this to mItemGenerator.

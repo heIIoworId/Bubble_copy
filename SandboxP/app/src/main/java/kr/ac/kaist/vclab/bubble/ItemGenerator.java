@@ -11,6 +11,7 @@ import java.util.Random;
 public class ItemGenerator {
     // basic params
     private int count;
+    private float radius;
     private float minDist;
     private float heightOffset;
 
@@ -22,11 +23,13 @@ public class ItemGenerator {
 
     public ItemGenerator(
             int count,
+            float radius,
             float minDist,
             float heightOffset,
             MapGenerator mMapGenerator) {
         // from arguments
         this.count = count;
+        this.radius = radius;
         this.minDist = minDist;
         this.heightOffset = heightOffset;
 
@@ -40,17 +43,38 @@ public class ItemGenerator {
     public float[][] getPositions() {
         float[][] posList = new float[count][3];
         Random mRandomX = new Random();
+        Random mRandomY = new Random();
         Random mRandomZ = new Random();
+        int search = (int) (minDist / unit);
 
-        for (int i = 0; i < count; i++) {
-            int j = mRandomX.nextInt(dimX);
-            int k = mRandomZ.nextInt(dimZ);
+        for (int index = 0; index < count; index++) {
+            int i = mRandomX.nextInt(dimX);
+            int j = mRandomZ.nextInt(dimZ);
 
-            posList[i][0] = unit * j;
-            posList[i][1] = Math.max(heightMap[j][k] + 4.0f, 4.0f);
-            posList[i][2] = unit * k;
+            // set x, z coors
+            posList[index][0] = unit * i;
+            posList[index][2] = unit * j;
+
+            // find 'safe' y coor
+            float safeY = getHeight(i, j);
+
+            for (int k = 0; k <= search; k++) {
+                for (int l = 0; l <= search; l++) {
+                    safeY = Math.max(safeY, getHeight(i + search / 2 - k, j + search / 2 - l));
+                }
+            }
+
+            posList[index][1] = safeY + radius + mRandomY.nextFloat() * heightOffset;
         }
 
         return posList;
+    }
+
+    private float getHeight(int i, int j) {
+        if ((i < 0) || (j < 0) || (i >= dimX) || (j >= dimZ)) {
+            return 0;
+        } else {
+            return heightMap[i][j];
+        }
     }
 }
