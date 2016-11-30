@@ -27,11 +27,11 @@ void main() {
     vec3 specColor = vec3(1.0, 1.0, 1.0);
 
     if (lambertian > 0.0) {
-        float shininess = 100.0;
+        float shininess = 20.0;
         vec3 viewDir = normalize(-vPosition);
         vec3 halfDir = normalize(tolight + viewDir);
         float specAngle = max(dot(halfDir, normal), 0.0);
-        specular = pow(specAngle, shininess);
+        specular = pow(pow(specAngle, shininess), 8.0);
     }
 
     // tri-planar mapping
