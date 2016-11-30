@@ -2514,7 +2514,6 @@ public class ItemSphere {
 
         // Draw the sphere
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertices.length / 3);
-        GLES20.glLineWidth(2.0f);
 
         GLES20.glDisableVertexAttribArray(mPositionHandle);
         GLES20.glDisableVertexAttribArray(mNormalHandle);

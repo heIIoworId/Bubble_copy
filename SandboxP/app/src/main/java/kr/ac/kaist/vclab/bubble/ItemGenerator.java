@@ -37,8 +37,8 @@ public class ItemGenerator {
 
         for (int i = 0; i < count; i++) {
             posList[i][0] = 5.0f * i;
-            posList[i][1] = 6.0f * i;
-            posList[i][2] = 20.0f;
+            posList[i][1] = 20.0f;
+            posList[i][2] = 6.0f * i;
         }
 
         return posList;
