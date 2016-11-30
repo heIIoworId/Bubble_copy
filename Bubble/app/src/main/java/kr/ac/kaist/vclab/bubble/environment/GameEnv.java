@@ -23,6 +23,8 @@ public class GameEnv {
     public static int numOfAchievedItems;
     public static int numOfTotalItems;
     public static float radiusOfItem;
+    public static int levelOfItem;
+    public static float[] colorOfItem;
 
     // BUBBLE INFO
     public static float[] initialLocationOfBubble;
@@ -39,11 +41,13 @@ public class GameEnv {
     // BUBBLE CORE INFO
     public int lengthOfTrajectory;
     public float dampingOfBubbleCore;
+    public float[] trajectoryColor;
 
     // WORLD INFO
     public static float[] gravity = new float[]{0f, -0.0006f, 0f};
 
     private static GameEnv ourInstance = new GameEnv();
+
     public static GameEnv getInstance() {
         return ourInstance;
     }
@@ -59,6 +63,8 @@ public class GameEnv {
         numOfAchievedItems = 0;
         numOfTotalItems = 10;
         radiusOfItem = 2.0f;
+        levelOfItem = 2;
+        colorOfItem = new float[]{0f, 0f, 0.9f};
 
         // BUBBLE INFO
         initialLocationOfBubble = new float[]{0,0,0};
@@ -75,6 +81,8 @@ public class GameEnv {
         // BUBBLE CORE INFO
         lengthOfTrajectory = 90;
         dampingOfBubbleCore = 0.95f;
+        trajectoryColor = new float[]{0.9f, 0f, 0f};
+
     }
 
     public static long getDuration(){

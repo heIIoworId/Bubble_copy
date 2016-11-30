@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import kr.ac.kaist.vclab.bubble.MyGLRenderer;
 import kr.ac.kaist.vclab.bubble.environment.GameEnv;
 import kr.ac.kaist.vclab.bubble.physics.Particle;
-import kr.ac.kaist.vclab.bubble.utils.SystemHelper;
 
 /**
  * Created by 84395 on 11/27/2016.
@@ -36,7 +35,7 @@ public class BubbleCore extends Particle {
     private static final int COORDS_PER_VERTEX = 3;
     private static final int VERTEX_STRIDE = COORDS_PER_VERTEX * 4;
 
-    private float[] color = {0.2f, 0.709803922f, 0.898039216f};
+    private float[] trajectoryColor;
 
     private float trajectory[];
     private ArrayList<Float> trajectoryArrayList;
@@ -44,10 +43,13 @@ public class BubbleCore extends Particle {
     public BubbleCore(float[] _location) {
         super(_location);
 
+        trajectoryColor = GameEnv.getInstance().trajectoryColor;
         trajectory = new float[GameEnv.getInstance().lengthOfTrajectory];
         trajectoryArrayList = new ArrayList<>();
 
         initVertexBuffer();
+        // FIXME SG (NEED TO INIT NORMAL VERTEX AND USE IT FOLLOWING CODE)
+
 
         // PREPARE SHADER AND GL PROGRAM
         int vertexShader = MyGLRenderer.loadShaderFromFile(
@@ -83,7 +85,7 @@ public class BubbleCore extends Particle {
         GLES20.glUniformMatrix4fv(mProjMatrixHandle, 1, false, projMatrix, 0);
         GLES20.glUniformMatrix4fv(mModelViewMatrixHandle, 1, false, modelViewMatrix, 0);
         GLES20.glUniformMatrix4fv(mNormalMatrixHandle, 1, false, normalMatrix, 0);
-        GLES20.glUniform3fv(mColorHandle, 1, color, 0);
+        GLES20.glUniform3fv(mColorHandle, 1, trajectoryColor, 0);
         GLES20.glUniform3fv(mLightHandle, 1, light, 0);
         GLES20.glUniform3fv(mLight2Handle, 1, light2, 0);
 
@@ -114,10 +116,6 @@ public class BubbleCore extends Particle {
         for(int i = 0; i < trajectoryArrayList.size(); i++){
             trajectory[i] = trajectoryArrayList.get(i);
         }
-
-        // FIXME TESTING
-//        System.out.println("test");
-//        SystemHelper.printFloatArray(trajectory);
     }
 
     public void initVertexBuffer(){
