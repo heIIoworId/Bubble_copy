@@ -14,7 +14,7 @@ void main() {
     vec3 tolight = normalize(uLight - vPosition);
     vec3 tolight2 = normalize(uLight2 - vPosition);
     vec3 normal = normalize(vNormal);
-    float scale = 0.15;
+    float scale = 0.2;
 
     // diffuse
     float diffuse = max(0.0, dot(normal, tolight));
@@ -51,7 +51,7 @@ void main() {
 
     // haze
     vec4 haze = vec4(0.7, 0.7, 0.7, 1.0);
-    float ratio = 1.0 + vPosition.z/80.0;
+    float ratio = 1.0 + vPosition.z/87.0;
 
     gl_FragColor = ratio * vec4(intensity, 0.67) * 0.8 + (1.0 - ratio) * haze;
 }

@@ -105,7 +105,7 @@ public class MapCube {
         GLES20.glLinkProgram(mProgram);                  // create OpenGL program executables
 
         // texture
-        textureBitmap = MyGLRenderer.loadImage("desert.jpg");
+        textureBitmap = MyGLRenderer.loadImage("rocky.jpg");
         // textureNormalBitmap = MyGLRenderer.loadImage("forest_normal.png");
 
         int[] textureHandles = new int[1];
