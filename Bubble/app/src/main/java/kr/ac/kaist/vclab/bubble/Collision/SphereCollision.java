@@ -1,6 +1,9 @@
 package kr.ac.kaist.vclab.bubble.collision;
 
+import android.opengl.Matrix;
+
 import kr.ac.kaist.vclab.bubble.models.Item;
+import kr.ac.kaist.vclab.bubble.utils.MatOperator;
 import kr.ac.kaist.vclab.bubble.utils.VecOperator;
 
 /**
@@ -8,12 +11,15 @@ import kr.ac.kaist.vclab.bubble.utils.VecOperator;
  */
 
 public class SphereCollision extends Collision {
+    private float originalRadius;
     private float radius;
 
-    public SphereCollision(float radius) {
-        originalCenter = new float[]{0, 0, 0, 1};
-        center = new float[]{0, 0, 0, 1};
 
+    public SphereCollision(float radius){
+        originalCenter = new float[]{0,0,0,1};
+        center = new float[]{0,0,0,1};
+
+        this.originalRadius = radius;
         this.radius = radius;
         //this.originalCenter = pos;
     }
@@ -33,10 +39,14 @@ public class SphereCollision extends Collision {
         radius = _radius;
     }
 
-    public void scaleRadius(float scale) {
-        if (scale > 0) {
-            radius *= scale;
-        }
+    public void move(float[] transformation){
+        float[] translation = MatOperator.matTranslation(transformation);
+        Matrix.multiplyMV(center, 0, translation, 0, originalCenter, 0);
+    }
+
+
+    public void scaleRadius(float scale){
+        radius = originalRadius * scale;
     }
 
     public boolean isCollided(BoxCollision target) {

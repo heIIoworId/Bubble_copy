@@ -19,6 +19,8 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import kr.ac.kaist.vclab.bubble.activities.MainActivity;
+import kr.ac.kaist.vclab.bubble.collision.Intersect;
+import kr.ac.kaist.vclab.bubble.collision.TriangleCollision;
 import kr.ac.kaist.vclab.bubble.environment.Env;
 import kr.ac.kaist.vclab.bubble.environment.GameEnv;
 import kr.ac.kaist.vclab.bubble.generators.ItemGenerator;
@@ -282,6 +284,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                 GameEnv.getInstance().getScaleOfBubble(),
                 GameEnv.getInstance().getScaleOfBubble(),
                 GameEnv.getInstance().getScaleOfBubble());
+        mBubbleCore.getCollision().scaleRadius(GameEnv.getInstance().getScaleOfBubble());
+
         Matrix.multiplyMM(mBubbleModelViewMatrix, 0, mViewMatrix, 0, mBubbleModelMatrix, 0);
         normalMatrix(mBubbleNormalMatrix, 0, mBubbleModelViewMatrix, 0);
 
@@ -337,6 +341,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         if(Env.getInstance().micStatus == 1){
             mBlower.setBlowingDir(mViewMatrix);
         }
+        checkMove();
         mPhysicalWorld.applyForce();
         float updatedVertices[] = GeomOperator.genVertices(mPhysicalWorld.getParticles());
         mBubble.setVertices(updatedVertices);
@@ -518,5 +523,42 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                 eye[0], eye[1], eye[2],
                 look[0], look[1], look[2],
                 up[0], up[1], up[2]);
+    }
+
+    void checkMove(){
+        mBubbleCore.getCollision().move(mBubbleModelMatrix);
+        float x = mBubbleTranslationMatrix[12];
+        float z = mBubbleTranslationMatrix[14];
+        float r = mBubbleCore.getCollision().getRadius();
+        TriangleCollision[] collisions = mMap.getCollisions();
+        //          x = Math.min(x - r, -mapSizeX/2) + mapSizeX/2;
+//            z = Math.min(z - r, -mapSizeZ/2) + mapSizeZ/2;
+        int dimX = (int) (mapSizeX / mapUnitLength);
+        int dimZ = (int) (mapSizeZ / mapUnitLength);
+        /*
+        System.out.println((int)Math.max((x-r + mapSizeX/2)/mapUnitLength, 0)+ " " + Math.min((x+r + mapSizeX/2)/mapUnitLength, dimX) );
+        System.out.println((int)Math.max((z-r + mapSizeZ/2)/mapUnitLength, 0)+ " " + Math.min((z+r + mapSizeZ/2)/mapUnitLength, dimZ) );
+        System.out.println(x + " " + mBubbleTranslationMatrix[13] + " " + z);
+        System.out.println(r);
+        System.out.println("------------------------------");
+        */
+        for(int i=(int)Math.max((x-r + mapSizeX/2)/mapUnitLength, 0); i<Math.min((x+r + mapSizeX/2)/mapUnitLength, dimX); i++) {
+            for (int j=(int)Math.max((z-r + mapSizeZ/2)/mapUnitLength, 0); j<Math.min((z+r + mapSizeZ/2)/mapUnitLength, dimZ); j++) {
+                //System.out.println("\n"+i + ", " + j+ "-------------------");
+                //System.out.println(x + " " + mBubbleTranslationMatrix[13] + " " + z);
+                TriangleCollision collision = collisions[i * dimZ * 2 + j * 2];
+                collision.move(mMapModelMatrix);
+                if(Intersect.intersect(mBubbleCore.getCollision(), collision)){
+                    System.out.println("hi "+ mBubbleCore.getCollision().getRadius());
+                    return;
+                }
+                collision = collisions[i * dimZ * 2 + j * 2 + 1];
+                collision.move(mMapModelMatrix);
+                if(Intersect.intersect(mBubbleCore.getCollision(), collision)){
+                    System.out.println("hi "+ mBubbleCore.getCollision().getRadius());
+                    return;
+                }
+            }
+        }
     }
 }

@@ -5,6 +5,8 @@ package kr.ac.kaist.vclab.bubble.environment;
  */
 
 public class GameEnv {
+    // GYRO INFO
+    public static float gyroScale;
 
     // TIME INFO
     public static long startTime;
@@ -47,6 +49,9 @@ public class GameEnv {
         return ourInstance;
     }
     private GameEnv() {
+        // GYRO INFO
+        gyroScale = 3.0f;
+
         // TIME INFO
         startTime = System.currentTimeMillis();
 

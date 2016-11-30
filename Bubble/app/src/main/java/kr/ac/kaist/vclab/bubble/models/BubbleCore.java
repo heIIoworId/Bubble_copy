@@ -8,6 +8,7 @@ import java.nio.FloatBuffer;
 import java.util.ArrayList;
 
 import kr.ac.kaist.vclab.bubble.MyGLRenderer;
+import kr.ac.kaist.vclab.bubble.collision.SphereCollision;
 import kr.ac.kaist.vclab.bubble.environment.GameEnv;
 import kr.ac.kaist.vclab.bubble.physics.Particle;
 import kr.ac.kaist.vclab.bubble.utils.SystemHelper;
@@ -42,6 +43,8 @@ public class BubbleCore extends Particle {
     private ArrayList<Float> traceVerticesArrayList;
     private static float traceNormals[];
     private float[] traceColor;
+
+    private SphereCollision sphereCollision = new SphereCollision(GameEnv.radiusOfBubble);
 
     public BubbleCore(float[] _location) {
         super(_location);
@@ -152,4 +155,9 @@ public class BubbleCore extends Particle {
         mTraceNormalBuffer.put(traceNormals);
         mTraceNormalBuffer.position(0);
     }
+
+    public SphereCollision getCollision() {
+        return sphereCollision;
+    }
+
 }

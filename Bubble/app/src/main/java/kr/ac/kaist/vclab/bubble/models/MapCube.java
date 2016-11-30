@@ -9,6 +9,7 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 import kr.ac.kaist.vclab.bubble.MyGLRenderer;
+import kr.ac.kaist.vclab.bubble.collision.TriangleCollision;
 import kr.ac.kaist.vclab.bubble.generators.MapGenerator;
 
 /**
@@ -53,6 +54,7 @@ public class MapCube {
     public static float[] normals;
     public static float[] textureCoors;
     private static int mode;
+    public static TriangleCollision[] collisions;
 
     float color[] = {0.33f, 0.42f, 0.18f};
 
@@ -77,6 +79,7 @@ public class MapCube {
         normals = mGenerator.getNormals();
         textureCoors = mGenerator.getTextureCoors();
         mode = mGenerator.getMode();
+        collisions = mGenerator.getCollision();
 
         ByteBuffer byteBuf1 = ByteBuffer.allocateDirect(vertices.length * 4);
         byteBuf1.order(ByteOrder.nativeOrder());
@@ -184,4 +187,8 @@ public class MapCube {
         GLES20.glDisableVertexAttribArray(mNormalHandle);
         GLES20.glDisableVertexAttribArray(mTextureCoorHandle);
     }
+    public TriangleCollision[] getCollisions(){
+        return collisions;
+    }
+
 }

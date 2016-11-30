@@ -235,12 +235,12 @@ public class SkyBox {
         GLES20.glEnable(GLES20.GL_TEXTURE_CUBE_MAP);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_CUBE_MAP, cubeTex[0]);
 
-        GLUtils.texImage2D(GLES20.GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, MyGLRenderer.loadImage("beach/negx.png"), 0);
-        GLUtils.texImage2D(GLES20.GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, MyGLRenderer.loadImage("beach/negy.png"), 0);
-        GLUtils.texImage2D(GLES20.GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, MyGLRenderer.loadImage("beach/negz.png"), 0);
-        GLUtils.texImage2D(GLES20.GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, MyGLRenderer.loadImage("beach/posx.png"), 0);
-        GLUtils.texImage2D(GLES20.GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, MyGLRenderer.loadImage("beach/posy.png"), 0);
-        GLUtils.texImage2D(GLES20.GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0,  MyGLRenderer.loadImage("beach/posz.png"), 0);
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, MyGLRenderer.loadImage("sky2/negx.png"), 0);
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, MyGLRenderer.loadImage("sky2/negy.png"), 0);
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, MyGLRenderer.loadImage("sky2/negz.png"), 0);
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, MyGLRenderer.loadImage("sky2/posx.png"), 0);
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, MyGLRenderer.loadImage("sky2/posy.png"), 0);
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0,  MyGLRenderer.loadImage("sky2/posz.png"), 0);
         GLES20.glTexParameteri ( GLES20.GL_TEXTURE_CUBE_MAP, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST );
         GLES20.glTexParameteri ( GLES20.GL_TEXTURE_CUBE_MAP, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST );
 
