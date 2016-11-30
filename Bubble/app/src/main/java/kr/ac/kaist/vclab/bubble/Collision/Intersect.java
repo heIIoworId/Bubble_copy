@@ -86,7 +86,7 @@ public class Intersect {
         // System.out.println("box "+boxCenter[0] +" " +boxCenter[1]+" "+boxCenter[2]);
         // System.out.println("sphere "+sphereCenter[0] +" " +sphereCenter[1]+" "+sphereCenter[2]);
         // System.out.println("radius " + sphereCollision.GetRadius());
-        return VecOperator.getMag(result) <= sphereCollision.GetRadius();
+        return VecOperator.getMag(result) <= sphereCollision.getRadius();
     }
 
     public static boolean intersect(SphereCollision sphereCollision1, SphereCollision sphereCollision2) {
@@ -97,7 +97,7 @@ public class Intersect {
             distance[i] = sphereCollisionCenter1[i] - sphereCollisionCenter2[i];
         }
 
-        return VecOperator.getMag(distance) <= Math.abs(sphereCollision2.GetRadius() - sphereCollision1.GetRadius());
+        return VecOperator.getMag(distance) <= Math.abs(sphereCollision2.getRadius() - sphereCollision1.getRadius());
     }
 /*
     public static boolean intersect(SphereCollision sphereCollision, List<Collision> collisionList){

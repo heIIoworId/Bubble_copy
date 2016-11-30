@@ -25,6 +25,7 @@ import kr.ac.kaist.vclab.bubble.generators.ItemGenerator;
 import kr.ac.kaist.vclab.bubble.models.BubbleCore;
 import kr.ac.kaist.vclab.bubble.models.BubbleSphere;
 import kr.ac.kaist.vclab.bubble.models.Item;
+import kr.ac.kaist.vclab.bubble.models.ItemManager;
 import kr.ac.kaist.vclab.bubble.models.MapCube;
 import kr.ac.kaist.vclab.bubble.models.SeaRectangle;
 import kr.ac.kaist.vclab.bubble.models.SkyBox;
@@ -57,6 +58,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     public SkyBox mSkyBox;
     private BubbleSphere mBubble;
     private ArrayList<Item> mItems;
+
+    // ITEM GENERATOR
+    private ItemGenerator mItemGenerator;
 
     // DECLARE PHYSICAL ENTITIES
     private PhysicalWorld mPhysicalWorld;
@@ -135,8 +139,35 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                 GameEnv.getInstance().levelOfBubble);
         mBubble.color = GameEnv.getInstance().colorOfBubble;
 
+        // INIT MAP
+        mMap = new MapCube(
+                mapSizeX, mapSizeY, mapSizeZ,
+                mapUnitLength,
+                mapMaxHeight, mapMinHeight,
+                mapComplexity,
+                1.0f, true
+        );
+
+        // INIT ITEMGEN
+        mItemGenerator = new ItemGenerator(
+                GameEnv.getInstance().numOfTotalItems,
+                GameEnv.getInstance().radiusOfItem,
+                GameEnv.getInstance().radiusOfBubble * 2,
+                5.0f,
+                mMap.mGenerator
+        );
+
         // INIT ITEMS
-        float[] positions = ItemGenerator.getPositionsOfItems();
+        // FIXME HM SG (아이템 위치 받기)
+        float[][] coors = mItemGenerator.getPositions();
+        float[] positions = new float[coors.length * 3];
+
+        for (int i = 0; i < coors.length; i++) {
+            positions[3 * i] = coors[i][0];
+            positions[3 * i + 1] = coors[i][1];
+            positions[3 * i + 2] = coors[i][2];
+        }
+
         mItems = new ArrayList<>();
         for(int i = 0; i<positions.length; i = i+3){
             float[] center = new float[3];
@@ -147,15 +178,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
             tempItem.color = GameEnv.getInstance().colorOfItem;
             mItems.add(tempItem);
         }
-
-        // INIT MAP
-        mMap = new MapCube(
-                mapSizeX, mapSizeY, mapSizeZ,
-                mapUnitLength,
-                mapMaxHeight, mapMinHeight,
-                mapComplexity,
-                1.0f, true
-        );
+        for(int i = 0; i<GameEnv.getInstance().numOfTotalItems; i++){
+            ItemManager.getInstance().items[i] = mItems.get(i);
+        }
 
         // INIT SEA (same x, z size as map)
         mSea = new SeaRectangle(mapSizeX, mapSizeZ);
@@ -200,6 +225,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
             Matrix.setIdentityM(mItemTranslationMatrix[i], 0);
             float center[] = mItems.get(i).getCenter();
             Matrix.translateM(
+                    mItemTranslationMatrix[i], 0, -mapSizeX/2.0f, 0, -mapSizeZ/2.0f);
+            Matrix.translateM(
                     mItemTranslationMatrix[i], 0, center[0], center[1], center[2]);
         }
 
@@ -211,12 +238,12 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // INIT MAP MATRIX
         Matrix.setIdentityM(mMapRotationMatrix, 0);
         Matrix.setIdentityM(mMapTranslationMatrix, 0);
-        Matrix.translateM(mMapTranslationMatrix, 0, -10.0f, -5.0f, -10.0f);
+        Matrix.translateM(mMapTranslationMatrix, 0, -mapSizeX/2.0f, 0, -mapSizeZ/2.0f);
 
         // INIT SEA MATRIX
         Matrix.setIdentityM(mSeaRotationMatrix, 0);
         Matrix.setIdentityM(mSeaTranslationMatrix, 0);
-        Matrix.translateM(mSeaTranslationMatrix, 0, -10.0f, -4.0f, -10.0f);
+        Matrix.translateM(mSeaTranslationMatrix, 0, -mapSizeX/2.0f, 0, -mapSizeZ/2.0f);
 
         // INIT SKYBOX MATRIX
         Matrix.setIdentityM(mSkyboxRotationMatrix, 0);
@@ -243,9 +270,11 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         // CALC BUBBLE MATRIX
         Matrix.setIdentityM(mBubbleTranslationMatrix, 0);
-        float curLocation[] = mBubbleCore.getLocation();
+        float curLocation[] = mBubbleCore.getLocation(); // FIND WHERE CORE IS
+        mBubble.setCenter(curLocation); // UPDATE CENTER OF BUBBLE
         Matrix.translateM(
-                mBubbleTranslationMatrix, 0, curLocation[0], curLocation[1], curLocation[2]);
+                mBubbleTranslationMatrix, 0,
+                mBubble.getCenter()[0], mBubble.getCenter()[1], mBubble.getCenter()[2]);
         Matrix.setIdentityM(mBubbleModelMatrix, 0);
         Matrix.multiplyMM(mTempMatrix, 0, mBubbleRotationMatrix, 0, mBubbleModelMatrix, 0);
         System.arraycopy(mTempMatrix, 0, mBubbleModelMatrix, 0, 16);
@@ -322,11 +351,12 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // ... gl_cull_face (culling)
         GLES20.glEnable(GLES20.GL_CULL_FACE);
         mSkyBox.draw(mProjMatrix, mSkyboxModelViewMatrix, mSkyboxNormalMatrix, mLight, mLight2);
-        mMap.draw(mProjMatrix, mMapModelViewMatrix, mMapNormalMatrix, mLight, mLight2);
+        mMap.draw(mProjMatrix, mMapModelViewMatrix, mMapNormalMatrix, mMapModelMatrix, mLight, mLight2);
         mBubbleCore.updateTraceVertices();
         mBubbleCore.drawTrace(mProjMatrix, mBubbleCoreModelViewMatrix, mBubbleCoreNormalMatrix,
                 mLight, mLight2);
         for(int i = 0; i<GameEnv.getInstance().numOfTotalItems; i++){
+            // DRAWN ONLY UNHITTED ITEM
             if(!mItems.get(i).checkHitStatus()) {
                 mItems.get(i).draw(mProjMatrix, mItemModelViewMatrix[i], mItemNormalMatrix[i],
                         mLight, mLight2);

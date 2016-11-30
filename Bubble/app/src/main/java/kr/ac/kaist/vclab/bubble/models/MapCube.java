@@ -1,11 +1,13 @@
 package kr.ac.kaist.vclab.bubble.models;
 
+import android.graphics.Bitmap;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+
 import kr.ac.kaist.vclab.bubble.MyGLRenderer;
 import kr.ac.kaist.vclab.bubble.generators.MapGenerator;
 
@@ -18,6 +20,10 @@ public class MapCube {
     private FloatBuffer mVertexBuffer;
     private FloatBuffer mNormalBuffer;
     private FloatBuffer mTextureCoorBuffer;
+
+    // bitmaps
+    private Bitmap textureBitmap; // texture
+    // private Bitmap textureNormalBitmap; // normal map of the texture
 
     // attribute handles
     private int mPositionHandle;
@@ -34,11 +40,14 @@ public class MapCube {
 
     private int mTextureHandle;
     private int mTextureCoorHandle;
+    private int mModelMatrixHandle;
+
+    private int mTextureNormalHandle;
 
     private static final int COORDS_PER_VERTEX = 3;
     private static final int VERTEX_STRIDE = COORDS_PER_VERTEX * 4;
 
-    private static MapGenerator mGenerator; // map generator instance
+    public static MapGenerator mGenerator; // map generator instance
 
     public static float[] vertices;
     public static float[] normals;
@@ -89,9 +98,9 @@ public class MapCube {
 
         // prepare shaders and OpenGL program
         int vertexShader = MyGLRenderer.loadShaderFromFile(
-                GLES20.GL_VERTEX_SHADER, "map-vshader2.glsl");
+                GLES20.GL_VERTEX_SHADER, "map-vshader5.glsl");
         int fragmentShader = MyGLRenderer.loadShaderFromFile(
-                GLES20.GL_FRAGMENT_SHADER, "map-fshader2.glsl");
+                GLES20.GL_FRAGMENT_SHADER, "map-fshader5.glsl");
 
         mProgram = GLES20.glCreateProgram();             // create empty OpenGL Program
         GLES20.glAttachShader(mProgram, vertexShader);   // add the vertex shader to program
@@ -99,23 +108,23 @@ public class MapCube {
         GLES20.glLinkProgram(mProgram);                  // create OpenGL program executables
 
         // texture
+        textureBitmap = MyGLRenderer.loadImage("rocky.jpg");
+        // textureNormalBitmap = MyGLRenderer.loadImage("forest_normal.png");
+
         int[] textureHandles = new int[1];
         GLES20.glGenTextures(1, textureHandles, 0);
 
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandles[0]);
-        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, MyGLRenderer.loadImage("terrain.jpg"), 0);
-        // GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
-        // GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
-        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
-        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_REPEAT);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_REPEAT);
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, textureBitmap, 0);
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
     }
 
     public void draw(float[] projMatrix,
                      float[] modelViewMatrix,
                      float[] normalMatrix,
+                     float[] modelMatrix,
                      float[] light,
                      float[] light2) {
         GLES20.glUseProgram(mProgram);
@@ -128,10 +137,13 @@ public class MapCube {
         mLightHandle = GLES20.glGetUniformLocation(mProgram, "uLight");
         mLight2Handle = GLES20.glGetUniformLocation(mProgram, "uLight2");
         mTextureHandle = GLES20.glGetUniformLocation(mProgram, "uTextureUnit");
+        // mTextureNormalHandle = GLES20.glGetUniformLocation(mProgram, "uTextureNormalUnit");
+        mModelMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uModelMatrix");
 
         GLES20.glUniformMatrix4fv(mProjMatrixHandle, 1, false, projMatrix, 0);
         GLES20.glUniformMatrix4fv(mModelViewMatrixHandle, 1, false, modelViewMatrix, 0);
         GLES20.glUniformMatrix4fv(mNormalMatrixHandle, 1, false, normalMatrix, 0);
+        GLES20.glUniformMatrix4fv(mModelMatrixHandle, 1, false, modelMatrix, 0);
 
         GLES20.glUniform3fv(mColorHandle, 1, color, 0);
         GLES20.glUniform3fv(mLightHandle, 1, light, 0);

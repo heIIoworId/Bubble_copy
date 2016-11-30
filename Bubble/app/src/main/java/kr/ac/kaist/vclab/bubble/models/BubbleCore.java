@@ -109,8 +109,6 @@ public class BubbleCore extends Particle {
                 GLES20.GL_FLOAT, false,
                 VERTEX_STRIDE, mTraceNormalBuffer);
 
-
-
 //        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, traceVertices.length / 3);
         GLES20.glDrawArrays(GLES20.GL_LINE_LOOP, 0, traceVertices.length / 3);
         // FIXME SG (ANOTHER WAY TO DRAW WIDE LINE?)
@@ -124,14 +122,15 @@ public class BubbleCore extends Particle {
         float currentLocation[] = this.getLocation();
         for(int i = 0; i < currentLocation.length; i++){
             traceVerticesArrayList.add(currentLocation[i]);
-            if(traceVerticesArrayList.size() > GameEnv.getInstance().lengthOfTrace){
+            if(traceVerticesArrayList.size() >
+                    GameEnv.getInstance().lengthOfTrace + GameEnv.getInstance().traceOffset){
                 traceVerticesArrayList.remove(0);
             }
         }
-        for(int i = 0; i < traceVerticesArrayList.size(); i++){
+        for(int i = 0; i < traceVerticesArrayList.size() - GameEnv.getInstance().traceOffset; i++){
             traceVertices[i] = traceVerticesArrayList.get(i);
         }
-        for(int i = 0; i < traceVerticesArrayList.size(); i = i+3){
+        for(int i = 0; i < traceVerticesArrayList.size() - GameEnv.getInstance().traceOffset; i = i+3){
             traceNormals[i] = 0f;
             traceNormals[i+1] = 1.0f;
             traceNormals[i+2] = 0f;

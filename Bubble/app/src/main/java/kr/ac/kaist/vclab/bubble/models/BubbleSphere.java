@@ -42,7 +42,7 @@ public class BubbleSphere {
     private static final int COORDS_PER_VERTEX = 3;
     private static final int VERTEX_STRIDE = COORDS_PER_VERTEX * 4;
 
-    private SphereCollision sphereCollision = new SphereCollision(4.0f);
+    private float[] center;
 
     private float[] vertexA;
     private float[] vertexB;
@@ -58,6 +58,8 @@ public class BubbleSphere {
     public float[] color;
 
     public BubbleSphere(float _radius, int _level){
+
+        center = new float[3];
 
         verticesList = new ArrayList<>();
         normalsList = new ArrayList<>();
@@ -166,15 +168,6 @@ public class BubbleSphere {
         GLES20.glDisableVertexAttribArray(mNormalHandle);
     }
 
-    public void updateAchievedItems(){
-        //FIXME SG JM collision detection 넣기
-        boolean newCollision = false;
-        if(newCollision){
-            GameEnv.getInstance().isNewItem = true;
-        }
-
-    }
-
     private void subdivide(float[] _vertex1, float[] _vertex2, float[] _vertex3, int level, float radius){
         if(level == 0){
             normalsList.add(_vertex1[0]);
@@ -257,12 +250,32 @@ public class BubbleSphere {
         initVertexBuffer();
     }
 
-    public SphereCollision getCollision() {
-        return sphereCollision;
+    public void setCenter(float[] _center){
+        center = _center;
+    }
+
+    public float[] getCenter(){
+        return center;
+    }
+
+    public void itemCollisionDetect(){
+        SphereCollision itemCollisionDetector = new SphereCollision(
+                center, GameEnv.getInstance().bubbleDetectionRadius);
+
+        Item[] items = ItemManager.getInstance().items;
+        for(int i = 0; i < items.length; i++){
+            // FIXME JM SG ITEM이 SPHERE가 아님
+//            if(itemCollisionDetector.isCollided(items[i])){
+//                // REMOVE ITEM
+//                items[i].markAsHitted();
+//                // RESET RADIUS
+//                GameEnv.getInstance().scaleOfBubble = GameEnv.getInstance().initialScaleOfBubble;
+//                // UPDATE ACHIEVED ITEM LIST
+//                GameEnv.getInstance().numOfAchievedItems++;
+//            }
+        }
     }
 
     //FIXME SG (UPDATE NORMALS ACCORDING TO VERTICES)
-    public void updateNormals(){
-
-    }
+    public void updateNormals(){}
 }

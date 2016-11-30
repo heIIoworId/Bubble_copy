@@ -22,8 +22,12 @@ public class SphereCollision extends Collision {
         this.radius = radius;
     }
 
-    public float GetRadius() {
+    public float getRadius() {
         return radius;
+    }
+
+    public void setRadius(float _radius){
+        radius = _radius;
     }
 
     public void scaleRadius(float scale) {
@@ -32,12 +36,11 @@ public class SphereCollision extends Collision {
         }
     }
 
-    boolean IsCollided(BoxCollision target) {
+    public boolean isCollided(BoxCollision target) {
         return Intersect.intersect(this, target);
     }
 
-
-    boolean IsCollided(SphereCollision target) {
+    public boolean isCollided(SphereCollision target) {
         return Intersect.intersect(this, target);
     }
 }

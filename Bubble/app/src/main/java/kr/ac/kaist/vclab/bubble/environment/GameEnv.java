@@ -13,7 +13,6 @@ public class GameEnv {
     public static int successStatus;
 
     // ITEM INFO
-    public static boolean isNewItem;
     public static int numOfAchievedItems;
     public static int numOfTotalItems;
     public static float radiusOfItem;
@@ -24,18 +23,20 @@ public class GameEnv {
     public static float[] initialLocationOfBubble;
     public static float radiusOfBubble;
     public static float[] colorOfBubble;
-    private static float initialScaleOfBubble;
-    private static float scaleOfBubble;
+    public static float initialScaleOfBubble;
+    public static float scaleOfBubble;
     private static float minScaleOfBubble;
     private static float shrinkRatio;
     public static int levelOfBubble;
     public static float dampingOfInnerBubble;
     public static float distOfBubbleAndCamera;
+    public static float bubbleDetectionRadius;
 
     // BUBBLE CORE INFO
     public float dampingOfBubbleCore;
     public int lengthOfTrace;
     public float[] traceColor;
+    public int traceOffset;
 
     // WORLD INFO
     public static float[] gravity = new float[]{0f, -0.0006f, 0f};
@@ -53,7 +54,6 @@ public class GameEnv {
         successStatus = 0; // -1: FAIL, 0: NOTHING, 1: SUCCESS
 
         // ITEM INFO
-        isNewItem = false;
         numOfAchievedItems = 0;
         numOfTotalItems = 10;
         radiusOfItem = 0.2f;
@@ -70,10 +70,12 @@ public class GameEnv {
         shrinkRatio = 0.9985f;
         levelOfBubble = 3;
         dampingOfInnerBubble = 1.0f;
-        distOfBubbleAndCamera = 1.5f;
+        distOfBubbleAndCamera = 2.0f;
+        bubbleDetectionRadius = 0.5f;
 
         // BUBBLE CORE INFO
-        lengthOfTrace = 300;
+        lengthOfTrace = 300; // 3의 배수여야함
+        traceOffset = 75; // 3의 배수여야함
         dampingOfBubbleCore = 0.95f;
         traceColor = new float[]{0.9f, 0f, 0f};
     }
@@ -85,10 +87,7 @@ public class GameEnv {
     }
 
     public static float getScaleOfBubble(){
-        if(isNewItem){
-            scaleOfBubble = initialScaleOfBubble;
-            isNewItem = false;
-        } else if(scaleOfBubble > minScaleOfBubble){
+        if(scaleOfBubble > minScaleOfBubble){
             scaleOfBubble = scaleOfBubble * shrinkRatio;
         }
         return scaleOfBubble;
