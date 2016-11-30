@@ -42,25 +42,24 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     // ... lava
     private float lavaSizeX = 350.0f;
     private float lavaSizeZ = 350.0f;
+    private float lavaHeight = -45.0f;
 
     // ... items
     private int itemCount = 10;
-    private float itemRadius = 10.0f;
+    private float itemRadius = 4.0f;
     private float itemMinDist = 20.0f;
     private float itemHeightOffset = 10.0f;
 
     // objects
-    // private Cube mCube;
     private MapCube mMap;
     private SeaRectangle mSea;
     private SkyBox mSky;
-    // private Sphere mSphere;
     private LavaRectangle mLava;
     private ItemSphere[] mItem;
 
     // item handlers
-    private ItemGenerator mItemGenerator;
-    private boolean[] itemDrawFlag; // true = draw ith item
+    private ItemGenerator mItemGenerator = null;
+    private boolean[] itemDrawFlag = new boolean[itemCount]; // true = draw ith item
 
     // view matrix
     private float[] mViewMatrix = new float[16];
@@ -73,7 +72,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     public float[] mSkyRotationMatrix = new float[16];
     public float[] mSphereRotationMatrix = new float[16];
     public float[] mLavaRotationMatrix = new float[16];
-    public float[][] mItemRotationMatrx = new float[itemCount][16];
+    public float[][] mItemRotationMatrix = new float[itemCount][16];
 
     // translation matrix (changed by touch events)
     public float[] mViewTranslationMatrix = new float[16];
@@ -149,9 +148,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         mSea = new SeaRectangle(mapSizeX, mapSizeZ);
         mSky = new SkyBox(skySizeX, skySizeY, skySizeZ);
-        // mSphere = new Sphere();
         mLava = new LavaRectangle(lavaSizeX, lavaSizeZ);
 
+        // Since ItemGenerator need MapGenerator instance, we need to pass mMap to mItemGenerator
+        // after we initialize mMap.
         mItemGenerator = new ItemGenerator(
                 itemCount,
                 itemMinDist,
@@ -159,7 +159,12 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                 mMap.mGenerator // This is already initialized, so we can safely pass this to mItemGenerator.
         );
 
-        mItem = null;
+        mItem = new ItemSphere[itemCount];
+
+        for (int i = 0; i < itemCount; i++) {
+            mItem[i] = new ItemSphere(itemRadius);
+            itemDrawFlag[i] = true;
+        }
 
         // initialize rotation / translation matrix
         Matrix.setIdentityM(mViewRotationMatrix, 0);
@@ -189,7 +194,16 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         Matrix.setIdentityM(mLavaRotationMatrix, 0);
         Matrix.setIdentityM(mLavaTranslationMatrix, 0);
-        Matrix.translateM(mLavaTranslationMatrix, 0, -lavaSizeX / 2.0f, -45.0f, -lavaSizeZ / 2.0f);
+        Matrix.translateM(mLavaTranslationMatrix, 0, -lavaSizeX / 2.0f, lavaHeight, -lavaSizeZ / 2.0f);
+
+        float[][] itemPositions = mItemGenerator.getPositions();
+
+        for (int i = 0; i < itemCount; i++) {
+            Matrix.setIdentityM(mItemRotationMatrix[i], 0);
+            Matrix.setIdentityM(mItemTranslationMatrix[i], 0);
+            Matrix.translateM(mItemTranslationMatrix[i], 0, -mapSizeX / 2.0f, 0, -mapSizeZ / 2.0f);
+            Matrix.translateM(mItemTranslationMatrix[i], 0, itemPositions[i][0], itemPositions[i][1], itemPositions[i][2]);
+        }
     }
 
     @Override
@@ -268,6 +282,15 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.multiplyMM(mTempMatrix, 0, mLavaTranslationMatrix, 0, mLavaModelMatrix, 0);
         System.arraycopy(mTempMatrix, 0, mLavaModelMatrix, 0, 16);
 
+        // calculate items' model matrix
+        for (int i = 0; i < itemCount; i++) {
+            Matrix.setIdentityM(mItemModelMatrix[i], 0);
+            Matrix.multiplyMM(mTempMatrix, 0, mItemRotationMatrix[i], 0, mItemModelMatrix[i], 0);
+            System.arraycopy(mTempMatrix, 0, mItemModelMatrix[i], 0, 16);
+            Matrix.multiplyMM(mTempMatrix, 0, mItemTranslationMatrix[i], 0, mItemModelMatrix[i], 0);
+            System.arraycopy(mTempMatrix, 0, mItemModelMatrix[i], 0, 16);
+        }
+
         // calculate model-view matrix
         Matrix.multiplyMM(mCubeModelViewMatrix, 0, mViewMatrix, 0, mCubeModelMatrix, 0);
         Matrix.multiplyMM(mMapModelViewMatrix, 0, mViewMatrix, 0, mMapModelMatrix, 0);
@@ -275,6 +298,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.multiplyMM(mSkyModelViewMatrix, 0, mViewMatrix, 0, mSkyModelMatrix, 0);
         Matrix.multiplyMM(mSphereModelViewMatrix, 0, mViewMatrix, 0, mSphereModelMatrix, 0);
         Matrix.multiplyMM(mLavaModelViewMatrix, 0, mViewMatrix, 0, mLavaModelMatrix, 0);
+
+        for (int i = 0; i < itemCount; i++) {
+            Matrix.multiplyMM(mItemModelViewMatrix[i], 0, mViewMatrix, 0, mItemModelMatrix[i], 0);
+        }
 
         // calculate normal matrix
         normalMatrix(mCubeNormalMatrix, 0, mCubeModelViewMatrix, 0);
@@ -284,12 +311,23 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         normalMatrix(mSphereNormalMatrix, 0, mSphereModelViewMatrix, 0);
         normalMatrix(mLavaNormalMatrix, 0, mLavaModelViewMatrix, 0);
 
+        for (int i = 0; i < itemCount; i++) {
+            normalMatrix(mItemNormalMatrix[i], 0, mItemModelViewMatrix[i], 0);
+        }
+
         // draw the objects
         GLES20.glEnable(GLES20.GL_CULL_FACE);
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
         mMap.draw(mProjMatrix, mMapModelViewMatrix, mMapNormalMatrix, mMapModelMatrix, mLight, mLight2);
         mSky.draw(mProjMatrix, mSkyModelViewMatrix, mSkyNormalMatrix, mLight, mLight2);
         mLava.draw(mProjMatrix, mLavaModelViewMatrix, mLavaNormalMatrix, mLight, mLight2);
+
+        for (int i = 0; i < itemCount; i++) {
+            if (itemDrawFlag[i]) {
+                mItem[i].draw(mProjMatrix, mItemModelViewMatrix[i], mItemNormalMatrix[i], mLight, mLight2);
+            }
+        }
+
         // GLES20.glDisable(GLES20.GL_CULL_FACE);
 
         GLES20.glEnable(GLES20.GL_BLEND);
