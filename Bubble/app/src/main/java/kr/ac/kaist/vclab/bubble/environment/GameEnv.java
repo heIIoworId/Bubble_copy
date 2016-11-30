@@ -93,7 +93,7 @@ public class GameEnv {
         }
         return scaleOfBubble;
     }
-    
+
     // FIXME SG (NOT USED YET)
     public static int getSuccessStatus(){
         if(scaleOfBubble <= minScaleOfBubble){
