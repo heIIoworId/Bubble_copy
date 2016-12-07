@@ -258,26 +258,6 @@ public class BubbleSphere {
         return center;
     }
 
-    public void itemCollisionDetect(){
-        SphereCollision itemCollisionDetector = new SphereCollision(
-                center, GameEnv.getInstance().bubbleDetectionRadius);
-
-        Item[] items = ItemManager.getInstance().items;
-        for(int i = 0; i < items.length; i++){
-            boolean isCollide = itemCollisionDetector.isCollided(
-                    center, GameEnv.getInstance().bubbleDetectionRadius,
-                    items[i].getCenter(), GameEnv.getInstance().radiusOfItem);
-            if(isCollide){
-                // REMOVE ITEM
-                items[i].markAsHitted();
-                // RESET RADIUS
-                GameEnv.getInstance().scaleOfBubble = GameEnv.getInstance().initialScaleOfBubble;
-                // UPDATE ACHIEVED ITEM LIST
-                GameEnv.getInstance().numOfAchievedItems++;
-            }
-        }
-    }
-
     //FIXME SG (UPDATE NORMALS ACCORDING TO VERTICES)
     public void updateNormals(){}
 }

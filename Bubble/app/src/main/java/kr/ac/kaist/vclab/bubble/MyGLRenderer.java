@@ -348,7 +348,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         //FIXME SG (UPDATE NORMALS OF SPHERE)
 
         // DRAW
-        mBubble.itemCollisionDetect();
+        mBubbleCore.itemCollisionDetect();
         // ... gl_depth_test (depth test)
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
 

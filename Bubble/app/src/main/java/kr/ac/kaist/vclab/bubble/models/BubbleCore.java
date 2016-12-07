@@ -113,7 +113,7 @@ public class BubbleCore extends Particle {
                 VERTEX_STRIDE, mTraceNormalBuffer);
 
 //        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, traceVertices.length / 3);
-        GLES20.glDrawArrays(GLES20.GL_LINE_LOOP, 0, traceVertices.length / 3);
+        GLES20.glDrawArrays(GLES20.GL_LINE_STRIP, 0, traceVertices.length / 3);
         // FIXME SG (ANOTHER WAY TO DRAW WIDE LINE?)
         GLES20.glLineWidth(5.0f);
 
@@ -158,6 +158,31 @@ public class BubbleCore extends Particle {
 
     public SphereCollision getCollision() {
         return sphereCollision;
+    }
+
+    public void itemCollisionDetect(){
+        SphereCollision itemCollisionDetector = new SphereCollision(
+                this.getLocation(), GameEnv.getInstance().bubbleDetectionRadius);
+
+        Item[] items = ItemManager.getInstance().items;
+        for(int i = 0; i < items.length; i++){
+            float[] itemCenter = items[i].getCenter();
+            itemCenter[0] = itemCenter[0]-(GameEnv.getInstance().mapSizeX/2.0f);
+            itemCenter[2] = itemCenter[2]-(GameEnv.getInstance().mapSizeZ/2.0f);
+
+            boolean isCollide = itemCollisionDetector.isCollided(
+                    this.getLocation(), GameEnv.getInstance().bubbleDetectionRadius,
+                    itemCenter, GameEnv.getInstance().radiusOfItem);
+            if(isCollide){
+                System.out.println(i+": collide");
+                // REMOVE ITEM
+                items[i].markAsHitted();
+                // RESET RADIUS
+                GameEnv.getInstance().scaleOfBubble = GameEnv.getInstance().initialScaleOfBubble;
+                // UPDATE ACHIEVED ITEM LIST
+                GameEnv.getInstance().numOfAchievedItems++;
+            }
+        }
     }
 
 }
