@@ -8,8 +8,10 @@ import java.nio.FloatBuffer;
 import java.util.ArrayList;
 
 import kr.ac.kaist.vclab.bubble.MyGLRenderer;
+import kr.ac.kaist.vclab.bubble.collision.SphereCollision;
 import kr.ac.kaist.vclab.bubble.environment.GameEnv;
 import kr.ac.kaist.vclab.bubble.physics.Particle;
+import kr.ac.kaist.vclab.bubble.utils.SystemHelper;
 
 /**
  * Created by 84395 on 11/27/2016.
@@ -19,10 +21,12 @@ public class BubbleCore extends Particle {
 
     // GL PROGRAM AND BUFFERS
     private final int mProgram;
-    private FloatBuffer mVertexBuffer;
+    private FloatBuffer mTraceVertexBuffer;
+    private FloatBuffer mTraceNormalBuffer;
 
     // ATTRIBUTE HANDLES
     private int mPositionHandle;
+    private int mNormalHandle;
 
     // UNIFORM HANDLES
     private int mProjMatrixHandle;
@@ -35,18 +39,23 @@ public class BubbleCore extends Particle {
     private static final int COORDS_PER_VERTEX = 3;
     private static final int VERTEX_STRIDE = COORDS_PER_VERTEX * 4;
 
-    public float[] color;
+    private float traceVertices[];
+    private ArrayList<Float> traceVerticesArrayList;
+    private static float traceNormals[];
+    private float[] traceColor;
 
-    private float trajectory[];
-    private ArrayList<Float> trajectoryArrayList;
+    private SphereCollision sphereCollision = new SphereCollision(GameEnv.radiusOfBubble);
 
     public BubbleCore(float[] _location) {
         super(_location);
 
-        trajectory = new float[GameEnv.getInstance().lengthOfTrajectory];
-        trajectoryArrayList = new ArrayList<>();
+        traceColor = GameEnv.getInstance().traceColor;
+        traceVertices = new float[GameEnv.getInstance().lengthOfTrace];
+        traceVerticesArrayList = new ArrayList<>();
+        traceNormals = new float[GameEnv.getInstance().lengthOfTrace];
 
-        initVertexBuffer();
+        initTraceVertexBuffer();
+        initTraceNormalBuffer();
 
         // PREPARE SHADER AND GL PROGRAM
         int vertexShader = MyGLRenderer.loadShaderFromFile(
@@ -61,12 +70,12 @@ public class BubbleCore extends Particle {
         GLES20.glLinkProgram(mProgram);
     }
 
-    // FIXME SG WORKING ON 161127
-    public void draw(float[] projMatrix,
-                     float[] modelViewMatrix,
-                     float[] normalMatrix,
-                     float[] light,
-                     float[] light2) {
+    // FIXME SG (SIMPLIFY IT ACCORDING TO FRAGMENT SHADER LATER)
+    public void drawTrace(float[] projMatrix,
+                          float[] modelViewMatrix,
+                          float[] normalMatrix,
+                          float[] light,
+                          float[] light2) {
 
         GLES20.glUseProgram(mProgram);
 
@@ -82,37 +91,98 @@ public class BubbleCore extends Particle {
         GLES20.glUniformMatrix4fv(mProjMatrixHandle, 1, false, projMatrix, 0);
         GLES20.glUniformMatrix4fv(mModelViewMatrixHandle, 1, false, modelViewMatrix, 0);
         GLES20.glUniformMatrix4fv(mNormalMatrixHandle, 1, false, normalMatrix, 0);
-        GLES20.glUniform3fv(mColorHandle, 1, color, 0);
+        GLES20.glUniform3fv(mColorHandle, 1, traceColor, 0);
         GLES20.glUniform3fv(mLightHandle, 1, light, 0);
         GLES20.glUniform3fv(mLight2Handle, 1, light2, 0);
 
         // ATTRIBUTES HANDLE
         mPositionHandle = GLES20.glGetAttribLocation(mProgram, "aPosition");
+        mNormalHandle = GLES20.glGetAttribLocation(mProgram, "aNormal");
 
         GLES20.glEnableVertexAttribArray(mPositionHandle);
+        GLES20.glEnableVertexAttribArray(mNormalHandle);
 
         GLES20.glVertexAttribPointer(
                 mPositionHandle, COORDS_PER_VERTEX,
                 GLES20.GL_FLOAT, false,
-                VERTEX_STRIDE, mVertexBuffer);
+                VERTEX_STRIDE, mTraceVertexBuffer);
 
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, trajectory.length / 3);
-//        GLES20.glDrawArrays(GLES20.GL_LINE_LOOP, 0, vertices.length / 3);
+        GLES20.glVertexAttribPointer(
+                mNormalHandle, COORDS_PER_VERTEX,
+                GLES20.GL_FLOAT, false,
+                VERTEX_STRIDE, mTraceNormalBuffer);
+
+//        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, traceVertices.length / 3);
+        GLES20.glDrawArrays(GLES20.GL_LINE_STRIP, 0, traceVertices.length / 3);
+        // FIXME SG (ANOTHER WAY TO DRAW WIDE LINE?)
+        GLES20.glLineWidth(5.0f);
 
         GLES20.glDisableVertexAttribArray(mPositionHandle);
     }
 
-    //FIXME SG
-    public void updateTrajectory(){
+    public void updateTraceVertices(){
         float currentLocation[] = this.getLocation();
-        // TODO
+        for(int i = 0; i < currentLocation.length; i++){
+            traceVerticesArrayList.add(currentLocation[i]);
+            if(traceVerticesArrayList.size() >
+                    GameEnv.getInstance().lengthOfTrace + GameEnv.getInstance().traceOffset){
+                traceVerticesArrayList.remove(0);
+            }
+        }
+        for(int i = 0; i < traceVerticesArrayList.size() - GameEnv.getInstance().traceOffset; i++){
+            traceVertices[i] = traceVerticesArrayList.get(i);
+        }
+        for(int i = 0; i < traceVerticesArrayList.size() - GameEnv.getInstance().traceOffset; i = i+3){
+            traceNormals[i] = 0f;
+            traceNormals[i+1] = 1.0f;
+            traceNormals[i+2] = 0f;
+        }
+        initTraceVertexBuffer();
     }
 
-    public void initVertexBuffer(){
-        ByteBuffer byteBuf = ByteBuffer.allocateDirect(trajectory.length * 4);
+    private void initTraceVertexBuffer(){
+        ByteBuffer byteBuf = ByteBuffer.allocateDirect(traceVertices.length * 4);
         byteBuf.order(ByteOrder.nativeOrder());
-        mVertexBuffer = byteBuf.asFloatBuffer();
-        mVertexBuffer.put(trajectory);
-        mVertexBuffer.position(0);
+        mTraceVertexBuffer = byteBuf.asFloatBuffer();
+        mTraceVertexBuffer.put(traceVertices);
+        mTraceVertexBuffer.position(0);
     }
+
+    private void initTraceNormalBuffer(){
+        ByteBuffer byteBuf = ByteBuffer.allocateDirect(traceNormals.length * 4);
+        byteBuf.order(ByteOrder.nativeOrder());
+        mTraceNormalBuffer = byteBuf.asFloatBuffer();
+        mTraceNormalBuffer.put(traceNormals);
+        mTraceNormalBuffer.position(0);
+    }
+
+    public SphereCollision getCollision() {
+        return sphereCollision;
+    }
+
+    public void itemCollisionDetect(){
+        SphereCollision itemCollisionDetector = new SphereCollision(
+                this.getLocation(), GameEnv.getInstance().bubbleDetectionRadius);
+
+        Item[] items = ItemManager.getInstance().items;
+        for(int i = 0; i < items.length; i++){
+            float[] itemCenter = items[i].getCenter();
+            itemCenter[0] = itemCenter[0]-(GameEnv.getInstance().mapSizeX/2.0f);
+            itemCenter[2] = itemCenter[2]-(GameEnv.getInstance().mapSizeZ/2.0f);
+
+            boolean isCollide = itemCollisionDetector.isCollided(
+                    this.getLocation(), GameEnv.getInstance().bubbleDetectionRadius,
+                    itemCenter, GameEnv.getInstance().radiusOfItem);
+            if(isCollide){
+                System.out.println(i+": collide");
+                // REMOVE ITEM
+                items[i].markAsHitted();
+                // RESET RADIUS
+                GameEnv.getInstance().scaleOfBubble = GameEnv.getInstance().initialScaleOfBubble;
+                // UPDATE ACHIEVED ITEM LIST
+                GameEnv.getInstance().numOfAchievedItems++;
+            }
+        }
+    }
+
 }

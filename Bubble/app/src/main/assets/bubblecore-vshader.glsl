@@ -10,9 +10,9 @@ attribute vec3 aNormal;
 varying vec3 vNormal;
 varying vec3 vPosition;
 
+
 void main() {
   vNormal = vec3(uNormalMatrix * vec4(aNormal, 0.0));
-
   // send position (eye coordinates) to fragment shader
   vec4 tPosition = uModelViewMatrix * vec4(aPosition, 1.0);
   vPosition = vec3(tPosition);

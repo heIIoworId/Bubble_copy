@@ -50,8 +50,8 @@ public class MainActivity extends Activity implements SensorEventListener {
         ToggleButton myButton1 = new ToggleButton(this);
         ToggleButton myButton2 = new ToggleButton(this);
 
-        // FIXME NEEDED TO BE RUN VIA A THREAD
-        String duration = "" + GameEnv.getInstance().duration;
+        // FIXME SG (CHECK OVERLAYVIEW OF ANDROID)
+        String duration = "" + GameEnv.getInstance().getDuration();
         setButtonText(myButton1, duration);
         setButtonText(myButton2, "Button 2");
 

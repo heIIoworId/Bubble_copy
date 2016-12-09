@@ -1,27 +1,28 @@
 package kr.ac.kaist.vclab.bubble;
 
 /**
- * Created by Jongmin on 2016-11-16.
+ * Created by 84395 on 10/29/2016.
  */
 
 public class VecOperator {
-    public static float getMag(float[] vector){
+
+    public static float getMag(float[] vector) {
         float result;
-        result = (float)Math.sqrt(
-                (vector[0]*vector[0])+(vector[1]*vector[1])+(vector[2]*vector[2]));
+        result = (float) Math.sqrt(
+                (vector[0] * vector[0]) + (vector[1] * vector[1]) + (vector[2] * vector[2]));
         return result;
     }
 
-    public static float[] normalize(float[] vector){
+    public static float[] normalize(float[] vector) {
         float result[] = new float[3];
         float mag = getMag(vector);
 
         result[0] = vector[0];
         result[1] = vector[1];
         result[2] = vector[2];
-        if(mag > 0 || mag < 0){
-            result = scale(result, 1/mag);
-        } else if(mag == 0){
+        if (mag > 0 || mag < 0) {
+            result = scale(result, 1 / mag);
+        } else if (mag == 0) {
             result[0] = 0f;
             result[1] = 0f;
             result[2] = 0f;
@@ -30,15 +31,15 @@ public class VecOperator {
         return result;
     }
 
-    public static float[] scale(float[] vector, float scale){
+    public static float[] scale(float[] vector, float scale) {
         float result[] = new float[3];
-        result[0] = vector[0]*scale;
-        result[1] = vector[1]*scale;
-        result[2] = vector[2]*scale;
+        result[0] = vector[0] * scale;
+        result[1] = vector[1] * scale;
+        result[2] = vector[2] * scale;
         return result;
     }
 
-    public static float[] add(float[] vectorA, float[] vectorB){
+    public static float[] add(float[] vectorA, float[] vectorB) {
         float result[] = new float[3];
         result[0] = vectorA[0] + vectorB[0];
         result[1] = vectorA[1] + vectorB[1];
@@ -46,7 +47,7 @@ public class VecOperator {
         return result;
     }
 
-    public static float[] sub(float[] vectorA, float[] vectorB){
+    public static float[] sub(float[] vectorA, float[] vectorB) {
         float result[] = new float[3];
         result[0] = vectorA[0] - vectorB[0];
         result[1] = vectorA[1] - vectorB[1];
@@ -54,22 +55,22 @@ public class VecOperator {
         return result;
     }
 
-    public static float getDistance(float[] pointA, float[] pointB){
-        float dist=0;
+    public static float getDistance(float[] pointA, float[] pointB) {
+        float dist = 0;
 
         float distXa = pointA[0];
         float distXb = pointB[0];
-        float sqDistX = (distXa-distXb)*(distXa-distXb);
+        float sqDistX = (distXa - distXb) * (distXa - distXb);
 
         float distYa = pointA[1];
         float distYb = pointB[1];
-        float sqDistY = (distYa-distYb)*(distYa-distYb);
+        float sqDistY = (distYa - distYb) * (distYa - distYb);
 
         float distZa = pointA[2];
         float distZb = pointB[2];
-        float sqDistZ = (distZa-distZb)*(distZa-distZb);
+        float sqDistZ = (distZa - distZb) * (distZa - distZb);
 
-        dist = (float)Math.sqrt(sqDistX + sqDistY + sqDistZ);
+        dist = (float) Math.sqrt(sqDistX + sqDistY + sqDistZ);
         return dist;
     }
 
@@ -83,13 +84,29 @@ public class VecOperator {
         return p1[0] * p2[0] + p1[1] * p2[1] + p1[2] * p2[2];
     }
 
-    public static float[] matLinear(float[] mat){
+    public static float[] matLinear(float[] mat) {
         float[] translation = new float[16];
         System.arraycopy(mat, 0, translation, 0, 16);
-        translation[12]=0;
-        translation[13]=0;
-        translation[14]=0;
+        translation[12] = 0;
+        translation[13] = 0;
+        translation[14] = 0;
         return translation;
     }
 
+    public static float angle(float[] vec_1, float[] vec_2) {
+        float mag_1 = getMag(vec_1);
+        float mag_2 = getMag(vec_2);
+
+        if ((mag_1 == 0) || (mag_2 == 0)) {
+            return 0;
+        } else {
+            return (float) Math.acos((double) dot(vec_1, vec_2) / (mag_1 * mag_2));
+        }
+    }
+
+    public static float[] cross(float[] vec_1, float[] vec_2) {
+        float[] result = new float[3];
+        cross(vec_1, vec_2, result);
+        return result;
+    }
 }

@@ -20,7 +20,7 @@ public class MapCube {
 
     // bitmaps
     private Bitmap textureBitmap; // texture
-    private Bitmap textureNormalBitmap; // normal map of the texture
+    // private Bitmap textureNormalBitmap; // normal map of the texture
 
     // attribute handles
     private int mPositionHandle;
@@ -95,9 +95,9 @@ public class MapCube {
 
         // prepare shaders and OpenGL program
         int vertexShader = MyGLRenderer.loadShaderFromFile(
-                GLES20.GL_VERTEX_SHADER, "map-vshader4.glsl");
+                GLES20.GL_VERTEX_SHADER, "map-vshader5.glsl");
         int fragmentShader = MyGLRenderer.loadShaderFromFile(
-                GLES20.GL_FRAGMENT_SHADER, "map-fshader4.glsl");
+                GLES20.GL_FRAGMENT_SHADER, "map-fshader5.glsl");
 
         mProgram = GLES20.glCreateProgram();             // create empty OpenGL Program
         GLES20.glAttachShader(mProgram, vertexShader);   // add the vertex shader to program
@@ -105,8 +105,8 @@ public class MapCube {
         GLES20.glLinkProgram(mProgram);                  // create OpenGL program executables
 
         // texture
-        textureBitmap = MyGLRenderer.loadImage("forest.png");
-        textureNormalBitmap = MyGLRenderer.loadImage("forest_normal.png");
+        textureBitmap = MyGLRenderer.loadImage("rocky.jpg");
+        // textureNormalBitmap = MyGLRenderer.loadImage("forest_normal.png");
 
         int[] textureHandles = new int[1];
         GLES20.glGenTextures(1, textureHandles, 0);
@@ -134,7 +134,7 @@ public class MapCube {
         mLightHandle = GLES20.glGetUniformLocation(mProgram, "uLight");
         mLight2Handle = GLES20.glGetUniformLocation(mProgram, "uLight2");
         mTextureHandle = GLES20.glGetUniformLocation(mProgram, "uTextureUnit");
-        mTextureNormalHandle = GLES20.glGetUniformLocation(mProgram, "uTextureNormalUnit");
+        // mTextureNormalHandle = GLES20.glGetUniformLocation(mProgram, "uTextureNormalUnit");
         mModelMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uModelMatrix");
 
         GLES20.glUniformMatrix4fv(mProjMatrixHandle, 1, false, projMatrix, 0);

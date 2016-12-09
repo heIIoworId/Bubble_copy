@@ -34,7 +34,8 @@ public class ItemSphere {
     private static final int COORDS_PER_VERTEX = 3;
     private static final int VERTEX_STRIDE = COORDS_PER_VERTEX * 4;
 
-    private static float vertices[] = {
+    // vertex coordinates from the lab's code
+    private static float oldVertices[] = {
             0.00000000000000f, 0.00000000000000f, 4.00000000000000f,
             1.23606800000000f, 0.00000000000000f, 3.80422800000000f,
             1.17557200000000f, 0.381968000000000f, 3.80422800000000f,
@@ -2438,6 +2439,9 @@ public class ItemSphere {
             0.00000000000000f, 0.00000000000000f, -4.00000000000000f,
             1.23606800000000f, 0.00000000000000f, -3.80422800000000f,};
 
+    // 'real' vertex coordinates
+    float[] vertices = new float[oldVertices.length];
+
     float color[] = {0.0f, 0.0f, 1.0f};
 
     public ItemSphere(float radius) {
@@ -2445,7 +2449,7 @@ public class ItemSphere {
         // so we adjust it to the size we want.
         // (We don't have to change normals, as they are normalized in fragment shader.)
         for (int i = 0; i < vertices.length; i++) {
-            vertices[i] *= radius / 4.0f;
+            vertices[i] = oldVertices[i] * radius / 4.0f;
         }
 
         ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
@@ -2514,7 +2518,6 @@ public class ItemSphere {
 
         // Draw the sphere
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertices.length / 3);
-        GLES20.glLineWidth(2.0f);
 
         GLES20.glDisableVertexAttribArray(mPositionHandle);
         GLES20.glDisableVertexAttribArray(mNormalHandle);

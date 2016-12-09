@@ -18,6 +18,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import kr.ac.kaist.vclab.bubble.Collision.Intersect;
+import kr.ac.kaist.vclab.bubble.Collision.TriangleCollision;
 
 /**
  * Created by sjjeon on 16. 9. 20.
@@ -27,6 +28,16 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     private static final String TAG = "MyGLRenderer";
 
+
+    private float mapSizeX = 90.0f;
+    private float mapSizeY = 25.0f;
+    private float mapSizeZ = 90.0f;
+    private float mapUnitLength = 1.5f;
+    private float mapMaxHeight = 15.0f;
+    private float mapMinHeight = -11.5f;
+    private float mapComplexity = 5.5f;
+    private MapCube mMap;
+
     Cube mCube;
     SkyBox mCube2;
     Sphere mSphere;
@@ -34,6 +45,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     public float [] mViewRotationMatrix = new float[16];
     public float [] mViewTranslationMatrix = new float[16];
+
+    public float[] mMapRotationMatrix = new float[16];
+    public float[] mMapTranslationMatrix = new float[16];
 
     public float [] mCubeRotationMatrix = new float[16];
     public float [] mCubeTranslationMatrix = new float[16];
@@ -61,7 +75,11 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private float[] mCube2NormalMatrix = new float[16];
     private float[] mSphereNormalMatrix = new float[16];
     private float[] mSquareNormalMatrix = new float[16];
+    private float[] mMapModelMatrix = new float[16];
 
+    private float[] mMapModelViewMatrix = new float[16];
+
+    private float[] mMapNormalMatrix = new float[16];
     private float[] mProjMatrix = new float[16];
 
     private float[] mLight = new float[3];
@@ -75,6 +93,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         // Set the background frame color
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        /*
         GLES20.glEnable(GLES20.GL_CULL_FACE);
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
        // GLES20.glEnable(GLES20.GL_POINT_SMOOTH);
@@ -86,7 +105,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
  //       GLES20.glBlendFunc(GLES20.GL_ONE, GLES20.GL_ZERO);
 //       GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE);
        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+*/
 
+        GLES20.glEnable(GLES20.GL_CULL_FACE);
+        GLES20.glEnable(GLES20.GL_DEPTH_TEST);
         resetViewMatrix();
 
         mLight = new float[] {2.0f, 3.0f, 14.0f};
@@ -112,6 +134,13 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mSphere = new Sphere();
      //   mSphere.getCollision().scaleRadius(scale);
         mSphere.color = new float[] {0.7f, 0.7f, 0.7f};
+        mMap = new MapCube(
+                mapSizeX, mapSizeY, mapSizeZ,
+                mapUnitLength,
+                mapMaxHeight, mapMinHeight,
+                mapComplexity,
+                1.0f, true
+        );
 
         // Initialize matrix
         Matrix.setIdentityM(mViewRotationMatrix, 0);
@@ -125,9 +154,12 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.setIdentityM(mCube2RotationMatrix, 0);
         Matrix.setIdentityM(mCube2TranslationMatrix, 0);
 
+        Matrix.setIdentityM(mMapRotationMatrix, 0);
+        Matrix.setIdentityM(mMapTranslationMatrix, 0);
+        Matrix.translateM(mMapTranslationMatrix, 0, -mapSizeZ / 2.0f, 0, -mapSizeZ / 2.0f);
         Matrix.setIdentityM(mSphereRotationMatrix, 0);
         Matrix.setIdentityM(mSphereTranslationMatrix, 0);
-        Matrix.translateM(mSphereTranslationMatrix, 0, 0, 5, 0);
+        Matrix.translateM(mSphereTranslationMatrix, 0, 0, 15, 0);
 
         Matrix.setIdentityM(move, 0);
     }
@@ -166,6 +198,12 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
        // Matrix.scaleM(mCubeModelMatrix, 0, scale, scale, scale);
 
 
+        // calculate map model matrix
+        Matrix.setIdentityM(mMapModelMatrix, 0);
+        Matrix.multiplyMM(mTempMatrix, 0, mMapRotationMatrix, 0, mMapModelMatrix, 0);
+        System.arraycopy(mTempMatrix, 0, mMapModelMatrix, 0, 16);
+        Matrix.multiplyMM(mTempMatrix, 0, mMapTranslationMatrix, 0, mMapModelMatrix, 0);
+        System.arraycopy(mTempMatrix, 0, mMapModelMatrix, 0, 16);
 
         Matrix.setIdentityM(mCube2ModelMatrix, 0);
         Matrix.multiplyMM(mTempMatrix, 0, mCube2RotationMatrix, 0, mCube2ModelMatrix, 0);
@@ -201,7 +239,13 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         normalMatrix(mSphereNormalMatrix, 0, mSphereModelViewMatrix, 0);
         normalMatrix(mSquareNormalMatrix, 0, mSquareModelViewMatrix, 0);
 
+        Matrix.multiplyMM(mMapModelViewMatrix, 0, mViewMatrix, 0, mMapModelMatrix, 0);
+        normalMatrix(mMapNormalMatrix, 0, mMapModelViewMatrix, 0);
+
+
+
         checkMove();
+        mMap.draw(mProjMatrix, mMapModelViewMatrix, mMapNormalMatrix, mMapModelMatrix, mLight, mLight2);
 
         // Draw
         mCube2.draw(mProjMatrix, mCube2ModelViewMatrix, mCube2NormalMatrix, mLight, mLight2);
@@ -379,6 +423,29 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
             System.out.println("Col3333lllllll!!!!!!!!!333");
         }
         else{
+            float x = mSphereTranslationMatrix[12];
+            float z = mSphereTranslationMatrix[14];
+            float r = mSphere.getCollision().GetRadius();
+            TriangleCollision[] collisions = mMap.getCollisions();
+  //          x = Math.min(x - r, -mapSizeX/2) + mapSizeX/2;
+//            z = Math.min(z - r, -mapSizeZ/2) + mapSizeZ/2;
+            int dimX = (int) (mapSizeX / mapUnitLength);
+            int dimZ = (int) (mapSizeZ / mapUnitLength);
+            for(int i=(int)Math.max((x-r + mapSizeX/2)/mapUnitLength, 0); i<Math.min((x+r + mapSizeX/2)/mapUnitLength, dimX); i++) {
+                for (int j=(int)Math.max((z-r + mapSizeZ/2)/mapUnitLength, 0); j<Math.min((z+r + mapSizeZ/2)/mapUnitLength, dimZ); j++) {
+                    TriangleCollision collision = collisions[i * dimZ * 2 + j * 2];
+                    collision.move(mMapModelMatrix);
+                    if(Intersect.intersect(mSphere.getCollision(), collision)){
+                        return;
+                    }
+                    collision = collisions[i * dimZ * 2 + j * 2];
+                    collision.move(mMapModelMatrix);
+                    if(Intersect.intersect(mSphere.getCollision(), collision)){
+                        return;
+                    }
+                }
+            }
+
             System.arraycopy(temp2, 0, mSphereTranslationMatrix,0,16);
             System.arraycopy(temp3, 0, mSphereRotationMatrix,0,16);
         }

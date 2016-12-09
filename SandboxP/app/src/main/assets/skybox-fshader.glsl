@@ -20,7 +20,7 @@ void main() {
     vec4 haze = vec4(0.5, 0.5, 0.5, 1.0);
     // float ratio = 1 + vPosition.z/85;
     // FIXME : Currently haze effect is not proper for skybox...
-    float ratio = 1;
+    float ratio = 1.0;
 
-    gl_FragColor = ratio * vec4(intensity, 1.0) + (1 - ratio) * haze;
+    gl_FragColor = ratio * vec4(intensity, 1.0) + (1.0 - ratio) * haze;
 }

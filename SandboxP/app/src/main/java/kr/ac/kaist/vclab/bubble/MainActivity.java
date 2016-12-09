@@ -2,10 +2,10 @@ package kr.ac.kaist.vclab.bubble;
 
 import android.app.Activity;
 import android.content.Context;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
+// import android.hardware.Sensor;
+// import android.hardware.SensorEvent;
+// import android.hardware.SensorEventListener;
+// import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.ViewGroup;
@@ -13,16 +13,16 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ToggleButton;
 
-public class MainActivity extends Activity implements SensorEventListener {
+public class MainActivity extends Activity {
     public static Context context;
     private MyGLSurfaceView mGLView;
-    private GyroHandler gyroHandler;
-    private SensorManager mSensorManager;
+    // private GyroHandler gyroHandler;
+    // private SensorManager mSensorManager;
 
     // private String[] labels = new String[]{"World", "Cube", "Map", "Bubble"};
     // private String[] modes = new String[]{"world", "cube", "map", "bubble"};
-    private String[] labels = new String[]{"World", "Cube", "Map"};
-    private String[] modes = new String[]{"world", "cube", "map"};
+    private String[] labels = new String[]{"World", "Map", "Hint"};
+    private String[] modes = new String[]{"world", "map", "hint"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +31,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 
         // create mGLView and set it as the ContentView for this activity
         mGLView = new MyGLSurfaceView(this);
-        gyroHandler = new GyroHandler();
+        // gyroHandler = new GyroHandler();
 
         // layouts
         LinearLayout layout = new LinearLayout(this);
@@ -41,32 +41,43 @@ public class MainActivity extends Activity implements SensorEventListener {
         buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
         buttonLayout.setGravity(Gravity.CENTER);
 
-        // buttons
-        final ToggleButton[] buttons = new ToggleButton[labels.length];
+        // buttons - for changing the mode
+        final ToggleButton[] modeButtons = new ToggleButton[labels.length];
 
         for (int i = 0; i < labels.length; i++) {
-            buttons[i] = new ToggleButton(this);
+            modeButtons[i] = new ToggleButton(this);
 
-            buttons[i].setText(labels[i]);
-            buttons[i].setTextOn(labels[i]);
-            buttons[i].setTextOff(labels[i]);
+            modeButtons[i].setText(labels[i]);
+            modeButtons[i].setTextOn(labels[i]);
+            modeButtons[i].setTextOff(labels[i]);
         }
 
         for (int i = 0; i < labels.length; i++) {
-            buttonLayout.addView(buttons[i]);
+            buttonLayout.addView(modeButtons[i]);
         }
+
+        // button - for set hint on / off
+        // final ToggleButton hintButton = new ToggleButton(this);
+
+        /*
+        hintButton.setText("Hint");
+        hintButton.setTextOn("HintOn");
+        hintButton.setTextOff("HintOff");
+
+        buttonLayout.addView(hintButton);
+        */
 
         // listener
         for (int i = 0; i < labels.length; i++) {
             final String modeChoosed = modes[i];
 
-            buttons[i].setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            modeButtons[i].setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
                         for (int j = 0; j < labels.length; j++) {
-                            if (buttons[j] != buttonView) {
-                                buttons[j].setChecked(false);
+                            if (modeButtons[j] != buttonView) {
+                                modeButtons[j].setChecked(false);
                             }
 
                             mGLView.mode = modeChoosed;
@@ -76,8 +87,24 @@ public class MainActivity extends Activity implements SensorEventListener {
             });
         }
 
+        /*
+        hintButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    mGLView.mRenderer.mapBlendFlag = true;
+                    mGLView.requestRender();
+                } else {
+                    mGLView.mRenderer.mapBlendFlag = false;
+                    mGLView.requestRender();
+                }
+            }
+        });
+        */
+
         // default checked button
-        buttons[0].setChecked(true);
+        modeButtons[0].setChecked(true);
+        // hintButton.setChecked(false);
 
         // layout params
         LinearLayout.LayoutParams glParams = new LinearLayout.LayoutParams(
@@ -97,15 +124,18 @@ public class MainActivity extends Activity implements SensorEventListener {
 
         setContentView(layout);
 
-        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        // mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         //자이로스코프 센서(회전)
-        gyroHandler.mGyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+        // gyroHandler.mGyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
     }
 
+    /*
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
+    */
 
+    /*
     public void onSensorChanged(SensorEvent event) {
         Sensor sensor = event.sensor;
 
@@ -116,11 +146,12 @@ public class MainActivity extends Activity implements SensorEventListener {
         values = gyroHandler.getSensorValues();
         mGLView.rotateByGyroSensor(values[0], -values[1], -values[2]);
     }
+    */
 
     @Override
     protected void onPause() {
         super.onPause();
-        mSensorManager.registerListener(this, gyroHandler.mGyroscope, SensorManager.SENSOR_DELAY_FASTEST);
+        // mSensorManager.registerListener(this, gyroHandler.mGyroscope, SensorManager.SENSOR_DELAY_FASTEST);
         mGLView.onPause();
     }
 

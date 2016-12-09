@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 
 import kr.ac.kaist.vclab.bubble.MyGLRenderer;
 import kr.ac.kaist.vclab.bubble.environment.Env;
+import kr.ac.kaist.vclab.bubble.environment.GameEnv;
 
 /**
  * Created by sjjeon on 16. 9. 20.
@@ -144,9 +145,10 @@ public class MyGLSurfaceView extends GLSurfaceView {
         float[] rotate = new float[16];
         Matrix.setIdentityM(rotate, 0);
 
-        Matrix.rotateM(rotate, 0, -gyroX, 1, 0, 0);
-        Matrix.rotateM(rotate, 0, -gyroY, 0, 1, 0);
-        Matrix.rotateM(rotate, 0, -gyroZ, 0, 0, 1);
+        float scale = GameEnv.getInstance().gyroScale;
+        Matrix.rotateM(rotate, 0, -gyroX * scale, 1, 0, 0);
+        Matrix.rotateM(rotate, 0, -gyroY * scale, 0, 1, 0);
+        Matrix.rotateM(rotate, 0, -gyroZ * scale, 0, 0, 1);
 
         //mRenderer.mViewTranslationMatrix = Util.transformUsingAuxiliary(mRenderer.mViewRotationMatrix, mRenderer.mViewTranslationMatrix, rotate);
 

@@ -32,7 +32,13 @@ public class Blower {
 
         blowingDir = viewVector;
     }
-
+    public void delForce(){
+        float viewVector[] = new float[3];
+        viewVector[0] = 0.0f;
+        viewVector[1] = 0.0f;
+        viewVector[2] = 0.0f;
+        blowingDir = viewVector;
+    }
     public void setBubbleCore(Particle _bubbleCore){
         bubbleCore = _bubbleCore;
     }

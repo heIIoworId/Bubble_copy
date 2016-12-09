@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import kr.ac.kaist.vclab.bubble.collision.SphereCollision;
 import kr.ac.kaist.vclab.bubble.MyGLRenderer;
+import kr.ac.kaist.vclab.bubble.environment.GameEnv;
 import kr.ac.kaist.vclab.bubble.utils.VecOperator;
 
 /**
@@ -41,7 +42,7 @@ public class BubbleSphere {
     private static final int COORDS_PER_VERTEX = 3;
     private static final int VERTEX_STRIDE = COORDS_PER_VERTEX * 4;
 
-    private SphereCollision sphereCollision = new SphereCollision(4.0f);
+    private float[] center;
 
     private float[] vertexA;
     private float[] vertexB;
@@ -57,6 +58,8 @@ public class BubbleSphere {
     public float[] color;
 
     public BubbleSphere(float _radius, int _level){
+
+        center = new float[3];
 
         verticesList = new ArrayList<>();
         normalsList = new ArrayList<>();
@@ -247,12 +250,14 @@ public class BubbleSphere {
         initVertexBuffer();
     }
 
-    public SphereCollision getCollision() {
-        return sphereCollision;
+    public void setCenter(float[] _center){
+        center = _center;
     }
 
-    //FIXME UPDATE NORMALS ACCORDING TO VERTICES
-    public void updateNormals(){
-
+    public float[] getCenter(){
+        return center;
     }
+
+    //FIXME SG (UPDATE NORMALS ACCORDING TO VERTICES)
+    public void updateNormals(){}
 }

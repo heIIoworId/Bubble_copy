@@ -99,7 +99,6 @@ public class GeomOperator {
             Particle currParticle = particles.get(i);
             float[] currLocation = currParticle.getLocation();
             vertices[j++] = currLocation[0];
-//            System.out.println("currLocation[0]: " + currLocation[0]);
             vertices[j++] = currLocation[1];
             vertices[j++] = currLocation[2];
         }
