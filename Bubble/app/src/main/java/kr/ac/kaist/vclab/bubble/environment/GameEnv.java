@@ -11,6 +11,9 @@ public class GameEnv {
     public static String imgFolder;
     // GYRO INFO
     public static float gyroScale;
+    public static float[] gyroValue;
+    public static float gyroLimit;
+    public static float gyroAngleLimit;
 
     // MAP INFO
     public static float mapSizeX; // X-size (widthX) of map cube
@@ -63,6 +66,9 @@ public class GameEnv {
 
         // GYRO INFO
         gyroScale = 1.5f;
+        gyroValue = new float[]{0,0,0};
+        gyroLimit = 80f;
+        gyroAngleLimit = 0.9f;
 
         // SKYBOX INFO
         imgFolder = "sky2";

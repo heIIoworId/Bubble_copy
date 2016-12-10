@@ -15,8 +15,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import kr.ac.kaist.vclab.bubble.MyGLRenderer;
 import kr.ac.kaist.vclab.bubble.environment.GameEnv;
 import kr.ac.kaist.vclab.bubble.events.GyroHandler;
+import kr.ac.kaist.vclab.bubble.physics.Blower;
 import kr.ac.kaist.vclab.bubble.views.MyGLSurfaceView;
 
 /**
@@ -128,6 +130,8 @@ public class MainActivity extends Activity implements SensorEventListener {
         // If your OpenGL application is memory intensive,
         // you should consider de-allocating objects that
         // consume significant memory here.
+        System.out.println("pause");
+        MyGLRenderer.mBlower.stop();
         mGLView.onPause();
     }
 
@@ -137,6 +141,9 @@ public class MainActivity extends Activity implements SensorEventListener {
         // The following call resumes a paused rendering thread.
         // If you de-allocated graphic objects for onPause()
         // this is a good place to re-allocate them.
+        //MyGLRenderer.mBlower.start();
+
+
         mGLView.onResume();
     }
 
