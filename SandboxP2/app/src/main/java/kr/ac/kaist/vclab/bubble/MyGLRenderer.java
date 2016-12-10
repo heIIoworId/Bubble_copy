@@ -47,17 +47,17 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private static final String TAG = "MyGLRenderer";
 
     // PRESETS OF MAP
-    private float mapSizeX = 90.0f; // X-size (widthX) of map cube
-    private float mapSizeY = 20.0f; // Y-size (thickness) of map cube
-    private float mapSizeZ = 90.0f; // Z-size (widthZ) of map cube
-    private float mapUnitLength = 1.5f; // length of the side of a triangle
-    private float mapMaxHeight = 23.0f; // maximum height
-    private float mapMinHeight = -11.0f; // minimum height (>= -mapSizeY) 윗면 기준(0)
-    private float mapComplexity = 4.5f; // complexity (bigger complexity -> more & steeper mountains)
+    private float mapSizeX = GameEnv.getInstance().mapSizeX;
+    private float mapSizeY = GameEnv.getInstance().mapSizeY;
+    private float mapSizeZ = GameEnv.getInstance().mapSizeZ;
+    private float mapUnitLength = GameEnv.getInstance().mapUnitLength;
+    private float mapMaxHeight = GameEnv.getInstance().mapMaxHeight;
+    private float mapMinHeight = GameEnv.getInstance().mapMinHeight;
+    private float mapComplexity = GameEnv.getInstance().mapComplexity;
 
-    private float lavaSizeX = 350.0f;
-    private float lavaSizeZ = 350.0f;
-    private float lavaHeight = -45.0f;
+    private float lavaSizeX = GameEnv.getInstance().lavaSizeX;
+    private float lavaSizeZ = GameEnv.getInstance().lavaSizeZ;
+    private float lavaHeight = GameEnv.getInstance().lavaHeight;
 
     // FLAGS USED INSIDE RENDERER
     public boolean enableHintFlag = true; // false -> mapBlendFlag has no effect
@@ -73,6 +73,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     // ITEM GENERATOR
     private ItemGenerator mItemGenerator;
+
+    // BUBBLE GENERATOR (Clone of mItemGenerator for bubble)
+    private ItemGenerator mBubbleGenerator;
 
     // DECLARE PHYSICAL ENTITIES
     private PhysicalWorld mPhysicalWorld;
@@ -121,7 +124,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private float[] mMapModelViewMatrix = new float[16];
     private float[] mMapNormalMatrix = new float[16];
 
-    // MATRICES FOR mMap
+    // MATRICES FOR mLava
     public float[] mLavaRotationMatrix = new float[16];
     public float[] mLavaTranslationMatrix = new float[16];
     private float[] mLavaModelMatrix = new float[16];
@@ -179,6 +182,15 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                 mMap.mGenerator
         );
 
+        // INIT BUBBLEGEN
+        mBubbleGenerator = new ItemGenerator(
+                1,
+                GameEnv.getInstance().radiusOfBubble,
+                GameEnv.getInstance().radiusOfBubble * 2,
+                5.0f,
+                mMap.mGenerator
+        );
+
         // INIT ITEMS
         float[][] coors = mItemGenerator.getPositions();
         float[] positions = new float[coors.length * 3];
@@ -208,9 +220,14 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mSkyBox = new SkyBox(GameEnv.getInstance().imgFolder);
 
         // INIT WORLD
+        float[] bubbleCoor = GameEnv.getInstance().initialLocationOfBubble;
+
+        // enable / disable this line to automate bubble coordinate calc.
+        // bubbleCoor = mBubbleGenerator.getPositions()[0];
+
         mParticles = GeomOperator.genParticles(mBubble.getVertices());
         mSprings = GeomOperator.genSprings(mParticles);
-        mBubbleCore = new BubbleCore(GameEnv.getInstance().initialLocationOfBubble);
+        mBubbleCore = new BubbleCore(bubbleCoor);
 
         if (Env.getInstance().micStatus == 1) {
             mBlower = new Blower();
@@ -230,11 +247,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mLight2 = new float[]{-2.0f, -3.0f, -5.0f};
 
         // INITIALIZE MATRICES
-        resetViewMatrix();
         // INIT VIEW MATRIX
         Matrix.setIdentityM(mViewRotationMatrix, 0);
         Matrix.setIdentityM(mViewTranslationMatrix, 0);
-        Matrix.translateM(mViewTranslationMatrix, 0, 0, 0, -14.0f);
+        Matrix.translateM(mViewTranslationMatrix, 0, 0, -30.0f, -14.0f);
 
         // INIT BUBBLE MATRIX
         Matrix.setIdentityM(mBubbleRotationMatrix, 0);
@@ -255,11 +271,17 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.setIdentityM(mBubbleCoreRotationMatrix, 0);
         Matrix.setIdentityM(mBubbleCoreTranslationMatrix, 0);
         Matrix.translateM(mBubbleCoreTranslationMatrix, 0, 0, 0, 0);
+        // Matrix.translateM(mBubbleCoreTranslationMatrix, 0, -mapSizeX / 2.0f, 0, -mapSizeZ / 2.0f);
 
         // INIT MAP MATRIX
         Matrix.setIdentityM(mMapRotationMatrix, 0);
         Matrix.setIdentityM(mMapTranslationMatrix, 0);
         Matrix.translateM(mMapTranslationMatrix, 0, -mapSizeX / 2.0f, 0, -mapSizeZ / 2.0f);
+
+        // INIT LAVA MATRIX
+        Matrix.setIdentityM(mLavaRotationMatrix, 0);
+        Matrix.setIdentityM(mLavaTranslationMatrix, 0);
+        Matrix.translateM(mLavaTranslationMatrix, 0, -lavaSizeX / 2.0f, lavaHeight, -lavaSizeZ / 2.0f);
 
         // INIT SEA MATRIX
         Matrix.setIdentityM(mSeaRotationMatrix, 0);
@@ -269,6 +291,12 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // INIT SKYBOX MATRIX
         Matrix.setIdentityM(mSkyboxRotationMatrix, 0);
         Matrix.setIdentityM(mSkyboxTranslationMatrix, 0);
+
+        Matrix.scaleM(mSkyboxModelMatrix, 0,
+                GameEnv.getInstance().skySizeX,
+                GameEnv.getInstance().skySizeY,
+                GameEnv.getInstance().skySizeZ
+        );
     }
 
     @Override
@@ -287,7 +315,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         System.arraycopy(mTempMatrix, 0, mViewMatrix, 0, 16);
 
         // UPDATE VIEW MATRIX TO FOLLOW BUBBLE
-        if (!GameEnv.getInstance().traceFlag) {
+        if (GameEnv.getInstance().traceFlag) {
             updateView();
         }
 
@@ -341,6 +369,15 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.multiplyMM(mMapModelViewMatrix, 0, mViewMatrix, 0, mMapModelMatrix, 0);
         normalMatrix(mMapNormalMatrix, 0, mMapModelViewMatrix, 0);
 
+        // CALC LAVA MODELMATRIX
+        Matrix.setIdentityM(mLavaModelMatrix, 0);
+        Matrix.multiplyMM(mTempMatrix, 0, mLavaRotationMatrix, 0, mLavaModelMatrix, 0);
+        System.arraycopy(mTempMatrix, 0, mLavaModelMatrix, 0, 16);
+        Matrix.multiplyMM(mTempMatrix, 0, mLavaTranslationMatrix, 0, mLavaModelMatrix, 0);
+        System.arraycopy(mTempMatrix, 0, mLavaModelMatrix, 0, 16);
+        Matrix.multiplyMM(mLavaModelViewMatrix, 0, mViewMatrix, 0, mLavaModelMatrix, 0);
+        normalMatrix(mLavaNormalMatrix, 0, mLavaModelViewMatrix, 0);
+
         // CALC SEA MODELMATRIX
         Matrix.setIdentityM(mSeaModelMatrix, 0);
         Matrix.multiplyMM(mTempMatrix, 0, mSeaRotationMatrix, 0, mSeaModelMatrix, 0);
@@ -348,7 +385,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.multiplyMM(mTempMatrix, 0, mSeaTranslationMatrix, 0, mSeaModelMatrix, 0);
         System.arraycopy(mTempMatrix, 0, mSeaModelMatrix, 0, 16);
         Matrix.multiplyMM(mSeaModelViewMatrix, 0, mViewMatrix, 0, mSeaModelMatrix, 0);
-        Matrix.multiplyMM(mSkyboxModelViewMatrix, 0, mViewMatrix, 0, mSkyboxModelMatrix, 0);
+        normalMatrix(mSeaNormalMatrix, 0, mSeaModelViewMatrix, 0);
 
         // CALC SKYBOX MODELMATRIX
         Matrix.setIdentityM(mSkyboxModelMatrix, 0);
@@ -356,8 +393,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         System.arraycopy(mTempMatrix, 0, mSkyboxModelMatrix, 0, 16);
         Matrix.multiplyMM(mTempMatrix, 0, mSkyboxTranslationMatrix, 0, mSkyboxModelMatrix, 0);
         System.arraycopy(mTempMatrix, 0, mSkyboxModelMatrix, 0, 16);
-        Matrix.scaleM(mSkyboxModelMatrix, 0, 30, 30, 30);
-        normalMatrix(mSeaNormalMatrix, 0, mSeaModelViewMatrix, 0);
+        Matrix.multiplyMM(mSkyboxModelViewMatrix, 0, mViewMatrix, 0, mSkyboxModelMatrix, 0);
         normalMatrix(mSkyboxNormalMatrix, 0, mSkyboxModelViewMatrix, 0);
 
         //UPDATE WORLD AND VERTICES OF SPHERE
@@ -377,12 +413,14 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         // ... gl_cull_face (culling)
         GLES20.glEnable(GLES20.GL_CULL_FACE);
-        mSkyBox.draw(mProjMatrix, mSkyboxModelViewMatrix, mSkyboxNormalMatrix, mLight, mLight2);
+        // mSkyBox.draw(mProjMatrix, mSkyboxModelViewMatrix, mSkyboxNormalMatrix, mLight, mLight2);
 
         // MAP - NOT TRANSPARENT
         if ((!enableHintFlag) || (!mapBlendFlag)) {
             mMap.draw(mProjMatrix, mMapModelViewMatrix, mMapNormalMatrix, mMapModelMatrix, mLight, mLight2);
         }
+
+        mLava.draw(mProjMatrix, mLavaModelViewMatrix, mLavaNormalMatrix, mLight, mLight2);
 
         mBubbleCore.updateTraceVertices();
         mBubbleCore.drawTrace(mProjMatrix, mBubbleCoreModelViewMatrix, mBubbleCoreNormalMatrix,
@@ -424,8 +462,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         final float right = ratio;
         final float bottom = -1.0f;
         final float top = 1.0f;
-        final float near = 1f;
-        final float far = 80.0f; // it should be bigger than map (and skybox)'s size!
+        final float near = GameEnv.getInstance().minViewDist;
+        final float far = GameEnv.getInstance().maxViewDist;
 
         Matrix.frustumM(mProjMatrix, 0, left, right, bottom, top, near, far);
     }

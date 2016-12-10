@@ -7,12 +7,17 @@ package kr.ac.kaist.vclab.bubble.environment;
 public class GameEnv {
     // FLAG
     public static int collisionFlag;
-
-    // If this is true, then camera doesn't follow the bubble, and you can rotate / translate the camera using the touchpad.
     public static boolean traceFlag;
+
+    // VIEWPORT
+    public static float minViewDist;
+    public static float maxViewDist;
 
     // SKYBOX INFO
     public static String imgFolder;
+    public static float skySizeX;
+    public static float skySizeY;
+    public static float skySizeZ;
 
     // GYRO INFO
     public static float gyroScale;
@@ -21,6 +26,15 @@ public class GameEnv {
     public static float mapSizeX; // X-size (widthX) of map cube
     public static float mapSizeY; // Y-size (thickness) of map cube
     public static float mapSizeZ; // Z-size (widthZ) of map cube
+    public static float mapUnitLength; // length of the side of a triangle
+    public static float mapMaxHeight; // maximum height
+    public static float mapMinHeight; // minimum height (>= -mapSizeY) 윗면 기준(0)
+    public static float mapComplexity; // complexity (bigger complexity -> more & steeper mountains)
+
+    // LAVA INFOR
+    public static float lavaSizeX;
+    public static float lavaSizeZ;
+    public static float lavaHeight;
 
     // TIME INFO
     public static long startTime;
@@ -68,17 +82,32 @@ public class GameEnv {
         collisionFlag = 0;
         traceFlag = true;
 
+        // VIEWPORT
+        minViewDist = 1.0f; // near
+        maxViewDist = 300.0f; // far
+
         // GYRO INFO
         gyroScale = 1.5f;
 
         // SKYBOX INFO
         imgFolder = "sky2";
+        skySizeX = 300.0f;
+        skySizeY = 300.0f;
+        skySizeZ = 300.0f;
 
         // MAP INFO
-        mapSizeX = 30f;
-        mapSizeY = 3f;
-        mapSizeZ = 30f;
+        mapSizeX = 80.0f;
+        mapSizeY = 20.0f;
+        mapSizeZ = 80.0f;
+        mapUnitLength = 1.5f;
+        mapMaxHeight = 20.0f;
+        mapMinHeight = -10.0f;
+        mapComplexity = 5.0f;
 
+        // LAVA INFO
+        lavaSizeX = 200.0f;
+        lavaSizeZ = 200.0f;
+        lavaHeight = -60.0f;
 
         // TIME INFO
         startTime = System.currentTimeMillis();
