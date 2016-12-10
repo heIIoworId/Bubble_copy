@@ -21,8 +21,8 @@ public class MainActivity extends Activity {
 
     // private String[] labels = new String[]{"World", "Cube", "Map", "Bubble"};
     // private String[] modes = new String[]{"world", "cube", "map", "bubble"};
-    private String[] labels = new String[]{"World", "Map"};
-    private String[] modes = new String[]{"world", "map"};
+    private String[] labels = new String[]{"World", "Map", "Hint"};
+    private String[] modes = new String[]{"world", "map", "hint"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,13 +57,15 @@ public class MainActivity extends Activity {
         }
 
         // button - for set hint on / off
-        final ToggleButton hintButton = new ToggleButton(this);
+        // final ToggleButton hintButton = new ToggleButton(this);
 
+        /*
         hintButton.setText("Hint");
         hintButton.setTextOn("HintOn");
         hintButton.setTextOff("HintOff");
 
         buttonLayout.addView(hintButton);
+        */
 
         // listener
         for (int i = 0; i < labels.length; i++) {
@@ -85,6 +87,7 @@ public class MainActivity extends Activity {
             });
         }
 
+        /*
         hintButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -97,10 +100,11 @@ public class MainActivity extends Activity {
                 }
             }
         });
+        */
 
         // default checked button
         modeButtons[0].setChecked(true);
-        hintButton.setChecked(false);
+        // hintButton.setChecked(false);
 
         // layout params
         LinearLayout.LayoutParams glParams = new LinearLayout.LayoutParams(

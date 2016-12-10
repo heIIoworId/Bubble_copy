@@ -135,12 +135,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         // lights
         mLight = new float[]{5.0f, 10.0f, 6.0f};
-        // mLight2 = new float[]{-4.0f, 7.0f, 8.0f};
         mLight2 = mLight;
 
         // objects
-        // mCube = new Cube();
-
         mMap = new MapCube(
                 mapSizeX, mapSizeY, mapSizeZ,
                 mapUnitLength,
@@ -216,26 +213,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
         // calculate view matrix
-        /*
-        Matrix.setIdentityM(mViewMatrix, 0);
-
-        float[] eye = new float[]{mSphereTranslationMatrix[12], mSphereTranslationMatrix[13], mSphereTranslationMatrix[14]};
-        float[] translation = new float[]{0, 0, -1, 0};
-        float[] change_translation = new float[4];
-
-        Matrix.multiplyMV(change_translation, 0, mViewRotationMatrix, 0, translation, 0);
-
-        for (int i = 0; i < 3; i++) {
-            change_translation[i] *= cameraDistance;
-            eye[i] += change_translation[i];
-        }
-
-        float[] look = new float[]{mSphereTranslationMatrix[12], mSphereTranslationMatrix[13], mSphereTranslationMatrix[14]};
-        float[] up = new float[]{0, 1, 0, 0};
-
-        Matrix.setLookAtM(mViewMatrix, 0, eye[0], eye[1], eye[2], look[0], look[1], look[2], up[0], up[1], up[2]);
-        */
-
         Matrix.setIdentityM(mViewMatrix, 0);
         Matrix.multiplyMM(mTempMatrix, 0, mViewRotationMatrix, 0, mViewMatrix, 0);
         System.arraycopy(mTempMatrix, 0, mViewMatrix, 0, 16);

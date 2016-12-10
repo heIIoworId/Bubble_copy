@@ -44,6 +44,16 @@ public class MyGLSurfaceView extends GLSurfaceView {
         int count = event.getPointerCount();
         int action = event.getAction();
 
+        // hint mode
+        if (mode == "hint") {
+            if (action == MotionEvent.ACTION_DOWN) {
+                mRenderer.mapBlendFlag = true;
+            }
+            if (action == MotionEvent.ACTION_UP) {
+                mRenderer.mapBlendFlag = false;
+            }
+        }
+
         // single touch -> rotate
         if ((action == MotionEvent.ACTION_MOVE) && (count == 1)) {
             float dx = x - mPreviousX;
