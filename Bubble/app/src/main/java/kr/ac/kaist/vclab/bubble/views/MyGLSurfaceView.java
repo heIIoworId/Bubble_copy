@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import kr.ac.kaist.vclab.bubble.MyGLRenderer;
 import kr.ac.kaist.vclab.bubble.environment.Env;
 import kr.ac.kaist.vclab.bubble.environment.GameEnv;
+import kr.ac.kaist.vclab.bubble.utils.MatOperator;
 
 /**
  * Created by sjjeon on 16. 9. 20.
@@ -74,7 +75,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
                         Matrix.setIdentityM(rot, 0);
                         Matrix.rotateM(rot, 0, dx, 0, 1, 0);
                         Matrix.rotateM(rot, 0, dy, 1, 0, 0);
-                        Matrix.multiplyMM(temp2, 0, rot, 0, mRenderer.mViewRotationMatrix, 0);
+                        Matrix.multiplyMM(temp2, 0, mRenderer.mViewRotationMatrix, 0, rot, 0);
                         System.arraycopy(temp2, 0, mRenderer.mViewRotationMatrix, 0, 16);
                     } else if (count == 2) {
                         // Translate world
@@ -143,18 +144,22 @@ public class MyGLSurfaceView extends GLSurfaceView {
     public void rotateByGyroSensor(float gyroX, float gyroY, float gyroZ) {
 
         float[] rotate = new float[16];
+        float [] temp = new float[16];
+
         Matrix.setIdentityM(rotate, 0);
 
         float scale = GameEnv.getInstance().gyroScale;
-        Matrix.rotateM(rotate, 0, -gyroX * scale, 1, 0, 0);
+
+        GameEnv.getInstance().gyroValue[1] += -gyroY * scale;
         Matrix.rotateM(rotate, 0, -gyroY * scale, 0, 1, 0);
-        Matrix.rotateM(rotate, 0, -gyroZ * scale, 0, 0, 1);
+        Matrix.multiplyMM(temp, 0 , rotate, 0,mRenderer.mViewRotationMatrix, 0);
+        System.arraycopy(temp,0, mRenderer.mViewRotationMatrix,0, 16);
 
-        //mRenderer.mViewTranslationMatrix = Util.transformUsingAuxiliary(mRenderer.mViewRotationMatrix, mRenderer.mViewTranslationMatrix, rotate);
+        GameEnv.getInstance().gyroValue[0] += -gyroX * scale;
+        Matrix.rotateM(rotate, 0, -gyroX * scale, 1, 0, 0);
+        Matrix.multiplyMM(temp, 0 , mRenderer.mViewRotationMatrix, 0, rotate, 0);
 
-
-        float [] temp = new float[16];
-        Matrix.multiplyMM(temp, 0 , rotate, 0,  mRenderer.mViewRotationMatrix, 0);
+        //System.out.println(GameEnv.getInstance().gyroValue[0] + " " + GameEnv.getInstance().gyroValue[1]);
         System.arraycopy(temp,0, mRenderer.mViewRotationMatrix,0, 16);
 
         requestRender();

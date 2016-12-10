@@ -13,16 +13,15 @@ public class GyroHandler implements SensorEventListener {
     private float gyroX;
     private float gyroY;
     private float gyroZ;
-    private float gyroScale = 0.2f;
 
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
 
     public void onSensorChanged(SensorEvent event) {
-        gyroX = event.values[0] * gyroScale;
-        gyroY = event.values[1] * gyroScale;
-        gyroZ = event.values[2] * gyroScale;
+        gyroX = event.values[0];
+        gyroY = event.values[1];
+        gyroZ = event.values[2];
         //mGLView.rotateByGyroSensor(gyroX, gyroY, gyroZ);
 
     }

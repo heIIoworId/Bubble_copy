@@ -10,7 +10,7 @@ import kr.ac.kaist.vclab.bubble.utils.VecOperator;
  */
 
 public class Blower {
-    SoundHandler soundHandler;
+    static SoundHandler soundHandler;
     float[] blowingDir;
     Particle bubbleCore;
 
@@ -18,6 +18,16 @@ public class Blower {
         soundHandler = SoundHandler.getInstance();
         soundHandler.start();
     }
+
+    public static void start(){
+        if (soundHandler != null)
+            soundHandler.start();
+    }
+    public static void stop(){
+        if (soundHandler != null)
+            soundHandler.stop();
+    }
+
 
     public void setBlowingDir(float[] viewRotationMatrix){
 

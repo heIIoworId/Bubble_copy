@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import kr.ac.kaist.vclab.bubble.MyGLRenderer;
 import kr.ac.kaist.vclab.bubble.environment.GameEnv;
 import kr.ac.kaist.vclab.bubble.events.GyroHandler;
 import kr.ac.kaist.vclab.bubble.events.SoundHandler;
@@ -131,6 +132,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         // consume significant memory here.
 
         SoundHandler.getInstance().stop();
+
         mGLView.onPause();
     }
 
@@ -142,6 +144,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         // this is a good place to re-allocate them.
 
         SoundHandler.getInstance().start();
+
         mGLView.onResume();
     }
 
