@@ -36,6 +36,7 @@ import kr.ac.kaist.vclab.bubble.physics.Particle;
 import kr.ac.kaist.vclab.bubble.physics.Spring;
 import kr.ac.kaist.vclab.bubble.physics.PhysicalWorld;
 import kr.ac.kaist.vclab.bubble.utils.GeomOperator;
+import kr.ac.kaist.vclab.bubble.utils.VecOperator;
 
 /**
  * Created by sjjeon on 16. 9. 20.
@@ -68,7 +69,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private PhysicalWorld mPhysicalWorld;
     private ArrayList<Particle> mParticles;
     private ArrayList<Spring> mSprings;
-    private Blower mBlower;
+    public static Blower mBlower;
     private BubbleCore mBubbleCore;
 
     // DECLARE LIGHTS
@@ -512,16 +513,15 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
             change_translation[i]*= GameEnv.getInstance().distOfBubbleAndCamera;
             eye[i] += change_translation[i];
         }
-
         float[] look = new float[]{
                 mBubbleTranslationMatrix[12],
                 mBubbleTranslationMatrix[13],
                 mBubbleTranslationMatrix[14]};
 
         float[] up = new float[4] ;
+
         float[] temp = new float[]{0,1,0,0};
         Matrix.multiplyMV(up, 0, mViewRotationMatrix, 0 ,temp, 0);
-
         Matrix.setLookAtM(mViewMatrix, 0,
                 eye[0], eye[1], eye[2],
                 look[0], look[1], look[2],
