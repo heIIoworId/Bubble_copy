@@ -28,6 +28,7 @@ import kr.ac.kaist.vclab.bubble.models.BubbleCore;
 import kr.ac.kaist.vclab.bubble.models.BubbleSphere;
 import kr.ac.kaist.vclab.bubble.models.Item;
 import kr.ac.kaist.vclab.bubble.models.ItemManager;
+import kr.ac.kaist.vclab.bubble.models.LavaRectangle;
 import kr.ac.kaist.vclab.bubble.models.MapCube;
 import kr.ac.kaist.vclab.bubble.models.SeaRectangle;
 import kr.ac.kaist.vclab.bubble.models.SkyBox;
@@ -50,14 +51,23 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private float mapSizeX = GameEnv.getInstance().mapSizeX;
     private float mapSizeY = GameEnv.getInstance().mapSizeY;
     private float mapSizeZ = GameEnv.getInstance().mapSizeZ;
-    private float mapUnitLength = 0.5f; // length of the side of a triangle
-    private float mapMaxHeight = 12.0f; // maximum height
-    private float mapMinHeight = -2.0f; // minimum height (>= -mapSizeY) 윗면 기준(0)
-    private float mapComplexity = 3.6f; // complexity (bigger complexity -> more & steeper mountains)
+    private float mapUnitLength = GameEnv.getInstance().mapUnitLength;
+    private float mapMaxHeight = GameEnv.getInstance().mapMaxHeight;
+    private float mapMinHeight = GameEnv.getInstance().mapMinHeight;
+    private float mapComplexity = GameEnv.getInstance().mapComplexity;
+
+    private float lavaSizeX = GameEnv.getInstance().lavaSizeX;
+    private float lavaSizeZ = GameEnv.getInstance().lavaSizeZ;
+    private float lavaHeight = GameEnv.getInstance().lavaHeight;
+
+    // FLAGS USED INSIDE RENDERER
+    public boolean enableHintFlag = true; // false -> mapBlendFlag has no effect
+    public boolean mapBlendFlag = false; // true -> map becomes transparent
 
     // DECLARE MODELS
     public MapCube mMap;
     public SeaRectangle mSea;
+    public LavaRectangle mLava;
     public SkyBox mSkyBox;
     private BubbleSphere mBubble;
     private ArrayList<Item> mItems;
@@ -112,6 +122,13 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private float[] mMapModelViewMatrix = new float[16];
     private float[] mMapNormalMatrix = new float[16];
 
+    // MATRICES FOR mLava
+    public float[] mLavaRotationMatrix = new float[16];
+    public float[] mLavaTranslationMatrix = new float[16];
+    private float[] mLavaModelMatrix = new float[16];
+    private float[] mLavaModelViewMatrix = new float[16];
+    private float[] mLavaNormalMatrix = new float[16];
+
     // MATRICES FOR mSea
     public float[] mSeaRotationMatrix = new float[16];
     public float[] mSeaTranslationMatrix = new float[16];
@@ -150,6 +167,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                 mapComplexity,
                 1.0f, true
         );
+
+        // INIT LAVA
+        mLava = new LavaRectangle(lavaSizeX, lavaSizeZ);
 
         // INIT ITEMGEN
         mItemGenerator = new ItemGenerator(
@@ -246,6 +266,11 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.setIdentityM(mMapTranslationMatrix, 0);
         Matrix.translateM(mMapTranslationMatrix, 0, -mapSizeX/2.0f, 0, -mapSizeZ/2.0f);
 
+        // INIT LAVA MATRIX
+        Matrix.setIdentityM(mLavaRotationMatrix, 0);
+        Matrix.setIdentityM(mLavaTranslationMatrix, 0);
+        Matrix.translateM(mLavaTranslationMatrix, 0, -lavaSizeX / 2.0f, lavaHeight, -lavaSizeZ / 2.0f);
+
         // INIT SEA MATRIX
         Matrix.setIdentityM(mSeaRotationMatrix, 0);
         Matrix.setIdentityM(mSeaTranslationMatrix, 0);
@@ -270,8 +295,11 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         System.arraycopy(mTempMatrix, 0, mViewMatrix, 0, 16);
         Matrix.multiplyMM(mTempMatrix, 0, mViewTranslationMatrix, 0, mViewMatrix, 0);
         System.arraycopy(mTempMatrix, 0, mViewMatrix, 0, 16);
+
         // UPDATE VIEW MATRIX TO FOLLOW BUBBLE
-        updateView();
+        if (GameEnv.getInstance().traceFlag) {
+            updateView();
+        }
 
         // CALC BUBBLE MATRIX
         Matrix.setIdentityM(mBubbleTranslationMatrix, 0);
@@ -322,6 +350,15 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.multiplyMM(mMapModelViewMatrix, 0, mViewMatrix, 0, mMapModelMatrix, 0);
         normalMatrix(mMapNormalMatrix, 0, mMapModelViewMatrix, 0);
 
+        // CALC LAVA MODELMATRIX
+        Matrix.setIdentityM(mLavaModelMatrix, 0);
+        Matrix.multiplyMM(mTempMatrix, 0, mLavaRotationMatrix, 0, mLavaModelMatrix, 0);
+        System.arraycopy(mTempMatrix, 0, mLavaModelMatrix, 0, 16);
+        Matrix.multiplyMM(mTempMatrix, 0, mLavaTranslationMatrix, 0, mLavaModelMatrix, 0);
+        System.arraycopy(mTempMatrix, 0, mLavaModelMatrix, 0, 16);
+        Matrix.multiplyMM(mLavaModelViewMatrix, 0, mViewMatrix, 0, mLavaModelMatrix, 0);
+        normalMatrix(mLavaNormalMatrix, 0, mLavaModelViewMatrix, 0);
+
         // CALC SEA MODELMATRIX
         Matrix.setIdentityM(mSeaModelMatrix, 0);
         Matrix.multiplyMM(mTempMatrix, 0, mSeaRotationMatrix, 0, mSeaModelMatrix, 0);
@@ -358,7 +395,13 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // ... gl_cull_face (culling)
         GLES20.glEnable(GLES20.GL_CULL_FACE);
         mSkyBox.draw(mProjMatrix, mSkyboxModelViewMatrix, mSkyboxNormalMatrix, mLight, mLight2);
-        mMap.draw(mProjMatrix, mMapModelViewMatrix, mMapNormalMatrix, mMapModelMatrix, mLight, mLight2);
+
+        // MAP - NOT TRANSPARENT
+        if ((!enableHintFlag) || (!mapBlendFlag)) {
+            mMap.draw(mProjMatrix, mMapModelViewMatrix, mMapNormalMatrix, mMapModelMatrix, mLight, mLight2);
+        }
+
+        mLava.draw(mProjMatrix, mLavaModelViewMatrix, mLavaNormalMatrix, mLight, mLight2);
 
         mBubbleCore.updateTraceVertices();
         // CHECK COLLISION BETWEEN BUBBLE AND ITEMS
@@ -376,11 +419,18 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // ... gl_blend (alpha blending)
         GLES20.glEnable(GLES20.GL_BLEND);
         GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+
+        // MAP - TRANSPARENT
+        if (enableHintFlag && mapBlendFlag) {
+            mMap.draw(mProjMatrix, mMapModelViewMatrix, mMapNormalMatrix, mMapModelMatrix, mLight, mLight2);
+        }
+
+        mSea.draw(mProjMatrix, mSeaModelViewMatrix, mSeaNormalMatrix, mLight, mLight2, curTime);
+
         mBubble.draw(mProjMatrix, mBubbleModelViewMatrix, mBubbleModelMatrix,
                 mViewMatrix, mBubbleNormalMatrix, mLight, mLight2,
                 mCamera, mSkyBox.getCubeTex());
         // FIXME CAN'T SEE SEA
-        mSea.draw(mProjMatrix, mSeaModelViewMatrix, mSeaNormalMatrix, mLight, mLight2, curTime);
         GLES20.glDisable(GLES20.GL_BLEND);
     }
 
@@ -395,8 +445,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         final float right = ratio;
         final float bottom = -1.0f;
         final float top = 1.0f;
-        final float near = 1f;
-        final float far = 80.0f; // it should be bigger than map (and skybox)'s size!
+        final float near = GameEnv.getInstance().minViewDist;
+        final float far = GameEnv.getInstance().maxViewDist;
 
         Matrix.frustumM(mProjMatrix, 0, left, right, bottom, top, near, far);
     }

@@ -53,6 +53,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
         // interested in events where the touch position changed.
 
         int count = e.getPointerCount();
+        int action = e.getAction();
 
         float x = e.getX(0);
         float y = e.getY(0);
@@ -65,73 +66,36 @@ public class MyGLSurfaceView extends GLSurfaceView {
         float dx = Math.max(Math.min(x - mPreviousX, 10f), -10f);
         float dy = Math.max(Math.min(y - mPreviousY, 10f), -10f);
 
-        if (e.getAction() == MotionEvent.ACTION_MOVE) {
-            switch (mode) {
-                case 0:
-                    if (count == 1) {
-                        // Rotate world
+        // TOUCH DOWN & UP -> HINT MODE ON / OFF (MAP BLENDING ON / OFF)
+        switch (action) {
+            case MotionEvent.ACTION_DOWN:
+                mRenderer.mapBlendFlag = true;
+                break;
+            case MotionEvent.ACTION_UP:
+                mRenderer.mapBlendFlag = false;
+                break;
+
+            case MotionEvent.ACTION_MOVE:
+                if (true) {
+                    // DOUBLE TOUCH -> ROTATE VIEW
+                    if (count == 2) {
                         float[] rot = temp1;
 
                         Matrix.setIdentityM(rot, 0);
                         Matrix.rotateM(rot, 0, dx, 0, 1, 0);
                         Matrix.rotateM(rot, 0, dy, 1, 0, 0);
-                        Matrix.multiplyMM(temp2, 0, mRenderer.mViewRotationMatrix, 0, rot, 0);
+                        Matrix.multiplyMM(temp2, 0, rot, 0, mRenderer.mViewRotationMatrix, 0);
                         System.arraycopy(temp2, 0, mRenderer.mViewRotationMatrix, 0, 16);
-                    } else if (count == 2) {
-                        // Translate world
+                    }
+
+                    // TRIPLE TOUCH -> TRANSLATE VIEW
+                    // FIXME : THIS WORKS IN THE REAL DEVICE, BUT THERE IS NO WAY TO TEST THIS IN THE EMULATOR!
+                    if (count == 3) {
                         Matrix.translateM(mRenderer.mViewTranslationMatrix, 0, dx / 100, -dy / 100, 0);
                     }
-                    break;
-                case 1:
-                    if (count == 2) {
-                        // Translate cube1
-                        float[] temp1 = new float[16];
-                        float[] move = new float[16];
-                        float[] inversetemp = new float[16];
-                        Matrix.invertM(inversetemp,0,mRenderer.mViewRotationMatrix,0);
-                        Matrix.setIdentityM(temp1, 0);
-                        Matrix.setIdentityM(move, 0);
-                        Matrix.translateM(move, 0, -dx/100, -dy/100, 0);
-                        Matrix.multiplyMM(temp1,0, move,0, inversetemp,0);
-                        System.arraycopy(temp1, 0, move, 0 , 16);
-                        Matrix.multiplyMM(temp1, 0, mRenderer.mViewRotationMatrix, 0, move, 0);
-                        System.arraycopy(temp1, 0, move, 0 , 16);
-//                        Matrix.multiplyMM(temp1, 0, mRenderer.mSphereTranslationMatrix, 0, move, 0);
-//                        System.arraycopy(temp1, 0, mRenderer.mSphereTranslationMatrix, 0 , 16);
+                }
 
-                    }
-                    else if (count == 3){
-                        float[] temp1 = new float[16];
-                        float[] move = new float[16];
-                        float[] inversetemp = new float[16];
-                        Matrix.invertM(inversetemp,0,mRenderer.mViewRotationMatrix,0);
-                        Matrix.setIdentityM(temp1, 0);
-                        Matrix.setIdentityM(move, 0);
-                        Matrix.translateM(move, 0, 0, 0, -dy/100);
-                        Matrix.multiplyMM(temp1,0, move,0, inversetemp,0);
-                        System.arraycopy(temp1, 0, move, 0 , 16);
-                        Matrix.multiplyMM(temp1, 0, mRenderer.mViewRotationMatrix, 0, move, 0);
-                        System.arraycopy(temp1, 0, move, 0 , 16);
-//                        Matrix.multiplyMM(temp1, 0, mRenderer.mSphereTranslationMatrix, 0, move, 0);
-//                        System.arraycopy(temp1, 0, mRenderer.mSphereTranslationMatrix, 0 , 16);
-                    }
-                    break;
-
-//                case 2:
-//                    if (count == 1) {
-//                        // Rotate cube2
-//                        float[] rot = temp1;
-//                        Matrix.setIdentityM(rot, 0);
-//                        Matrix.rotateM(rot, 0, dx, 0, 1, 0);
-//                        Matrix.rotateM(rot, 0, dy, 1, 0, 0);
-//                        Matrix.multiplyMM(temp2, 0, rot, 0, mRenderer.mSphereRotationMatrix, 0);
-//                        System.arraycopy(temp2, 0, mRenderer.mSphereRotationMatrix, 0, 16);
-//                    } else if (count == 2) {
-//                        // Translate cube2
-//                        Matrix.translateM(mRenderer.mSphereTranslationMatrix, 0, dx/ 100, -dy / 100, 0);
-//                    }
-//                    break;
-            }
+                break;
         }
 
         mPreviousX = x;

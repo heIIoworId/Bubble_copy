@@ -7,8 +7,18 @@ package kr.ac.kaist.vclab.bubble.environment;
 public class GameEnv {
     // FLAG
     public static int collisionFlag;
+    public static boolean traceFlag;
+
+    // VIEWPORT
+    public static float minViewDist;
+    public static float maxViewDist;
+
     // SKYBOX INFO
     public static String imgFolder;
+    public static float skySizeX;
+    public static float skySizeY;
+    public static float skySizeZ;
+
     // GYRO INFO
     public static float gyroScale;
     public static float[] gyroValue;
@@ -19,6 +29,15 @@ public class GameEnv {
     public static float mapSizeX; // X-size (widthX) of map cube
     public static float mapSizeY; // Y-size (thickness) of map cube
     public static float mapSizeZ; // Z-size (widthZ) of map cube
+    public static float mapUnitLength; // length of the side of a triangle
+    public static float mapMaxHeight; // maximum height
+    public static float mapMinHeight; // minimum height (>= -mapSizeY) 윗면 기준(0)
+    public static float mapComplexity; // complexity (bigger complexity -> more & steeper mountains)
+
+    // LAVA INFOR
+    public static float lavaSizeX;
+    public static float lavaSizeZ;
+    public static float lavaHeight;
 
     // TIME INFO
     public static long startTime;
@@ -60,9 +79,14 @@ public class GameEnv {
     public static GameEnv getInstance() {
         return ourInstance;
     }
+
     private GameEnv() {
         // FLAG
         collisionFlag = 0;
+
+        // VIEWPORT
+        minViewDist = 1.0f; // near
+        maxViewDist = 300.0f; // far
 
         // GYRO INFO
         gyroScale = 1.5f;
@@ -72,11 +96,23 @@ public class GameEnv {
 
         // SKYBOX INFO
         imgFolder = "sky2";
+        skySizeX = 300.0f;
+        skySizeY = 300.0f;
+        skySizeZ = 300.0f;
 
         // MAP INFO
-        mapSizeX = 30f;
-        mapSizeY = 3f;
-        mapSizeZ= 30f;
+        mapSizeX = 80.0f;
+        mapSizeY = 20.0f;
+        mapSizeZ = 80.0f;
+        mapUnitLength = 1.5f;
+        mapMaxHeight = 20.0f;
+        mapMinHeight = -10.0f;
+        mapComplexity = 5.0f;
+
+        // LAVA INFO
+        lavaSizeX = 200.0f;
+        lavaSizeZ = 200.0f;
+        lavaHeight = -60.0f;
 
         // TIME INFO
         startTime = System.currentTimeMillis();
@@ -92,17 +128,17 @@ public class GameEnv {
         colorOfItem = new float[]{0f, 0f, 0.9f};
 
         // BUBBLE INFO
-        initialLocationOfBubble = new float[]{0,15.0f,0};
+        initialLocationOfBubble = new float[]{0, 15.0f, 0};
         radiusOfBubble = 1.2f;
-        colorOfBubble = new float[] {0.3f, 0.8f, 0.9f};
+        colorOfBubble = new float[]{0.3f, 0.8f, 0.9f};
         initialScaleOfBubble = 0.4f;
         scaleOfBubble = initialScaleOfBubble;
-        minScaleOfBubble = 0.1f;
+        minScaleOfBubble = 0.15f;
         shrinkRatio = 0.9998f;
         levelOfBubble = 3;
         dampingOfInnerBubble = 1.0f;
         distOfBubbleAndCamera = 1.6f;
-        bubbleDetectionRadius = 2f;
+        bubbleDetectionRadius = 15f;
 
         // BUBBLE CORE INFO
         lengthOfTrace = 300; // 3의 배수여야함
@@ -111,24 +147,24 @@ public class GameEnv {
         traceColor = new float[]{0.9f, 0f, 0f};
     }
 
-    public static long getDuration(){
+    public static long getDuration() {
         long duration;
         duration = System.currentTimeMillis() - startTime;
         return duration;
     }
 
-    public static float getScaleOfBubble(){
-        if(scaleOfBubble > minScaleOfBubble){
+    public static float getScaleOfBubble() {
+        if (scaleOfBubble > minScaleOfBubble) {
             scaleOfBubble = scaleOfBubble * shrinkRatio;
         }
         return scaleOfBubble;
     }
 
     // FIXME SG (NOT USED YET)
-    public static int getSuccessStatus(){
-        if(scaleOfBubble <= minScaleOfBubble){
+    public static int getSuccessStatus() {
+        if (scaleOfBubble <= minScaleOfBubble) {
             successStatus = -1; // FAIL
-        } else if(numOfTotalItems - numOfAchievedItems == 0){
+        } else if (numOfTotalItems - numOfAchievedItems == 0) {
             successStatus = 1;
         }
         return successStatus;

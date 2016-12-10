@@ -46,8 +46,8 @@ public class ItemGenerator {
         int search = (int) (minDist / unit);
 
         for (int index = 0; index < count; index++) {
-            int i = mRandomX.nextInt(dimX);
-            int j = mRandomZ.nextInt(dimZ);
+            int i = dimX / 8 + mRandomX.nextInt((dimX * 6) / 8);
+            int j = dimZ / 8 + mRandomZ.nextInt((dimZ * 6) / 8);
 
             // set x, z coors
             posList[index][0] = unit * i;
