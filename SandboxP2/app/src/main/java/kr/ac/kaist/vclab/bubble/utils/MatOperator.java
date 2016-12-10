@@ -16,19 +16,19 @@ public class MatOperator {
         return translation;
     }
 
-    public static float[] matTranslation(float[] mat) {
+    public static float[] matTranslation(float[] mat){
         float[] transformation = new float[16];
         Matrix.setIdentityM(transformation, 0);
-        transformation[12] = mat[12];
-        transformation[13] = mat[13];
-        transformation[14] = mat[14];
+        transformation[12]=mat[12];
+        transformation[13]=mat[13];
+        transformation[14]=mat[14];
         return transformation;
     }
 
-    public static void print(float[] mat) {
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                System.out.print(mat[i * 4 + j] + " ");
+    public static void print(float[] mat){
+        for(int i=0; i<4 ;i++){
+            for (int j=0; j<4; j++){
+                System.out.print(mat[i*4 +j] + " ");
             }
             System.out.println();
         }

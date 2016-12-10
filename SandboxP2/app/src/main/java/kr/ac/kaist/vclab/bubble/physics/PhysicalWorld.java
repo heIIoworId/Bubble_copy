@@ -18,48 +18,48 @@ public class PhysicalWorld {
     Particle bubbleCore;
     Blower blower;
 
-    public PhysicalWorld() {
+    public PhysicalWorld(){
         particles = new ArrayList<>();
         springs = new ArrayList<>();
     }
 
-    public void applyForce() {
+    public void applyForce(){
         // SET DAMPING RATIO
-        for (int i = 0; i < particles.size(); i++) {
+        for(int i = 0; i<particles.size(); i++){
             particles.get(i).setDamping(GameEnv.getInstance().dampingOfInnerBubble);
         }
         bubbleCore.setDamping(GameEnv.getInstance().dampingOfBubbleCore);
-        if (GameEnv.getInstance().collisionFlag == 1) {
+        if(GameEnv.getInstance().collisionFlag == 1){
             return;
         }
 
         // APPLY FORCE
-        for (int i = 0; i < springs.size(); i++) {
+        for (int i=0; i<springs.size(); i++){
             springs.get(i).applyForce();
         }
         bubbleCore.applyForce(GameEnv.getInstance().gravity);
-        if (Env.getInstance().micStatus == 1) {
+        if(Env.getInstance().micStatus == 1) {
             blower.applyForce();
         }
     }
 
-    public ArrayList<Particle> getParticles() {
+    public ArrayList<Particle> getParticles(){
         return particles;
     }
 
-    public void setParticles(ArrayList<Particle> _particles) {
+    public void setParticles(ArrayList<Particle> _particles){
         particles = _particles;
     }
 
-    public void setSprings(ArrayList<Spring> _springs) {
+    public void setSprings(ArrayList<Spring> _springs){
         springs = _springs;
     }
 
-    public void setBubbleCore(Particle _bubbleCore) {
+    public void setBubbleCore(Particle _bubbleCore){
         bubbleCore = _bubbleCore;
     }
 
-    public void setBlower(Blower _blower) {
+    public void setBlower(Blower _blower){
         blower = _blower;
     }
 

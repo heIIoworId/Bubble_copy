@@ -62,7 +62,6 @@ public class Intersect {
 
         return VecOperator.getMag(distance) <= Math.abs(sphereCollision2.getRadius() - sphereCollision1.getRadius());
     }
-
     public static boolean intersect(SphereCollision sphereCollision, TriangleCollision triangleCollision) {
         float[] vectors = triangleCollision.vectors;
         float[] sphereCenter = sphereCollision.GetCenter();
@@ -104,9 +103,9 @@ public class Intersect {
         int second = 1;
         float denominator = vec21[first] * vec31[second] - vec21[second] * vec31[first];
 
-        while (denominator == 0.0f && first < 2) {
+        while(denominator == 0.0f && first < 2){
             first = (first + 1);
-            second = (second + 1) % 3;
+            second = (second + 1)%3;
             denominator = vec21[first] * vec31[second] - vec21[second] * vec31[first];
         }
         float[] nearesttov1 = new float[3];
@@ -124,14 +123,14 @@ public class Intersect {
         //System.out.println("a " + a + " b " + b);
 
         //nearest point is out of the plane
-        if (a < 0 || a > 1 || b < 0 || b > 1) {
+        if(a < 0 || a > 1 || b <0 || b > 1){
             //System.out.println("out of plane!!!");
             return (Intersectline(vec1, vec2, normal, nearest, sphereCollision)
-                    || Intersectline(vec2, vec3, normal, nearest, sphereCollision)
-                    || Intersectline(vec3, vec1, normal, nearest, sphereCollision));
+                    ||Intersectline(vec2, vec3, normal, nearest, sphereCollision)
+                    ||Intersectline(vec3, vec1, normal, nearest, sphereCollision));
         }
         //nearest point is in the plane
-        else {
+        else{
             //System.out.println("in the  plane!!!");
 
             //System.out.println("nearest"+ " " + nearest[0]+ " " + nearest[1] + " " + nearest[2]);//
@@ -140,15 +139,14 @@ public class Intersect {
             return VecOperator.getDistance(nearest, sphereCenter) < sphereCollision.getRadius();
         }
     }
-
-    static boolean Intersectline(float[] vec1, float[] vec2, float[] normal, float[] nearest, SphereCollision sphereCollision) {
+    static boolean Intersectline(float[] vec1, float[] vec2, float[] normal, float[] nearest, SphereCollision sphereCollision){
         float[] vec21 = new float[3];
         vec21 = VecOperator.sub(vec2, vec1);
         float[] tonearest = new float[3];
         VecOperator.cross(vec21, normal, tonearest);
         float a = 0;
         boolean zero = false;
-        for (int i = 0; i < 3; i++) {
+        for(int i=0; i<3; i++){
             if (vec21[i] == 0) {
                 a = (nearest[i] - vec1[i]) / tonearest[i];
                 zero = true;
@@ -163,12 +161,15 @@ public class Intersect {
                         //System.out.println("aaaa");
                         return true;
                     }
-                } else {
+                }
+
+                else{
                     if (VecOperator.getDistance(vec1, sphereCollision.GetCenter()) < sphereCollision.getRadius()
                             || VecOperator.getDistance(vec2, sphereCollision.GetCenter()) < sphereCollision.getRadius()) {
                         if (VecOperator.getDistance(vec1, sphereCollision.GetCenter()) < sphereCollision.getRadius()) {
                             //System.out.println(vec1[0] + " " + vec1[1] + " " + vec1[2] + "\n " + sphereCollision.GetCenter()[0] + " " + sphereCollision.GetCenter()[1] + " " + sphereCollision.GetCenter()[2] + " " + sphereCollision.getRadius() + " " + VecOperator.getDistance(vec1, sphereCollision.GetCenter()));
-                        } else //System.out.println(vec1[0] +" " + vec1[1] +" " + vec1[2] +"\n "+sphereCollision.GetCenter()[0]+" "+sphereCollision.GetCenter()[1] + " " + sphereCollision.GetCenter()[2]+" "+sphereCollision.getRadius() + " " + VecOperator.getDistance(vec2, sphereCollision.GetCenter()));
+                        }
+                        else //System.out.println(vec1[0] +" " + vec1[1] +" " + vec1[2] +"\n "+sphereCollision.GetCenter()[0]+" "+sphereCollision.GetCenter()[1] + " " + sphereCollision.GetCenter()[2]+" "+sphereCollision.getRadius() + " " + VecOperator.getDistance(vec2, sphereCollision.GetCenter()));
                             //System.out.println("bbbb");
 
                             return true;
@@ -177,10 +178,11 @@ public class Intersect {
             }
         }
 
-        if (zero) {
+        if(zero){
             return false;
-        } else {
-            a = (vec21[1] * (nearest[0] - vec1[0]) - vec21[0] * (nearest[1] - vec1[1])) / (vec21[0] * tonearest[1] - vec21[1] * tonearest[0]);
+        }
+        else{
+            a = (vec21[1] *(nearest[0] - vec1[0]) - vec21[0] * (nearest[1] - vec1[1]))/(vec21[0] * tonearest[1] - vec21[1] * tonearest[0]);
             float[] toline = new float[3];
             toline = VecOperator.scale(tonearest, a);
             float[] inline = new float[3];
@@ -189,7 +191,8 @@ public class Intersect {
                 if (VecOperator.getDistance(inline, sphereCollision.GetCenter()) < sphereCollision.getRadius()) {
                     return true;
                 }
-            } else {
+            }
+            else{
                 if (VecOperator.getDistance(vec1, sphereCollision.GetCenter()) < sphereCollision.getRadius()
                         || VecOperator.getDistance(vec2, sphereCollision.GetCenter()) < sphereCollision.getRadius()) {
                     return true;
@@ -198,12 +201,11 @@ public class Intersect {
             return false;
         }
     }
-
-    static boolean IsinLine(float[] vec1, float[] vec2, float[] x) {
-        for (int i = 0; i < 3; i++) {
+    static boolean IsinLine(float[] vec1, float[] vec2, float[] x){
+        for(int i=0; i<3; i++){
             float max = Math.max(vec1[i], vec2[i]);
             float min = Math.min(vec1[i], vec2[i]);
-            if (x[i] > max || x[i] < min) {
+            if(x[i] >max || x[i] < min){
                 return false;
             }
         }

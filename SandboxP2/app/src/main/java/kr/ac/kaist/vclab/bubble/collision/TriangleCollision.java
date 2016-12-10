@@ -15,15 +15,16 @@ public class TriangleCollision extends Collision {
     private float[] vector3;
 
 
-    public TriangleCollision(float[] a, float[] b, float[] c) {
-        originalCenter = new float[]{0, 0, 0, 1};
-        center = new float[]{0, 0, 0, 1};
+    public TriangleCollision(float []a, float[] b, float[]c){
+        originalCenter = new float[]{0,0,0,1};
+        center = new float[]{0,0,0,1};
         //System.out.println("hiiii");
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                if (i == 3) {
-                    originVectors[i + j * 4] = 1;
-                } else {
+        for(int i=0; i<4; i++){
+            for(int j=0; j<4; j++){
+                if(i==3){
+                    originVectors[i + j*4] = 1;
+                }
+                else {
                     switch (j) {
                         case 0:
                             originVectors[i + j * 4] = a[i];
@@ -49,7 +50,7 @@ public class TriangleCollision extends Collision {
         this.vector3 = c;
     }
 
-    public void move(float[] transformation) {
+    public void move(float[] transformation){
 
 //        System.out.println("--------------------");
 //        System.out.println("trans");
@@ -60,22 +61,22 @@ public class TriangleCollision extends Collision {
 //        System.out.println("before");
 //        MatOperator.print(vectors);
 
-        Matrix.multiplyMM(vectors, 0, transformation, 0, originVectors, 0);
+        Matrix.multiplyMM(vectors, 0, transformation, 0, originVectors, 0 );
 //        System.out.println("after");
 //        MatOperator.print(vectors);
 //        System.out.println("--------------------");
 
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 4; j++) {
-                switch (j) {
+        for(int i=0; i<3; i++){
+            for (int j=0; j<4; j++){
+                switch (j){
                     case 0:
-                        vector1[i] = vectors[i + j * 4];
+                        vector1[i] = vectors[i+j*4];
                         break;
                     case 1:
-                        vector2[i] = vectors[i + j * 4];
+                        vector2[i] = vectors[i+j*4];
                         break;
                     case 2:
-                        vector3[i] = vectors[i + j * 4];
+                        vector3[i] = vectors[i+j*4];
                         break;
                     default:
                         break;
@@ -84,8 +85,8 @@ public class TriangleCollision extends Collision {
         }
     }
 
-    public void scalevectors(float scale) {
-        for (int i = 0; i < 16; i++) {
+    public void scalevectors(float scale){
+        for(int i=0; i<16; i++){
             originVectors[i] *= scale;
         }
     }

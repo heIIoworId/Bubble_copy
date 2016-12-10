@@ -10,18 +10,28 @@ import kr.ac.kaist.vclab.bubble.utils.VecOperator;
  */
 
 public class Blower {
-    SoundHandler soundHandler;
+    static SoundHandler soundHandler;
     float[] blowingDir;
     Particle bubbleCore;
 
-    public Blower() {
-        soundHandler = new SoundHandler();
+    public Blower(){
+        soundHandler = SoundHandler.getInstance();
         soundHandler.start();
     }
 
-    public void setBlowingDir(float[] viewRotationMatrix) {
+    public static void start(){
+        if (soundHandler != null)
+            soundHandler.start();
+    }
+    public static void stop(){
+        if (soundHandler != null)
+            soundHandler.stop();
+    }
 
-        float negativeZ[] = {0f, 0f, -1f, 0f};
+
+    public void setBlowingDir(float[] viewRotationMatrix){
+
+        float negativeZ[] = {0f,0f,-1f,0f};
         float temp[] = new float[4];
         Matrix.multiplyMV(temp, 0, viewRotationMatrix, 0, negativeZ, 0);
 
@@ -33,20 +43,19 @@ public class Blower {
         blowingDir = viewVector;
     }
 
-    public void delForce() {
+    public void delForce(){
         float viewVector[] = new float[3];
         viewVector[0] = 0.0f;
         viewVector[1] = 0.0f;
         viewVector[2] = 0.0f;
         blowingDir = viewVector;
     }
-
-    public void setBubbleCore(Particle _bubbleCore) {
+    public void setBubbleCore(Particle _bubbleCore){
         bubbleCore = _bubbleCore;
     }
 
-    public void applyForce() {
-        float amplitude = (float) (soundHandler.getAmplitude() / 2000000f);
+    public void applyForce(){
+        float amplitude = (float) (soundHandler.getAmplitude()/2000000f);
         float blowForce[] = VecOperator.scale(blowingDir, amplitude);
         bubbleCore.applyForce(blowForce);
     }

@@ -497,11 +497,11 @@ public class MapGenerator {
         }
     }
 
-    public TriangleCollision[] getCollision() {
+    public TriangleCollision[] getCollision(){
         //List<TriangleCollision> collsions = new ArrayList<TriangleCollision>();
         TriangleCollision[] collsions = new TriangleCollision[dimX * dimZ * 2];
-        for (int i = 0; i < dimX; i++) {
-            for (int j = 0; j < dimZ; j++) {
+        for(int i = 0; i < dimX ; i++){
+            for(int j = 0; j < dimZ; j++){
                 collsions[i * dimZ * 2 + j * 2] = new TriangleCollision(new float[]{unit * i, heightMap[i][j], unit * j},
                         new float[]{unit * i, heightMap[i][j + 1], unit * (j + 1)},
                         new float[]{unit * (i + 1), heightMap[i + 1][j + 1], unit * (j + 1)});

@@ -52,7 +52,7 @@ public class GeneralSphere {
     private static ArrayList<Float> normalsList;
     public float[] color;
 
-    public GeneralSphere(float _radius, int _level) {
+    public GeneralSphere(float _radius, int _level){
 
         verticesList = new ArrayList<>();
         normalsList = new ArrayList<>();
@@ -74,13 +74,13 @@ public class GeneralSphere {
         subdivide(vertexF, vertexA, vertexD, _level, _radius);
 
         vertices = new float[verticesList.size()];
-        for (int i = 0; i < verticesList.size(); i++) {
+        for(int i = 0; i<verticesList.size(); i++){
             vertices[i] = verticesList.get(i);
         }
         initVertexBuffer();
 
         normals = new float[normalsList.size()];
-        for (int i = 0; i < normalsList.size(); i++) {
+        for(int i = 0; i<normalsList.size(); i++){
             normals[i] = normalsList.get(i);
         }
         initNormalBuffer();
@@ -146,8 +146,8 @@ public class GeneralSphere {
         GLES20.glDisableVertexAttribArray(mNormalHandle);
     }
 
-    private void subdivide(float[] _vertex1, float[] _vertex2, float[] _vertex3, int level, float radius) {
-        if (level == 0) {
+    private void subdivide(float[] _vertex1, float[] _vertex2, float[] _vertex3, int level, float radius){
+        if(level == 0){
             normalsList.add(_vertex1[0]);
             normalsList.add(_vertex1[1]);
             normalsList.add(_vertex1[2]);
@@ -203,7 +203,7 @@ public class GeneralSphere {
         }
     }
 
-    public void initVertexBuffer() {
+    public void initVertexBuffer(){
         ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
         byteBuf.order(ByteOrder.nativeOrder());
         mVertexBuffer = byteBuf.asFloatBuffer();
@@ -211,7 +211,7 @@ public class GeneralSphere {
         mVertexBuffer.position(0);
     }
 
-    public void initNormalBuffer() {
+    public void initNormalBuffer(){
         ByteBuffer byteBuf = ByteBuffer.allocateDirect(normals.length * 4);
         byteBuf.order(ByteOrder.nativeOrder());
         mNormalBuffer = byteBuf.asFloatBuffer();
@@ -219,7 +219,7 @@ public class GeneralSphere {
         mNormalBuffer.position(0);
     }
 
-    public float[] getVertices() {
+    public float[] getVertices(){
         return vertices;
     }
 
