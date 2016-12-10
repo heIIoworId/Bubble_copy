@@ -15,9 +15,9 @@ public class SphereCollision extends Collision {
     private float radius;
 
 
-    public SphereCollision(float radius){
-        originalCenter = new float[]{0,0,0,1};
-        center = new float[]{0,0,0,1};
+    public SphereCollision(float radius) {
+        originalCenter = new float[]{0, 0, 0, 1};
+        center = new float[]{0, 0, 0, 1};
 
         this.originalRadius = radius;
         this.radius = radius;
@@ -35,17 +35,17 @@ public class SphereCollision extends Collision {
         return radius;
     }
 
-    public void setRadius(float _radius){
+    public void setRadius(float _radius) {
         radius = _radius;
     }
 
-    public void move(float[] transformation){
+    public void move(float[] transformation) {
         float[] translation = MatOperator.matTranslation(transformation);
         Matrix.multiplyMV(center, 0, translation, 0, originalCenter, 0);
     }
 
 
-    public void scaleRadius(float scale){
+    public void scaleRadius(float scale) {
         radius = originalRadius * scale;
     }
 
@@ -57,10 +57,10 @@ public class SphereCollision extends Collision {
         return Intersect.intersect(this, target);
     }
 
-    public boolean isCollided(float[] center1, float radius1, float[] center2, float radius2){
+    public boolean isCollided(float[] center1, float radius1, float[] center2, float radius2) {
         boolean bool = false;
         float dist = VecOperator.getDistance(center1, center2);
-        if(dist <= radius1 + radius2){
+        if (dist <= radius1 + radius2) {
             bool = true;
         }
         return bool;

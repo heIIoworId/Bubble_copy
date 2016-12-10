@@ -25,44 +25,46 @@ public class Particle {
         acceleration = new float[3];
     }*/
 
-    public Particle(float[] _location){
+    public Particle(float[] _location) {
         mass = 1.0f;
         location = _location;
         velocity = new float[3];
         acceleration = new float[3];
     }
 
-    public void applyForce(float[] force){
-        acceleration = VecOperator.scale(force, 1.0f/mass);
+    public void applyForce(float[] force) {
+        acceleration = VecOperator.scale(force, 1.0f / mass);
         velocity = VecOperator.add(velocity, acceleration);
         velocity = VecOperator.scale(velocity, damping);
         location = VecOperator.add(location, velocity);
         acceleration = VecOperator.scale(acceleration, 0f);
     }
 
-    public float[] getLocation(){
+    public float[] getLocation() {
         return location;
     }
-    public void setLocation(float[] _location){
+
+    public void setLocation(float[] _location) {
         location = _location;
     }
 
-    public void setDamping(float _damping){
+    public void setDamping(float _damping) {
         damping = _damping;
     }
 
     public boolean isColocated(float[] _location) {
         boolean result = false;
-        if(location[0]==_location[0] && location[1]==_location[1] && location[2]==_location[2]){
+        if (location[0] == _location[0] && location[1] == _location[1] && location[2] == _location[2]) {
             result = true;
         }
         return result;
     }
 
-    public float[] getVelocity(){
+    public float[] getVelocity() {
         return velocity;
     }
-    public void setVelocity(float[] _velocity){
+
+    public void setVelocity(float[] _velocity) {
         velocity = _velocity;
     }
 

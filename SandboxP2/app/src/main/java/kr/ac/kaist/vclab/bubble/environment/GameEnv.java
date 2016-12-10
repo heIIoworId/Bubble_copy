@@ -57,6 +57,7 @@ public class GameEnv {
     public static GameEnv getInstance() {
         return ourInstance;
     }
+
     private GameEnv() {
         // FLAG
         collisionFlag = 0;
@@ -70,7 +71,7 @@ public class GameEnv {
         // MAP INFO
         mapSizeX = 30f;
         mapSizeY = 3f;
-        mapSizeZ= 30f;
+        mapSizeZ = 30f;
 
 
         // TIME INFO
@@ -87,9 +88,9 @@ public class GameEnv {
         colorOfItem = new float[]{0f, 0f, 0.9f};
 
         // BUBBLE INFO
-        initialLocationOfBubble = new float[]{0,15.0f,0};
+        initialLocationOfBubble = new float[]{0, 15.0f, 0};
         radiusOfBubble = 1.2f;
-        colorOfBubble = new float[] {0.3f, 0.8f, 0.9f};
+        colorOfBubble = new float[]{0.3f, 0.8f, 0.9f};
         initialScaleOfBubble = 0.4f;
         scaleOfBubble = initialScaleOfBubble;
         minScaleOfBubble = 0.15f;
@@ -106,24 +107,24 @@ public class GameEnv {
         traceColor = new float[]{0.9f, 0f, 0f};
     }
 
-    public static long getDuration(){
+    public static long getDuration() {
         long duration;
         duration = System.currentTimeMillis() - startTime;
         return duration;
     }
 
-    public static float getScaleOfBubble(){
-        if(scaleOfBubble > minScaleOfBubble){
+    public static float getScaleOfBubble() {
+        if (scaleOfBubble > minScaleOfBubble) {
             scaleOfBubble = scaleOfBubble * shrinkRatio;
         }
         return scaleOfBubble;
     }
 
     // FIXME SG (NOT USED YET)
-    public static int getSuccessStatus(){
-        if(scaleOfBubble <= minScaleOfBubble){
+    public static int getSuccessStatus() {
+        if (scaleOfBubble <= minScaleOfBubble) {
             successStatus = -1; // FAIL
-        } else if(numOfTotalItems - numOfAchievedItems == 0){
+        } else if (numOfTotalItems - numOfAchievedItems == 0) {
             successStatus = 1;
         }
         return successStatus;

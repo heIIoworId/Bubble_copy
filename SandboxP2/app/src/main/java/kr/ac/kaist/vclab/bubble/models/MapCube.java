@@ -101,9 +101,9 @@ public class MapCube {
 
         // prepare shaders and OpenGL program
         int vertexShader = MyGLRenderer.loadShaderFromFile(
-                GLES20.GL_VERTEX_SHADER, "map-vshader5.glsl");
+                GLES20.GL_VERTEX_SHADER, "map-vshader6.glsl");
         int fragmentShader = MyGLRenderer.loadShaderFromFile(
-                GLES20.GL_FRAGMENT_SHADER, "map-fshader5.glsl");
+                GLES20.GL_FRAGMENT_SHADER, "map-fshader6.glsl");
 
         mProgram = GLES20.glCreateProgram();             // create empty OpenGL Program
         GLES20.glAttachShader(mProgram, vertexShader);   // add the vertex shader to program
@@ -187,7 +187,8 @@ public class MapCube {
         GLES20.glDisableVertexAttribArray(mNormalHandle);
         GLES20.glDisableVertexAttribArray(mTextureCoorHandle);
     }
-    public TriangleCollision[] getCollisions(){
+
+    public TriangleCollision[] getCollisions() {
         return collisions;
     }
 

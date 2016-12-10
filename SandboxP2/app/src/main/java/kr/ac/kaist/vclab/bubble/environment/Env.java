@@ -9,6 +9,7 @@ public class Env {
     public static int dirtyModeStatus;
 
     private static Env ourInstance = new Env();
+
     public static Env getInstance() {
         return ourInstance;
     }

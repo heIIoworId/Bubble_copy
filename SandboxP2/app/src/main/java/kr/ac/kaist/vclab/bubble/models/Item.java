@@ -13,7 +13,7 @@ public class Item extends GeneralSphere {
     private boolean isHitted;
     private int itemType;
 
-    public Item(float[] _center){
+    public Item(float[] _center) {
         super(GameEnv.getInstance().radiusOfItem, GameEnv.getInstance().levelOfItem);
         center = _center;
         isHitted = false;
@@ -21,13 +21,15 @@ public class Item extends GeneralSphere {
         itemType = 1; // 0: BAD, 1: GOOD
     }
 
-    public boolean checkHitStatus(){
+    public boolean checkHitStatus() {
         return isHitted;
     }
-    public void markAsHitted(){
+
+    public void markAsHitted() {
         isHitted = true;
     }
-    public float[] getCenter(){
+
+    public float[] getCenter() {
         return center;
     }
 }

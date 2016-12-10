@@ -11,14 +11,16 @@ public class ItemManager {
     public static Item[] items;
 
     private static ItemManager ourInstance = new ItemManager();
+
     public static ItemManager getInstance() {
         return ourInstance;
     }
+
     private ItemManager() {
         items = new Item[GameEnv.getInstance().numOfTotalItems];
     }
 
-    public static void setItems(Item[] _items){
+    public static void setItems(Item[] _items) {
         items = new Item[GameEnv.getInstance().numOfTotalItems];
         items = _items;
     }

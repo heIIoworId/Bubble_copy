@@ -43,7 +43,7 @@ public class SeaRectangle {
     private static float[] normals;
     private static float[] textureCoors;
 
-    private float[] move = new float[]{10.0f ,2.0f};
+    private float[] move = new float[]{10.0f, 2.0f};
     float[] color = {0.0f, 0.0f, 1.0f};
 
 
@@ -66,7 +66,7 @@ public class SeaRectangle {
                 0.0f, 1.0f, 0.0f
         };
 
-        textureCoors = new float[] {
+        textureCoors = new float[]{
                 0.0f, 0.0f, 0.0f,
                 0.0f, 1.0f, 0.0f,
                 1.0f, 1.0f, 0.0f,
