@@ -83,6 +83,7 @@ public class GameEnv {
     private GameEnv() {
         // FLAG
         collisionFlag = 0;
+        traceFlag = true;
 
         // VIEWPORT
         minViewDist = 1.0f; // near
