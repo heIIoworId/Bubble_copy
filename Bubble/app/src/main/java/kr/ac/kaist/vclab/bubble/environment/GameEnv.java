@@ -78,7 +78,6 @@ public class GameEnv {
         mapSizeY = 3f;
         mapSizeZ= 30f;
 
-
         // TIME INFO
         startTime = System.currentTimeMillis();
 
@@ -98,12 +97,12 @@ public class GameEnv {
         colorOfBubble = new float[] {0.3f, 0.8f, 0.9f};
         initialScaleOfBubble = 0.4f;
         scaleOfBubble = initialScaleOfBubble;
-        minScaleOfBubble = 0.15f;
+        minScaleOfBubble = 0.1f;
         shrinkRatio = 0.9998f;
         levelOfBubble = 3;
         dampingOfInnerBubble = 1.0f;
         distOfBubbleAndCamera = 1.6f;
-        bubbleDetectionRadius = 15f;
+        bubbleDetectionRadius = 2f;
 
         // BUBBLE CORE INFO
         lengthOfTrace = 300; // 3의 배수여야함

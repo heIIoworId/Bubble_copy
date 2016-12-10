@@ -10,7 +10,7 @@ public class Item extends GeneralSphere {
 
     // FIXME SG (HOW TO MAKE IT GLOW?)
     private float center[];
-    private boolean isHitted;
+    public boolean isHitted;
     private int itemType;
 
     public Item(float[] _center){
@@ -21,13 +21,13 @@ public class Item extends GeneralSphere {
         itemType = 1; // 0: BAD, 1: GOOD
     }
 
-    public boolean checkHitStatus(){
-        return isHitted;
-    }
     public void markAsHitted(){
         isHitted = true;
     }
     public float[] getCenter(){
         return center;
+    }
+    public void setCenter(float[] _center){
+        center = _center;
     }
 }

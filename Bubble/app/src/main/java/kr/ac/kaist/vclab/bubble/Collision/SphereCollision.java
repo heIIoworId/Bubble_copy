@@ -24,6 +24,8 @@ public class SphereCollision extends Collision {
         //this.originalCenter = pos;
     }
 
+    public SphereCollision() {}
+
     public SphereCollision(float[] pos, float radius) {
         originalCenter = pos;
         center = pos;

@@ -47,9 +47,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private static final String TAG = "MyGLRenderer";
 
     // PRESETS OF MAP
-    private float mapSizeX = 30.0f; // X-size (widthX) of map cube
-    private float mapSizeY = 3.0f; // Y-size (thickness) of map cube
-    private float mapSizeZ = 30.0f; // Z-size (widthZ) of map cube
+    private float mapSizeX = GameEnv.getInstance().mapSizeX;
+    private float mapSizeY = GameEnv.getInstance().mapSizeY;
+    private float mapSizeZ = GameEnv.getInstance().mapSizeZ;
     private float mapUnitLength = 0.5f; // length of the side of a triangle
     private float mapMaxHeight = 12.0f; // maximum height
     private float mapMinHeight = -2.0f; // minimum height (>= -mapSizeY) 윗면 기준(0)
@@ -225,11 +225,15 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         for(int i = 0; i < GameEnv.getInstance().numOfTotalItems; i++){
             Matrix.setIdentityM(mItemRotationMatrix[i], 0);
             Matrix.setIdentityM(mItemTranslationMatrix[i], 0);
+            float newCenter[] = new float[3];
             float center[] = mItems.get(i).getCenter();
+            newCenter[0] = center[0] - (GameEnv.getInstance().mapSizeX/2.0f);
+            newCenter[1] = center[1];
+            newCenter[2] = center[0] - (GameEnv.getInstance().mapSizeZ/2.0f);
+            mItems.get(i).setCenter(newCenter);
             Matrix.translateM(
-                    mItemTranslationMatrix[i], 0, -mapSizeX/2.0f, 0, -mapSizeZ/2.0f);
-            Matrix.translateM(
-                    mItemTranslationMatrix[i], 0, center[0], center[1], center[2]);
+                    mItemTranslationMatrix[i], 0,
+                    newCenter[0], newCenter[1], newCenter[2]);
         }
 
         // INIT BUBBLECORE MATRIX
@@ -285,8 +289,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                 GameEnv.getInstance().getScaleOfBubble(),
                 GameEnv.getInstance().getScaleOfBubble(),
                 GameEnv.getInstance().getScaleOfBubble());
-        mBubbleCore.getCollision().scaleRadius(GameEnv.getInstance().getScaleOfBubble());
-
+//        mBubbleCore.getCollision().scaleRadius(GameEnv.getInstance().getScaleOfBubble());
         Matrix.multiplyMM(mBubbleModelViewMatrix, 0, mViewMatrix, 0, mBubbleModelMatrix, 0);
         normalMatrix(mBubbleNormalMatrix, 0, mBubbleModelViewMatrix, 0);
 
@@ -349,7 +352,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         //FIXME SG (UPDATE NORMALS OF SPHERE)
 
         // DRAW
-        mBubbleCore.itemCollisionDetect();
         // ... gl_depth_test (depth test)
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
 
@@ -359,13 +361,15 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mMap.draw(mProjMatrix, mMapModelViewMatrix, mMapNormalMatrix, mMapModelMatrix, mLight, mLight2);
 
         mBubbleCore.updateTraceVertices();
-        mBubbleCore.drawTrace(mProjMatrix, mBubbleCoreModelViewMatrix, mBubbleCoreNormalMatrix,
-                mLight, mLight2);
+        // CHECK COLLISION BETWEEN BUBBLE AND ITEMS
+        mBubbleCore.itemCollisionDetect();
+        //FIXME SG TEST OUT (IT CAUSES ERRORS)
+//        mBubbleCore.drawTrace(mProjMatrix, mBubbleCoreModelViewMatrix, mBubbleCoreNormalMatrix,
+//                mLight, mLight2);
         for(int i = 0; i<GameEnv.getInstance().numOfTotalItems; i++){
-            // DRAWN ONLY UNHITTED ITEM
-            if(!mItems.get(i).checkHitStatus()) {
-                mItems.get(i).draw(mProjMatrix, mItemModelViewMatrix[i], mItemNormalMatrix[i],
-                        mLight, mLight2);
+            // DRAW ONLY UN-HITTED ITEM
+            if(!mItems.get(i).isHitted) {
+                mItems.get(i).draw(mProjMatrix, mItemModelViewMatrix[i], mItemNormalMatrix[i], mLight, mLight2);
             }
         }
 
