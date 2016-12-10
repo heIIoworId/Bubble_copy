@@ -229,7 +229,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
             float center[] = mItems.get(i).getCenter();
             newCenter[0] = center[0] - (GameEnv.getInstance().mapSizeX/2.0f);
             newCenter[1] = center[1];
-            newCenter[2] = center[0] - (GameEnv.getInstance().mapSizeZ/2.0f);
+            newCenter[2] = center[2] - (GameEnv.getInstance().mapSizeZ/2.0f);
             mItems.get(i).setCenter(newCenter);
             Matrix.translateM(
                     mItemTranslationMatrix[i], 0,
