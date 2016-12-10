@@ -225,12 +225,15 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         for(int i = 0; i < GameEnv.getInstance().numOfTotalItems; i++){
             Matrix.setIdentityM(mItemRotationMatrix[i], 0);
             Matrix.setIdentityM(mItemTranslationMatrix[i], 0);
+            float newCenter[] = new float[3];
             float center[] = mItems.get(i).getCenter();
-            //FIXME SG TEST
+            newCenter[0] = center[0] - (GameEnv.getInstance().mapSizeX/2.0f);
+            newCenter[1] = center[1];
+            newCenter[2] = center[0] - (GameEnv.getInstance().mapSizeZ/2.0f);
+            mItems.get(i).setCenter(newCenter);
             Matrix.translateM(
-                    mItemTranslationMatrix[i], 0, -mapSizeX/2.0f, 0, -mapSizeZ/2.0f);
-            Matrix.translateM(
-                    mItemTranslationMatrix[i], 0, center[0], center[1], center[2]);
+                    mItemTranslationMatrix[i], 0,
+                    newCenter[0], newCenter[1], newCenter[2]);
         }
 
         // INIT BUBBLECORE MATRIX
@@ -360,13 +363,13 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mBubbleCore.updateTraceVertices();
         // CHECK COLLISION BETWEEN BUBBLE AND ITEMS
         mBubbleCore.itemCollisionDetect();
-        mBubbleCore.drawTrace(mProjMatrix, mBubbleCoreModelViewMatrix, mBubbleCoreNormalMatrix,
-                mLight, mLight2);
+        //FIXME SG TEST OUT (IT CAUSES ERRORS)
+//        mBubbleCore.drawTrace(mProjMatrix, mBubbleCoreModelViewMatrix, mBubbleCoreNormalMatrix,
+//                mLight, mLight2);
         for(int i = 0; i<GameEnv.getInstance().numOfTotalItems; i++){
             // DRAW ONLY UN-HITTED ITEM
             if(!mItems.get(i).isHitted) {
-                mItems.get(i).draw(mProjMatrix, mItemModelViewMatrix[i], mItemNormalMatrix[i],
-                        mLight, mLight2);
+                mItems.get(i).draw(mProjMatrix, mItemModelViewMatrix[i], mItemNormalMatrix[i], mLight, mLight2);
             }
         }
 

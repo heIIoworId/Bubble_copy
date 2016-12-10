@@ -163,13 +163,10 @@ public class BubbleCore extends Particle {
 
     public void itemCollisionDetect(){
 
-        // FIXME SG LOCATION OF ITEMS ARE WRONG?
         Item[] items = ItemManager.getInstance().items;
         for(int i = 0; i < items.length; i++){
             if(!items[i].isHitted){ //DEALING WITH NOT-HITTED ITEMS ONLY
                 float[] itemCenter = items[i].getCenter();
-                itemCenter[0] = itemCenter[0]-(GameEnv.getInstance().mapSizeX/2.0f);
-                itemCenter[2] = itemCenter[2]-(GameEnv.getInstance().mapSizeZ/2.0f);
 
                 boolean isCollided = false;
                 float dist = VecOperator.getDistance(itemCenter, this.getLocation());

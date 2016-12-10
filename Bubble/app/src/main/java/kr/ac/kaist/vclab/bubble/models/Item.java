@@ -27,4 +27,7 @@ public class Item extends GeneralSphere {
     public float[] getCenter(){
         return center;
     }
+    public void setCenter(float[] _center){
+        center = _center;
+    }
 }
