@@ -46,9 +46,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private static final String TAG = "MyGLRenderer";
 
     // PRESETS OF MAP
-    private float mapSizeX = 30.0f; // X-size (widthX) of map cube
-    private float mapSizeY = 3.0f; // Y-size (thickness) of map cube
-    private float mapSizeZ = 30.0f; // Z-size (widthZ) of map cube
+    private float mapSizeX = GameEnv.getInstance().mapSizeX;
+    private float mapSizeY = GameEnv.getInstance().mapSizeY;
+    private float mapSizeZ = GameEnv.getInstance().mapSizeZ;
     private float mapUnitLength = 0.5f; // length of the side of a triangle
     private float mapMaxHeight = 12.0f; // maximum height
     private float mapMinHeight = -2.0f; // minimum height (>= -mapSizeY) 윗면 기준(0)
@@ -225,6 +225,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
             Matrix.setIdentityM(mItemRotationMatrix[i], 0);
             Matrix.setIdentityM(mItemTranslationMatrix[i], 0);
             float center[] = mItems.get(i).getCenter();
+            //FIXME SG TEST
             Matrix.translateM(
                     mItemTranslationMatrix[i], 0, -mapSizeX/2.0f, 0, -mapSizeZ/2.0f);
             Matrix.translateM(
@@ -284,8 +285,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                 GameEnv.getInstance().getScaleOfBubble(),
                 GameEnv.getInstance().getScaleOfBubble(),
                 GameEnv.getInstance().getScaleOfBubble());
-        mBubbleCore.getCollision().scaleRadius(GameEnv.getInstance().getScaleOfBubble());
-
+//        mBubbleCore.getCollision().scaleRadius(GameEnv.getInstance().getScaleOfBubble());
         Matrix.multiplyMM(mBubbleModelViewMatrix, 0, mViewMatrix, 0, mBubbleModelMatrix, 0);
         normalMatrix(mBubbleNormalMatrix, 0, mBubbleModelViewMatrix, 0);
 
@@ -348,7 +348,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         //FIXME SG (UPDATE NORMALS OF SPHERE)
 
         // DRAW
-        mBubbleCore.itemCollisionDetect();
         // ... gl_depth_test (depth test)
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
 
@@ -358,11 +357,13 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mMap.draw(mProjMatrix, mMapModelViewMatrix, mMapNormalMatrix, mMapModelMatrix, mLight, mLight2);
 
         mBubbleCore.updateTraceVertices();
+        // CHECK COLLISION BETWEEN BUBBLE AND ITEMS
+        mBubbleCore.itemCollisionDetect();
         mBubbleCore.drawTrace(mProjMatrix, mBubbleCoreModelViewMatrix, mBubbleCoreNormalMatrix,
                 mLight, mLight2);
         for(int i = 0; i<GameEnv.getInstance().numOfTotalItems; i++){
-            // DRAWN ONLY UNHITTED ITEM
-            if(!mItems.get(i).checkHitStatus()) {
+            // DRAW ONLY UN-HITTED ITEM
+            if(!mItems.get(i).isHitted) {
                 mItems.get(i).draw(mProjMatrix, mItemModelViewMatrix[i], mItemNormalMatrix[i],
                         mLight, mLight2);
             }

@@ -12,6 +12,7 @@ import kr.ac.kaist.vclab.bubble.collision.SphereCollision;
 import kr.ac.kaist.vclab.bubble.environment.GameEnv;
 import kr.ac.kaist.vclab.bubble.physics.Particle;
 import kr.ac.kaist.vclab.bubble.utils.SystemHelper;
+import kr.ac.kaist.vclab.bubble.utils.VecOperator;
 
 /**
  * Created by 84395 on 11/27/2016.
@@ -156,31 +157,35 @@ public class BubbleCore extends Particle {
         mTraceNormalBuffer.position(0);
     }
 
-    public SphereCollision getCollision() {
+    public SphereCollision getCollision(){
         return sphereCollision;
     }
 
     public void itemCollisionDetect(){
-        SphereCollision itemCollisionDetector = new SphereCollision(
-                this.getLocation(), GameEnv.getInstance().bubbleDetectionRadius);
 
+        // FIXME SG LOCATION OF ITEMS ARE WRONG?
         Item[] items = ItemManager.getInstance().items;
         for(int i = 0; i < items.length; i++){
-            float[] itemCenter = items[i].getCenter();
-            itemCenter[0] = itemCenter[0]-(GameEnv.getInstance().mapSizeX/2.0f);
-            itemCenter[2] = itemCenter[2]-(GameEnv.getInstance().mapSizeZ/2.0f);
+            if(!items[i].isHitted){ //DEALING WITH NOT-HITTED ITEMS ONLY
+                float[] itemCenter = items[i].getCenter();
+                itemCenter[0] = itemCenter[0]-(GameEnv.getInstance().mapSizeX/2.0f);
+                itemCenter[2] = itemCenter[2]-(GameEnv.getInstance().mapSizeZ/2.0f);
 
-            boolean isCollide = itemCollisionDetector.isCollided(
-                    this.getLocation(), GameEnv.getInstance().bubbleDetectionRadius,
-                    itemCenter, GameEnv.getInstance().radiusOfItem);
-            if(isCollide){
-                System.out.println(i+": collide");
-                // REMOVE ITEM
-                items[i].markAsHitted();
-                // RESET RADIUS
-                GameEnv.getInstance().scaleOfBubble = GameEnv.getInstance().initialScaleOfBubble;
-                // UPDATE ACHIEVED ITEM LIST
-                GameEnv.getInstance().numOfAchievedItems++;
+                boolean isCollided = false;
+                float dist = VecOperator.getDistance(itemCenter, this.getLocation());
+                if(dist <= GameEnv.getInstance().bubbleDetectionRadius + GameEnv.getInstance().radiusOfItem){
+                    isCollided = true;
+                }
+
+                if(isCollided){
+                    System.out.println(i+": collide");
+                    // REMOVE ITEM
+                    items[i].markAsHitted();
+                    // RESET RADIUS
+                    GameEnv.getInstance().scaleOfBubble = GameEnv.getInstance().initialScaleOfBubble;
+                    // UPDATE ACHIEVED ITEM LIST
+                    GameEnv.getInstance().numOfAchievedItems++;
+                }
             }
         }
     }

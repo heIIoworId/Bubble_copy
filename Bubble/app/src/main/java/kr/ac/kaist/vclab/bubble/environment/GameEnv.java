@@ -72,7 +72,6 @@ public class GameEnv {
         mapSizeY = 3f;
         mapSizeZ= 30f;
 
-
         // TIME INFO
         startTime = System.currentTimeMillis();
 

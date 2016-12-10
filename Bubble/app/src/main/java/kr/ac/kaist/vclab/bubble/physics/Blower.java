@@ -15,7 +15,7 @@ public class Blower {
     Particle bubbleCore;
 
     public Blower(){
-        soundHandler = new SoundHandler();
+        soundHandler = SoundHandler.getInstance();
         soundHandler.start();
     }
 

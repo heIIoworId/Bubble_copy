@@ -9,14 +9,17 @@ import java.io.IOException;
  */
 
 public class SoundHandler {
-    private MediaRecorder mRecorder = null;
+    private static MediaRecorder mRecorder = null;
+    private static SoundHandler ourInstance = new SoundHandler();
 
-    public SoundHandler() {
+    public static SoundHandler getInstance(){
+        return ourInstance;
     }
 
-    ;
+    private SoundHandler() {
+    }
 
-    public void start() {
+    public static void start() {
         if (mRecorder == null) {
             mRecorder = new MediaRecorder();
             mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -32,7 +35,7 @@ public class SoundHandler {
         }
     }
 
-    public void stop() {
+    public static void stop() {
         if (mRecorder != null) {
             mRecorder.stop();
             mRecorder.release();
@@ -40,7 +43,7 @@ public class SoundHandler {
         }
     }
 
-    public double getAmplitude() {
+    public static double getAmplitude() {
         if (mRecorder != null)
             return mRecorder.getMaxAmplitude();
         else
