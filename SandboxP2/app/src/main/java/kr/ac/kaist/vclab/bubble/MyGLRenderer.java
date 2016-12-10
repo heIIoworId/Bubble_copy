@@ -28,6 +28,7 @@ import kr.ac.kaist.vclab.bubble.models.BubbleCore;
 import kr.ac.kaist.vclab.bubble.models.BubbleSphere;
 import kr.ac.kaist.vclab.bubble.models.Item;
 import kr.ac.kaist.vclab.bubble.models.ItemManager;
+import kr.ac.kaist.vclab.bubble.models.LavaRectangle;
 import kr.ac.kaist.vclab.bubble.models.MapCube;
 import kr.ac.kaist.vclab.bubble.models.SeaRectangle;
 import kr.ac.kaist.vclab.bubble.models.SkyBox;
@@ -46,13 +47,17 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private static final String TAG = "MyGLRenderer";
 
     // PRESETS OF MAP
-    private float mapSizeX = 30.0f; // X-size (widthX) of map cube
-    private float mapSizeY = 3.0f; // Y-size (thickness) of map cube
-    private float mapSizeZ = 30.0f; // Z-size (widthZ) of map cube
-    private float mapUnitLength = 0.5f; // length of the side of a triangle
-    private float mapMaxHeight = 12.0f; // maximum height
-    private float mapMinHeight = -2.0f; // minimum height (>= -mapSizeY) 윗면 기준(0)
-    private float mapComplexity = 3.6f; // complexity (bigger complexity -> more & steeper mountains)
+    private float mapSizeX = 90.0f; // X-size (widthX) of map cube
+    private float mapSizeY = 20.0f; // Y-size (thickness) of map cube
+    private float mapSizeZ = 90.0f; // Z-size (widthZ) of map cube
+    private float mapUnitLength = 1.5f; // length of the side of a triangle
+    private float mapMaxHeight = 23.0f; // maximum height
+    private float mapMinHeight = -11.0f; // minimum height (>= -mapSizeY) 윗면 기준(0)
+    private float mapComplexity = 4.5f; // complexity (bigger complexity -> more & steeper mountains)
+
+    private float lavaSizeX = 350.0f;
+    private float lavaSizeZ = 350.0f;
+    private float lavaHeight = -45.0f;
 
     // FLAGS USED INSIDE RENDERER
     public boolean enableHintFlag = true; // false -> mapBlendFlag has no effect
@@ -61,6 +66,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     // DECLARE MODELS
     public MapCube mMap;
     public SeaRectangle mSea;
+    public LavaRectangle mLava;
     public SkyBox mSkyBox;
     private BubbleSphere mBubble;
     private ArrayList<Item> mItems;
@@ -115,6 +121,13 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private float[] mMapModelViewMatrix = new float[16];
     private float[] mMapNormalMatrix = new float[16];
 
+    // MATRICES FOR mMap
+    public float[] mLavaRotationMatrix = new float[16];
+    public float[] mLavaTranslationMatrix = new float[16];
+    private float[] mLavaModelMatrix = new float[16];
+    private float[] mLavaModelViewMatrix = new float[16];
+    private float[] mLavaNormalMatrix = new float[16];
+
     // MATRICES FOR mSea
     public float[] mSeaRotationMatrix = new float[16];
     public float[] mSeaTranslationMatrix = new float[16];
@@ -153,6 +166,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                 mapComplexity,
                 1.0f, true
         );
+
+        // INIT LAVA
+        mLava = new LavaRectangle(lavaSizeX, lavaSizeZ);
 
         // INIT ITEMGEN
         mItemGenerator = new ItemGenerator(
