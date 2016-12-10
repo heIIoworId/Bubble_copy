@@ -42,6 +42,7 @@ public class Blower {
 
         blowingDir = viewVector;
     }
+
     public void delForce(){
         float viewVector[] = new float[3];
         viewVector[0] = 0.0f;
