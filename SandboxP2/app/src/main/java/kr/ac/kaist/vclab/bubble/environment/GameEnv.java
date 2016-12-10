@@ -7,8 +7,13 @@ package kr.ac.kaist.vclab.bubble.environment;
 public class GameEnv {
     // FLAG
     public static int collisionFlag;
+
+    // If this is true, then camera doesn't follow the bubble, and you can rotate / translate the camera using the touchpad.
+    public static boolean traceFlag;
+
     // SKYBOX INFO
     public static String imgFolder;
+
     // GYRO INFO
     public static float gyroScale;
 
@@ -61,6 +66,7 @@ public class GameEnv {
     private GameEnv() {
         // FLAG
         collisionFlag = 0;
+        traceFlag = true;
 
         // GYRO INFO
         gyroScale = 1.5f;

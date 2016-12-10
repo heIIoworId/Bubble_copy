@@ -271,8 +271,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         System.arraycopy(mTempMatrix, 0, mViewMatrix, 0, 16);
 
         // UPDATE VIEW MATRIX TO FOLLOW BUBBLE
-        // FIXME : enable / disable this to make the camera follow / not follow the bubble
-        // updateView();
+        if (!GameEnv.getInstance().traceFlag) {
+            updateView();
+        }
 
         // CALC BUBBLE MATRIX
         Matrix.setIdentityM(mBubbleTranslationMatrix, 0);

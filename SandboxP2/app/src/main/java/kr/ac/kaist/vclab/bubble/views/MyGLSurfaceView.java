@@ -73,21 +73,25 @@ public class MyGLSurfaceView extends GLSurfaceView {
             case MotionEvent.ACTION_UP:
                 mRenderer.mapBlendFlag = false;
                 break;
+
             case MotionEvent.ACTION_MOVE:
-                // DOUBLE TOUCH -> ROTATE VIEW
-                if (count == 2) {
-                    float[] rot = temp1;
+                if (GameEnv.getInstance().traceFlag) {
+                    // DOUBLE TOUCH -> ROTATE VIEW
+                    if (count == 2) {
+                        float[] rot = temp1;
 
-                    Matrix.setIdentityM(rot, 0);
-                    Matrix.rotateM(rot, 0, dx, 0, 1, 0);
-                    Matrix.rotateM(rot, 0, dy, 1, 0, 0);
-                    Matrix.multiplyMM(temp2, 0, rot, 0, mRenderer.mViewRotationMatrix, 0);
-                    System.arraycopy(temp2, 0, mRenderer.mViewRotationMatrix, 0, 16);
-                }
+                        Matrix.setIdentityM(rot, 0);
+                        Matrix.rotateM(rot, 0, dx, 0, 1, 0);
+                        Matrix.rotateM(rot, 0, dy, 1, 0, 0);
+                        Matrix.multiplyMM(temp2, 0, rot, 0, mRenderer.mViewRotationMatrix, 0);
+                        System.arraycopy(temp2, 0, mRenderer.mViewRotationMatrix, 0, 16);
+                    }
 
-                // TRIPLE TOUCH -> TRANSLATE VIEW
-                if (count == 3) {
-                    Matrix.translateM(mRenderer.mViewTranslationMatrix, 0, dx / 100, -dy / 100, 0);
+                    // TRIPLE TOUCH -> TRANSLATE VIEW
+                    // FIXME : THIS WORKS IN THE REAL DEVICE, BUT THERE IS NO WAY TO TEST THIS IN THE EMULATOR!
+                    if (count == 3) {
+                        Matrix.translateM(mRenderer.mViewTranslationMatrix, 0, dx / 100, -dy / 100, 0);
+                    }
                 }
 
                 break;
