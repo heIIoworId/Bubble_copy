@@ -583,6 +583,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     void checkMove(){
         mBubbleCore.getCollision().move(mBubbleModelMatrix);
+        mBubbleCore.getCollision().scaleRadius(GameEnv.getScaleOfBubble());
+
         float bubbleX = mBubbleTranslationMatrix[12];
         float bubbleZ = mBubbleTranslationMatrix[14];
         float bubbleR = mBubbleCore.getCollision().getRadius();
