@@ -128,4 +128,13 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
         requestRender();
     }
+    public void doRotate(float[] rotateMatrix){
+        float [] temp = new float[16];
+//        float [] temp2 = new float[16];
+//        Matrix.setIdentityM(temp2, 0);
+//        Matrix.multiplyMM(temp, 0 ,temp2, 0, rotateMatrix, 0);
+        Matrix.multiplyMM(temp, 0 , mRenderer.mViewRotationMatrix, 0 ,rotateMatrix, 0);
+        System.arraycopy(temp,0, mRenderer.mViewRotationMatrix, 0, 16);
+        requestRender();
+    }
 }

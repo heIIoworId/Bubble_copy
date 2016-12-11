@@ -37,6 +37,7 @@ import kr.ac.kaist.vclab.bubble.physics.Particle;
 import kr.ac.kaist.vclab.bubble.physics.Spring;
 import kr.ac.kaist.vclab.bubble.physics.PhysicalWorld;
 import kr.ac.kaist.vclab.bubble.utils.GeomOperator;
+import kr.ac.kaist.vclab.bubble.utils.MatOperator;
 import kr.ac.kaist.vclab.bubble.utils.VecOperator;
 
 /**
@@ -289,13 +290,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // CLEAR COLOR & DEPTH BUFFERS
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
-        // CALC VIEW MATRIX
-        Matrix.setIdentityM(mViewMatrix, 0);
-        Matrix.multiplyMM(mTempMatrix, 0, mViewRotationMatrix, 0, mViewMatrix, 0);
-        System.arraycopy(mTempMatrix, 0, mViewMatrix, 0, 16);
-        Matrix.multiplyMM(mTempMatrix, 0, mViewTranslationMatrix, 0, mViewMatrix, 0);
-        System.arraycopy(mTempMatrix, 0, mViewMatrix, 0, 16);
-
         // UPDATE VIEW MATRIX TO FOLLOW BUBBLE
         if (GameEnv.getInstance().traceFlag) {
             updateView();
@@ -378,10 +372,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         normalMatrix(mSeaNormalMatrix, 0, mSeaModelViewMatrix, 0);
         normalMatrix(mSkyboxNormalMatrix, 0, mSkyboxModelViewMatrix, 0);
 
-        //UPDATE WORLD AND VERTICES OF SPHERE
-        if(Env.getInstance().micStatus == 1){
-            mBlower.setBlowingDir(mViewMatrix);
-        }
         checkMove();
         mPhysicalWorld.applyForce();
         float updatedVertices[] = GeomOperator.genVertices(mPhysicalWorld.getParticles());
@@ -566,20 +556,31 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         for (int i=0; i<3; i++){
             change_translation[i]*= GameEnv.getInstance().distOfBubbleAndCamera;
             eye[i] += change_translation[i];
+
         }
+
         float[] look = new float[]{
                 mBubbleTranslationMatrix[12],
                 mBubbleTranslationMatrix[13],
                 mBubbleTranslationMatrix[14]};
 
         float[] up = new float[4] ;
-
         float[] temp = new float[]{0,1,0,0};
         Matrix.multiplyMV(up, 0, mViewRotationMatrix, 0 ,temp, 0);
+//        up = new float[]{0,1,0,0};
         Matrix.setLookAtM(mViewMatrix, 0,
                 eye[0], eye[1], eye[2],
                 look[0], look[1], look[2],
                 up[0], up[1], up[2]);
+
+
+        //UPDATE WORLD AND VERTICES OF SPHERE
+        if(Env.getInstance().micStatus == 1) {
+            mBlower.setBlowingDirByVector(new float[]{mBubbleTranslationMatrix[12] - eye[0],
+                    mBubbleTranslationMatrix[13] - eye[1],
+                    mBubbleTranslationMatrix[14] - eye[2]});
+        }
+        System.arraycopy(MatOperator.matLinear(mViewRotationMatrix),0, mViewRotationMatrix,0, 16);
     }
 
     void checkMove(){
