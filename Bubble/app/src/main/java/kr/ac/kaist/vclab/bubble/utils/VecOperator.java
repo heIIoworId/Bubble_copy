@@ -1,5 +1,9 @@
 package kr.ac.kaist.vclab.bubble.utils;
 
+import java.text.DecimalFormat;
+
+import kr.ac.kaist.vclab.bubble.environment.Env;
+
 /**
  * Created by 84395 on 10/29/2016.
  */
@@ -74,25 +78,6 @@ public class VecOperator {
         return dist;
     }
 
-    public static void cross(float[] p1, float[] p2, float[] result) {
-        result[0] = p1[1] * p2[2] - p2[1] * p1[2];
-        result[1] = p1[2] * p2[0] - p2[2] * p1[0];
-        result[2] = p1[0] * p2[1] - p2[0] * p1[1];
-    }
-
-    public static float dot(float[] p1, float[] p2) {
-        return p1[0] * p2[0] + p1[1] * p2[1] + p1[2] * p2[2];
-    }
-
-    public static float[] matLinear(float[] mat) {
-        float[] translation = new float[16];
-        System.arraycopy(mat, 0, translation, 0, 16);
-        translation[12] = 0;
-        translation[13] = 0;
-        translation[14] = 0;
-        return translation;
-    }
-
     // angle between two vectors
     public static float angle(float[] vec_1, float[] vec_2) {
         float mag_1 = getMag(vec_1);
@@ -105,11 +90,25 @@ public class VecOperator {
         }
     }
 
+    public static float dot(float[] p1, float[] p2) {
+        return p1[0] * p2[0] + p1[1] * p2[1] + p1[2] * p2[2];
+    }
     // cross(a, b, c) -> in-place cross product
     // cross(a, b) -> return the RESULT of cross product
+    public static void cross(float[] p1, float[] p2, float[] result) {
+        result[0] = p1[1] * p2[2] - p2[1] * p1[2];
+        result[1] = p1[2] * p2[0] - p2[2] * p1[0];
+        result[2] = p1[0] * p2[1] - p2[0] * p1[1];
+    }
+
     public static float[] cross(float[] vec_1, float[] vec_2) {
         float[] result = new float[3];
         cross(vec_1, vec_2, result);
         return result;
+    }
+
+    public static void print(float[] vec){
+        DecimalFormat form = Env.printForm;
+        System.out.println(form.format(vec[0]) + " " + form.format(vec[1]) + " " + form.format(vec[2]));
     }
 }

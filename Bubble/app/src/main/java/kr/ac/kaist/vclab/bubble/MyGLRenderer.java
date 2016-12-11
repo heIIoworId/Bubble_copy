@@ -556,7 +556,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         for (int i=0; i<3; i++){
             change_translation[i]*= GameEnv.getInstance().distOfBubbleAndCamera;
             eye[i] += change_translation[i];
-
         }
 
         float[] look = new float[]{
@@ -573,7 +572,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                 look[0], look[1], look[2],
                 up[0], up[1], up[2]);
 
-
         //UPDATE WORLD AND VERTICES OF SPHERE
         if(Env.getInstance().micStatus == 1) {
             mBlower.setBlowingDirByVector(new float[]{mBubbleTranslationMatrix[12] - eye[0],
@@ -585,16 +583,16 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     void checkMove(){
         mBubbleCore.getCollision().move(mBubbleModelMatrix);
-        float x = mBubbleTranslationMatrix[12];
-        float z = mBubbleTranslationMatrix[14];
-        float r = mBubbleCore.getCollision().getRadius();
+        float bubbleX = mBubbleTranslationMatrix[12];
+        float bubbleZ = mBubbleTranslationMatrix[14];
+        float bubbleR = mBubbleCore.getCollision().getRadius();
         TriangleCollision[] collisions = mMap.getCollisions();
 
         int dimX = (int) (mapSizeX / mapUnitLength);
         int dimZ = (int) (mapSizeZ / mapUnitLength);
 
-        for(int i=(int)Math.max((x-r + mapSizeX/2)/mapUnitLength, 0); i<Math.min((x+r + mapSizeX/2)/mapUnitLength, dimX); i++) {
-            for (int j=(int)Math.max((z-r + mapSizeZ/2)/mapUnitLength, 0); j<Math.min((z+r + mapSizeZ/2)/mapUnitLength, dimZ); j++) {
+        for(int i=(int)Math.max((bubbleX - bubbleR - mMapTranslationMatrix[12])/mapUnitLength, 0); i<Math.min((bubbleX + bubbleR - mMapTranslationMatrix[12])/mapUnitLength, dimX); i++) {
+            for (int j=(int)Math.max((bubbleZ - bubbleR - mMapTranslationMatrix[14])/mapUnitLength, 0); j<Math.min((bubbleZ + bubbleR - mMapTranslationMatrix[14])/mapUnitLength, dimZ); j++) {
                 TriangleCollision collision = collisions[i * dimZ * 2 + j * 2];
                 collision.move(mMapModelMatrix);
                 if(Intersect.intersect(mBubbleCore.getCollision(), collision)){

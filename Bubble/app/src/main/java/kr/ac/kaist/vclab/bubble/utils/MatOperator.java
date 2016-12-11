@@ -2,11 +2,16 @@ package kr.ac.kaist.vclab.bubble.utils;
 
 import android.opengl.Matrix;
 
+import java.text.DecimalFormat;
+
+import kr.ac.kaist.vclab.bubble.environment.Env;
+
 /**
  * Created by 84395 on 10/29/2016.
  */
 
 public class MatOperator {
+
     public static float[] matLinear(float[] mat) {
         float[] translation = new float[16];
         System.arraycopy(mat, 0, translation, 0, 16);
@@ -28,7 +33,16 @@ public class MatOperator {
     public static void print(float[] mat){
         for(int i=0; i<4 ;i++){
             for (int j=0; j<4; j++){
-                System.out.print(mat[i*4 +j] + " ");
+                System.out.print(Env.printForm.format(mat[i*4 +j]) + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    public static void print3(float[] mat){
+        for(int i=0; i<3 ;i++){
+            for (int j=0; j<3; j++){
+                System.out.print(Env.printForm.format(mat[i*4 +j]) + " ");
             }
             System.out.println();
         }
