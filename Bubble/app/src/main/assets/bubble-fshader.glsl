@@ -26,7 +26,7 @@ void main() {
 
   //gl_FragColor = texture2D(sampler, vTex_Coord);
     gl_FragColor = envColor;
-    gl_FragColor.a = 0.5;
+    gl_FragColor.a = 0.3;
   //gl_FragColor = vec4(uColor, 1.0);
   /*
 

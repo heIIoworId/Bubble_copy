@@ -397,7 +397,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.multiplyMM(mSkyboxModelViewMatrix, 0, mViewMatrix, 0, mSkyboxModelMatrix, 0);
         normalMatrix(mSkyboxNormalMatrix, 0, mSkyboxModelViewMatrix, 0);
 
-
         checkMove();
         mPhysicalWorld.applyForce();
         float updatedVertices[] = GeomOperator.genVertices(mPhysicalWorld.getParticles());

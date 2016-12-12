@@ -94,8 +94,8 @@ public class GameEnv {
         gyroAngleLimit = 0.9f;
 
         // SKYBOX INFO
-        imgFolder = "sky2";
-        skySize = 20.0f;
+        imgFolder = "lake";
+        skySize = 200.0f;
 
         // MAP INFO
         mapSizeX = 80.0f;
