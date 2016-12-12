@@ -160,16 +160,6 @@ public class GameEnv {
         return scaleOfBubble;
     }
 
-    // FIXME SG (NOT USED YET)
-    public static int getSuccessStatus() {
-        if (scaleOfBubble <= minScaleOfBubble) {
-            successStatus = -1; // FAIL
-        } else if (numOfTotalItems - numOfAchievedItems == 0) {
-            successStatus = 1;
-        }
-        return successStatus;
-    }
-
     public static int getGameStatus(){
         // -1: GAME OVER, 0: NOTHING, 1: GAME CLEAR
         int status = 0;
