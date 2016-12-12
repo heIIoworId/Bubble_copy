@@ -135,7 +135,7 @@ public class GameEnv {
         levelOfBubble = 3;
         dampingOfInnerBubble = 1.0f;
         distOfBubbleAndCamera = 1.6f;
-        bubbleDetectionRadius = 15f;
+        bubbleDetectionRadius = 2f;
 
         // BUBBLE CORE INFO
         lengthOfTrace = 300; // 3의 배수여야함
