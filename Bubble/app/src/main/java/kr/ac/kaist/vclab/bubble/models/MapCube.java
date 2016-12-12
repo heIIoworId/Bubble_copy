@@ -24,7 +24,7 @@ public class MapCube {
 
     // bitmaps
     private Bitmap textureBitmap; // texture
-    // private Bitmap textureNormalBitmap; // normal map of the texture
+    private Bitmap textureNormalBitmap; // normal map of the texture
 
     // attribute handles
     private int mPositionHandle;
@@ -101,9 +101,9 @@ public class MapCube {
 
         // prepare shaders and OpenGL program
         int vertexShader = MyGLRenderer.loadShaderFromFile(
-                GLES20.GL_VERTEX_SHADER, "map-vshader6.glsl");
+                GLES20.GL_VERTEX_SHADER, "map-vshader8.glsl");
         int fragmentShader = MyGLRenderer.loadShaderFromFile(
-                GLES20.GL_FRAGMENT_SHADER, "map-fshader6.glsl");
+                GLES20.GL_FRAGMENT_SHADER, "map-fshader8.glsl");
 
         mProgram = GLES20.glCreateProgram();             // create empty OpenGL Program
         GLES20.glAttachShader(mProgram, vertexShader);   // add the vertex shader to program
@@ -111,17 +111,23 @@ public class MapCube {
         GLES20.glLinkProgram(mProgram);                  // create OpenGL program executables
 
         // texture
-        textureBitmap = MyGLRenderer.loadImage("rocky.jpg");
-        // textureNormalBitmap = MyGLRenderer.loadImage("forest_normal.png");
+        textureBitmap = MyGLRenderer.loadImage("rocky2.jpg");
+        textureNormalBitmap = MyGLRenderer.loadImage("rocky2_normal.jpg");
 
-        int[] textureHandles = new int[1];
-        GLES20.glGenTextures(1, textureHandles, 0);
+        int[] textureHandles = new int[2];
+        GLES20.glGenTextures(2, textureHandles, 0);
 
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandles[0]);
         GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, textureBitmap, 0);
-        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
-        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandles[1]);
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, textureNormalBitmap, 0);
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
     }
 
     public void draw(float[] projMatrix,
@@ -140,7 +146,7 @@ public class MapCube {
         mLightHandle = GLES20.glGetUniformLocation(mProgram, "uLight");
         mLight2Handle = GLES20.glGetUniformLocation(mProgram, "uLight2");
         mTextureHandle = GLES20.glGetUniformLocation(mProgram, "uTextureUnit");
-        // mTextureNormalHandle = GLES20.glGetUniformLocation(mProgram, "uTextureNormalUnit");
+        mTextureNormalHandle = GLES20.glGetUniformLocation(mProgram, "uTextureNormalUnit");
         mModelMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uModelMatrix");
 
         GLES20.glUniformMatrix4fv(mProjMatrixHandle, 1, false, projMatrix, 0);
@@ -179,6 +185,7 @@ public class MapCube {
 
         // set texture
         GLES20.glUniform1i(mTextureHandle, 0);
+        GLES20.glUniform1i(mTextureNormalHandle, 1);
 
         // Draw the cube
         GLES20.glDrawArrays(mode, 0, vertices.length / 3);
