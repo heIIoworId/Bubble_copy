@@ -63,6 +63,7 @@ public class MainActivity extends Activity {
         LinearLayout buttonLayout = new LinearLayout(this);
         buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
         buttonLayout.setGravity(Gravity.CENTER);
+        buttonLayout.setAlpha(0.8f);
 
         final ToggleButton myButton1 = new ToggleButton(this);
         myButton1.setBackgroundColor(0);
@@ -113,6 +114,7 @@ public class MainActivity extends Activity {
 
     private void setButtonText(ToggleButton button, String text) {
         button.setText(text);
+        button.setTextSize(17f);
         button.setTextOn(text);
         button.setTextOff(text);
     }
