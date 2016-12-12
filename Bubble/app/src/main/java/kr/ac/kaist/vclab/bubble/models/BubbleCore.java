@@ -121,27 +121,27 @@ public class BubbleCore extends Particle {
         GLES20.glDisableVertexAttribArray(mPositionHandle);
     }
 
-    public void updateTraceVertices(){
+    public void updateTraceVertices() {
         float currentLocation[] = this.getLocation();
-        for(int i = 0; i < currentLocation.length; i++){
+        for (int i = 0; i < currentLocation.length; i++) {
             traceVerticesArrayList.add(currentLocation[i]);
-            if(traceVerticesArrayList.size() >
-                    GameEnv.getInstance().lengthOfTrace + GameEnv.getInstance().traceOffset){
+            if (traceVerticesArrayList.size() >
+                    GameEnv.getInstance().lengthOfTrace + GameEnv.getInstance().traceOffset) {
                 traceVerticesArrayList.remove(0);
             }
         }
-        for(int i = 0; i < traceVerticesArrayList.size() - GameEnv.getInstance().traceOffset; i++){
+        for (int i = 0; i < traceVerticesArrayList.size() - GameEnv.getInstance().traceOffset; i++) {
             traceVertices[i] = traceVerticesArrayList.get(i);
         }
-        for(int i = 0; i < traceVerticesArrayList.size() - GameEnv.getInstance().traceOffset; i = i+3){
+        for (int i = 0; i < traceVerticesArrayList.size() - GameEnv.getInstance().traceOffset; i = i + 3) {
             traceNormals[i] = 0f;
-            traceNormals[i+1] = 1.0f;
-            traceNormals[i+2] = 0f;
+            traceNormals[i + 1] = 1.0f;
+            traceNormals[i + 2] = 0f;
         }
         initTraceVertexBuffer();
     }
 
-    private void initTraceVertexBuffer(){
+    private void initTraceVertexBuffer() {
         ByteBuffer byteBuf = ByteBuffer.allocateDirect(traceVertices.length * 4);
         byteBuf.order(ByteOrder.nativeOrder());
         mTraceVertexBuffer = byteBuf.asFloatBuffer();
@@ -149,7 +149,7 @@ public class BubbleCore extends Particle {
         mTraceVertexBuffer.position(0);
     }
 
-    private void initTraceNormalBuffer(){
+    private void initTraceNormalBuffer() {
         ByteBuffer byteBuf = ByteBuffer.allocateDirect(traceNormals.length * 4);
         byteBuf.order(ByteOrder.nativeOrder());
         mTraceNormalBuffer = byteBuf.asFloatBuffer();
@@ -157,25 +157,25 @@ public class BubbleCore extends Particle {
         mTraceNormalBuffer.position(0);
     }
 
-    public SphereCollision getCollision(){
+    public SphereCollision getCollision() {
         return sphereCollision;
     }
 
-    public void itemCollisionDetect(){
+    public void itemCollisionDetect() {
 
         Item[] items = ItemManager.getInstance().items;
-        for(int i = 0; i < items.length; i++){
-            if(!items[i].isHitted){ //DEALING WITH NOT-HITTED ITEMS ONLY
+        for (int i = 0; i < items.length; i++) {
+            if (!items[i].isHitted) { //DEALING WITH NOT-HITTED ITEMS ONLY
                 float[] itemCenter = items[i].getCenter();
 
                 boolean isCollided = false;
                 float dist = VecOperator.getDistance(itemCenter, this.getLocation());
-                if(dist <= GameEnv.getInstance().bubbleDetectionRadius + GameEnv.getInstance().radiusOfItem){
+                if (dist <= GameEnv.getInstance().bubbleDetectionRadius + GameEnv.getInstance().radiusOfItem) {
                     isCollided = true;
                 }
 
-                if(isCollided){
-                    System.out.println(i+": collide");
+                if (isCollided) {
+                    System.out.println(i + ": collide");
                     // REMOVE ITEM
                     items[i].markAsHitted();
                     // RESET RADIUS

@@ -12,7 +12,7 @@ public class SoundHandler {
     private static MediaRecorder mRecorder = null;
     private static SoundHandler ourInstance = new SoundHandler();
 
-    public static SoundHandler getInstance(){
+    public static SoundHandler getInstance() {
         return ourInstance;
     }
 

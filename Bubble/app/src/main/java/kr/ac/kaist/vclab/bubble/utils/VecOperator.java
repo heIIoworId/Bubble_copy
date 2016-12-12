@@ -93,6 +93,7 @@ public class VecOperator {
     public static float dot(float[] p1, float[] p2) {
         return p1[0] * p2[0] + p1[1] * p2[1] + p1[2] * p2[2];
     }
+
     // cross(a, b, c) -> in-place cross product
     // cross(a, b) -> return the RESULT of cross product
     public static void cross(float[] p1, float[] p2, float[] result) {
@@ -107,7 +108,7 @@ public class VecOperator {
         return result;
     }
 
-    public static void print(float[] vec){
+    public static void print(float[] vec) {
         DecimalFormat form = Env.printForm;
         System.out.println(form.format(vec[0]) + " " + form.format(vec[1]) + " " + form.format(vec[2]));
     }

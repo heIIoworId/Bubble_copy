@@ -25,7 +25,7 @@ public class SensorListener implements SensorEventListener {
     public SensorListener(Context context) {
         //Save context
         this.context = context;
-        mSensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
+        mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         gyroHandler = new GyroHandler();
         gyroHandler.mGyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
 
@@ -36,10 +36,11 @@ public class SensorListener implements SensorEventListener {
         timestamp = 0;
 
     }
+
     private void getGyroVector(float[] gyroValues,
                                float[] deltaVector,
                                float dT) {
-        gyroValues[1] = - gyroValues[1];
+        gyroValues[1] = -gyroValues[1];
         // Calculate the angular speed of the sample
         float omegaMagnitude = VecOperator.getMag(gyroValues);
 
@@ -67,7 +68,7 @@ public class SensorListener implements SensorEventListener {
     public void onSensorChanged(SensorEvent event) {
 
         float[] deltaVector = new float[4];
-        if(timestamp != 0){
+        if (timestamp != 0) {
             float dT = (event.timestamp - timestamp) * NS2S;
             getGyroVector(event.values, deltaVector, dT);
         }

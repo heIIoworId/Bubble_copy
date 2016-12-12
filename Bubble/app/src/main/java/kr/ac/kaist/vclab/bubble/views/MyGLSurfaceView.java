@@ -37,7 +37,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
         setRenderer(mRenderer);
 
         // Render the view only when there is a change in the drawing data
-        if(Env.getInstance().dirtyModeStatus == 1){
+        if (Env.getInstance().dirtyModeStatus == 1) {
             setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         }
     }
@@ -105,13 +105,13 @@ public class MyGLSurfaceView extends GLSurfaceView {
     }
 
 
-    public void doRotate(float[] rotateMatrix){
-        float [] temp = new float[16];
+    public void doRotate(float[] rotateMatrix) {
+        float[] temp = new float[16];
 //        float [] temp2 = new float[16];
 //        Matrix.setIdentityM(temp2, 0);
 //        Matrix.multiplyMM(temp, 0 ,temp2, 0, rotateMatrix, 0);
-        Matrix.multiplyMM(temp, 0 , mRenderer.mViewRotationMatrix, 0 ,rotateMatrix, 0);
-        System.arraycopy(temp,0, mRenderer.mViewRotationMatrix, 0, 16);
+        Matrix.multiplyMM(temp, 0, mRenderer.mViewRotationMatrix, 0, rotateMatrix, 0);
+        System.arraycopy(temp, 0, mRenderer.mViewRotationMatrix, 0, 16);
         requestRender();
     }
 }

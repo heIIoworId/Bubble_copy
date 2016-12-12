@@ -33,7 +33,7 @@ import kr.ac.kaist.vclab.bubble.views.MyGLSurfaceView;
  * Created by sjjeon on 16. 9. 20.
  */
 
-public class MainActivity extends Activity  {
+public class MainActivity extends Activity {
     public static Context context;
     public static MyGLSurfaceView mGLView;
     public static SensorListener mSensorListener;
@@ -70,7 +70,7 @@ public class MainActivity extends Activity  {
         myButton2.setBackgroundColor(0);
 
         // FIXME NEEDED TO BE RUN VIA A THREAD
-        Thread t = new Thread(){
+        Thread t = new Thread() {
             @Override
             public void run() {
                 try {

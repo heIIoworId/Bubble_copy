@@ -57,7 +57,7 @@ public class BubbleSphere {
     private static ArrayList<Float> normalsList;
     public float[] color;
 
-    public BubbleSphere(float _radius, int _level){
+    public BubbleSphere(float _radius, int _level) {
 
         center = new float[3];
 
@@ -81,13 +81,13 @@ public class BubbleSphere {
         subdivide(vertexF, vertexA, vertexD, _level, _radius);
 
         vertices = new float[verticesList.size()];
-        for(int i = 0; i<verticesList.size(); i++){
+        for (int i = 0; i < verticesList.size(); i++) {
             vertices[i] = verticesList.get(i);
         }
         initVertexBuffer();
 
         normals = new float[normalsList.size()];
-        for(int i = 0; i<normalsList.size(); i++){
+        for (int i = 0; i < normalsList.size(); i++) {
             normals[i] = normalsList.get(i);
         }
         initNormalBuffer();
@@ -168,8 +168,8 @@ public class BubbleSphere {
         GLES20.glDisableVertexAttribArray(mNormalHandle);
     }
 
-    private void subdivide(float[] _vertex1, float[] _vertex2, float[] _vertex3, int level, float radius){
-        if(level == 0){
+    private void subdivide(float[] _vertex1, float[] _vertex2, float[] _vertex3, int level, float radius) {
+        if (level == 0) {
             normalsList.add(_vertex1[0]);
             normalsList.add(_vertex1[1]);
             normalsList.add(_vertex1[2]);
@@ -225,7 +225,7 @@ public class BubbleSphere {
         }
     }
 
-    public void initVertexBuffer(){
+    public void initVertexBuffer() {
         ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
         byteBuf.order(ByteOrder.nativeOrder());
         mVertexBuffer = byteBuf.asFloatBuffer();
@@ -233,7 +233,7 @@ public class BubbleSphere {
         mVertexBuffer.position(0);
     }
 
-    public void initNormalBuffer(){
+    public void initNormalBuffer() {
         ByteBuffer byteBuf = ByteBuffer.allocateDirect(normals.length * 4);
         byteBuf.order(ByteOrder.nativeOrder());
         mNormalBuffer = byteBuf.asFloatBuffer();
@@ -241,7 +241,7 @@ public class BubbleSphere {
         mNormalBuffer.position(0);
     }
 
-    public float[] getVertices(){
+    public float[] getVertices() {
         return vertices;
     }
 
@@ -250,14 +250,15 @@ public class BubbleSphere {
         initVertexBuffer();
     }
 
-    public void setCenter(float[] _center){
+    public void setCenter(float[] _center) {
         center = _center;
     }
 
-    public float[] getCenter(){
+    public float[] getCenter() {
         return center;
     }
 
     //FIXME SG (UPDATE NORMALS ACCORDING TO VERTICES)
-    public void updateNormals(){}
+    public void updateNormals() {
+    }
 }
