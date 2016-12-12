@@ -47,6 +47,7 @@ public class SeaRectangle {
     float[] color = {0.0f, 0.0f, 1.0f};
 
 
+
     public SeaRectangle(float sizeX, float sizeZ) {
         vertices = new float[]{
                 0.0f, 0.0f, 0.0f,

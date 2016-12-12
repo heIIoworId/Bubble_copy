@@ -41,7 +41,6 @@ public class SkyBox {
     private static final int COORDS_PER_VERTEX = 3;
     private static final int VERTEX_STRIDE = COORDS_PER_VERTEX * 4;
 
-    // private Texture mTexture = new Texture();
     private BoxCollision boxCollision = new BoxCollision(new float[]{1, 0, 0}, new float[]{0, 1, 0}, new float[]{0, 0, 1});
     private static float vertices[] = {
             // Front face

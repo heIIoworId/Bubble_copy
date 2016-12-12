@@ -91,6 +91,7 @@ public class BubbleSphere {
             normals[i] = normalsList.get(i);
         }
         initNormalBuffer();
+        color = new float[]{0.8f,1f,0.9f};
 
         // PREPARE SHADER AND GL PROGRAM
         int vertexShader = MyGLRenderer.loadShaderFromFile(

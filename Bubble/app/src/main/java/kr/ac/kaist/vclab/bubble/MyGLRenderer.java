@@ -386,7 +386,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.multiplyMM(mTempMatrix, 0, mSeaTranslationMatrix, 0, mSeaModelMatrix, 0);
         System.arraycopy(mTempMatrix, 0, mSeaModelMatrix, 0, 16);
         Matrix.multiplyMM(mSeaModelViewMatrix, 0, mViewMatrix, 0, mSeaModelMatrix, 0);
-        Matrix.multiplyMM(mSkyboxModelViewMatrix, 0, mViewMatrix, 0, mSkyboxModelMatrix, 0);
+        normalMatrix(mSeaNormalMatrix, 0, mSeaModelViewMatrix, 0);
 
         // CALC SKYBOX MODELMATRIX
         Matrix.setIdentityM(mSkyboxModelMatrix, 0);
@@ -394,9 +394,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         System.arraycopy(mTempMatrix, 0, mSkyboxModelMatrix, 0, 16);
         Matrix.multiplyMM(mTempMatrix, 0, mSkyboxTranslationMatrix, 0, mSkyboxModelMatrix, 0);
         System.arraycopy(mTempMatrix, 0, mSkyboxModelMatrix, 0, 16);
-        Matrix.scaleM(mSkyboxModelMatrix, 0, 30, 30, 30);
-        normalMatrix(mSeaNormalMatrix, 0, mSeaModelViewMatrix, 0);
+        Matrix.multiplyMM(mSkyboxModelViewMatrix, 0, mViewMatrix, 0, mSkyboxModelMatrix, 0);
         normalMatrix(mSkyboxNormalMatrix, 0, mSkyboxModelViewMatrix, 0);
+
 
         checkMove();
         mPhysicalWorld.applyForce();

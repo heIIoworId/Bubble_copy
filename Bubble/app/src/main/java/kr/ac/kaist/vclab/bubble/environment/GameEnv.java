@@ -95,7 +95,7 @@ public class GameEnv {
 
         // SKYBOX INFO
         imgFolder = "sky2";
-        skySize = 200.0f;
+        skySize = 20.0f;
 
         // MAP INFO
         mapSizeX = 80.0f;

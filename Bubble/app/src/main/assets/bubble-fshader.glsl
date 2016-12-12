@@ -14,7 +14,6 @@ void main() {
   vec3 tolight = normalize(uLight - vPosition);
   vec3 tolight2 = normalize(uLight2 - vPosition);
   vec3 normal = normalize(vNormal);
-
   vec3 Kd = vec3(1.0, 1.0, 1.0);
 
   Kd = texture2D(sampler, vTex_Coord).rgb;
@@ -29,5 +28,11 @@ void main() {
     gl_FragColor = envColor;
     gl_FragColor.a = 0.5;
   //gl_FragColor = vec4(uColor, 1.0);
+  /*
+
+   vec4 bubbleColor = vec4(intensity, 1.0);
+   gl_FragColor = ratio * envColor + (1.0 - ratio) * bubbleColor;
+   gl_FragColor.a = 0.5;
+  */
 
 }

@@ -31,7 +31,8 @@ void main() {
 //  RefractDir = -refract(toPos, wNormal, 1.0/1.52);
 //  RefractDir = -reflect(toPos, wNormal.xyz);
 //  RefractDir = -reflect(normalize(aPosition), vNormal);
-  RefractDir = -refract(-toPos, wNormal.xyz, 1.0/1.52);
+  float ratio = 1.0/1.52;
+  RefractDir = -refract(-toPos, wNormal.xyz, ratio);
 
   vTex_Coord = aTex_Coord;
 }
