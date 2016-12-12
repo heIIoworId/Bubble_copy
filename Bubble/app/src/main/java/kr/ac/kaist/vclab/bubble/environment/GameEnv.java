@@ -169,4 +169,22 @@ public class GameEnv {
         }
         return successStatus;
     }
+
+    public static int getGameStatus(){
+        // -1: GAME OVER, 0: NOTHING, 1: GAME CLEAR
+        int status = 0;
+        if (collisionFlag == 1){
+            status = -1;
+            return status;
+        }
+        if (scaleOfBubble <= minScaleOfBubble) {
+            status = -1;
+            return status;
+        }
+        if (numOfTotalItems - numOfAchievedItems == 0){
+            status = 1;
+            return status;
+        }
+        return status;
+    }
 }
