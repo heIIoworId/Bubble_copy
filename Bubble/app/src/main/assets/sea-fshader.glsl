@@ -32,7 +32,7 @@ void main() {
 
     // haze
     vec4 haze = vec4(0.5, 0.5, 0.5, 0.7);
-    float ratio = 1.0 + vPosition.z/23.0;
+    float ratio = 1.0 + vPosition.z/87.0;
 
     gl_FragColor = ratio * vec4(intensity, 0.7) + (1.0 - ratio) * haze;
 }
