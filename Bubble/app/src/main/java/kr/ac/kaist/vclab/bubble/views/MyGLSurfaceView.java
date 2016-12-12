@@ -64,12 +64,14 @@ public class MyGLSurfaceView extends GLSurfaceView {
         float dy = Math.max(Math.min(y - mPreviousY, 10f), -10f);
 
         // TOUCH DOWN & UP -> HINT MODE ON / OFF (MAP BLENDING ON / OFF)
+        mRenderer.mapBlendFlag = false;
+
         switch (action) {
             case MotionEvent.ACTION_DOWN:
-                mRenderer.mapBlendFlag = true;
-                break;
-            case MotionEvent.ACTION_UP:
-                mRenderer.mapBlendFlag = false;
+                if (count == 1) {
+                    mRenderer.mapBlendFlag = true;
+                }
+
                 break;
 
             case MotionEvent.ACTION_MOVE:

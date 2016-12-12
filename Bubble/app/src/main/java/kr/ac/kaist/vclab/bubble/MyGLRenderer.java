@@ -207,7 +207,12 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         // INIT SEA (same x, z size as map)
         mSea = new SeaRectangle(mapSizeX, mapSizeZ);
-        mSkyBox = new SkyBox(GameEnv.getInstance().imgFolder);
+
+        // INIT SKYBOX
+        mSkyBox = new SkyBox(
+                GameEnv.getInstance().imgFolder,
+                GameEnv.getInstance().skySize
+        );
 
         // INIT WORLD
         mParticles = GeomOperator.genParticles(mBubble.getVertices());

@@ -15,9 +15,7 @@ public class GameEnv {
 
     // SKYBOX INFO
     public static String imgFolder;
-    public static float skySizeX;
-    public static float skySizeY;
-    public static float skySizeZ;
+    public static float skySize;
 
     // GYRO INFO
     public static float gyroScale;
@@ -87,19 +85,17 @@ public class GameEnv {
 
         // VIEWPORT
         minViewDist = 1.0f; // near
-        maxViewDist = 300.0f; // far
+        maxViewDist = 400.0f; // far
 
         // GYRO INFO
         gyroScale = 1.5f;
-        gyroValue = new float[]{0,0,0};
+        gyroValue = new float[]{0, 0, 0};
         gyroLimit = 80f;
         gyroAngleLimit = 0.9f;
 
         // SKYBOX INFO
         imgFolder = "sky2";
-        skySizeX = 300.0f;
-        skySizeY = 300.0f;
-        skySizeZ = 300.0f;
+        skySize = 200.0f;
 
         // MAP INFO
         mapSizeX = 80.0f;
@@ -113,7 +109,7 @@ public class GameEnv {
         // LAVA INFO
         lavaSizeX = 200.0f;
         lavaSizeZ = 200.0f;
-        lavaHeight = -60.0f;
+        lavaHeight = -80.0f;
 
         // TIME INFO
         startTime = System.currentTimeMillis();
@@ -152,7 +148,7 @@ public class GameEnv {
         int duration;
         long temp;
         temp = System.currentTimeMillis() - startTime;
-        temp = temp/1000;
+        temp = temp / 1000;
         duration = (int) Math.ceil(temp);
         return duration;
     }
