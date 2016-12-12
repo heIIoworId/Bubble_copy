@@ -64,18 +64,19 @@ public class MyGLSurfaceView extends GLSurfaceView {
         float dy = Math.max(Math.min(y - mPreviousY, 10f), -10f);
 
         // TOUCH DOWN & UP -> HINT MODE ON / OFF (MAP BLENDING ON / OFF)
-        mRenderer.mapBlendFlag = false;
-
         switch (action) {
             case MotionEvent.ACTION_DOWN:
-                if (count == 1) {
-                    mRenderer.mapBlendFlag = true;
-                }
-
+                mRenderer.mapBlendFlag = true;
                 break;
-
+            case MotionEvent.ACTION_UP:
+                mRenderer.mapBlendFlag = false;
+                break;
             case MotionEvent.ACTION_MOVE:
                 if (true) {
+                    if (count > 1) {
+                        mRenderer.mapBlendFlag = false;
+                    }
+
                     // DOUBLE TOUCH -> ROTATE VIEW
                     if (count == 2) {
                         float[] rot = temp1;
