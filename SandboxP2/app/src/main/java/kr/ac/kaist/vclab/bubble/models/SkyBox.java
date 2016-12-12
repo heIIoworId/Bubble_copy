@@ -42,7 +42,7 @@ public class SkyBox {
     private static final int VERTEX_STRIDE = COORDS_PER_VERTEX * 4;
 
     // private Texture mTexture = new Texture();
-    private BoxCollision boxCollision = new BoxCollision(new float[]{1,0,0}, new float[]{0,1,0}, new float[]{0,0,1});
+    private BoxCollision boxCollision = new BoxCollision(new float[]{1, 0, 0}, new float[]{0, 1, 0}, new float[]{0, 0, 1});
     private static float vertices[] = {
             // Front face
             -1.0f, -1.0f, 1.0f,
@@ -144,7 +144,6 @@ public class SkyBox {
     };
 
 
-
     private static float texcoord[] = {
             // Front face
             0.0f, 1.0f, 0.0f,
@@ -196,10 +195,24 @@ public class SkyBox {
 
     };
 
-    float color[] = { 0.2f, 0.709803922f, 0.898039216f };
+    float color[] = {0.2f, 0.709803922f, 0.898039216f};
     private int[] cubeTex = new int[1];
 
-    public SkyBox(String imgFolder) {
+    // SkyBox size
+    private float size;
+
+    public SkyBox(String imgFolder, float size) {
+        // store size attribute
+        this.size = size;
+
+        // re-scale vertices
+        for (int i = 0; i < vertices.length; i++) {
+            vertices[i] *= size;
+        }
+
+        // re-scale collision
+        // boxCollision.scaleAxes(new float[]{size, size, size, 1.0f});
+
         ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
         byteBuf.order(ByteOrder.nativeOrder());
         mVertexBuffer = byteBuf.asFloatBuffer();
@@ -235,16 +248,20 @@ public class SkyBox {
         GLES20.glEnable(GLES20.GL_TEXTURE_CUBE_MAP);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_CUBE_MAP, cubeTex[0]);
 
-        GLUtils.texImage2D(GLES20.GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, MyGLRenderer.loadImage(imgFolder+"/negx.png"), 0);
-        GLUtils.texImage2D(GLES20.GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, MyGLRenderer.loadImage(imgFolder+"/negy.png"), 0);
-        GLUtils.texImage2D(GLES20.GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, MyGLRenderer.loadImage(imgFolder+"/negz.png"), 0);
-        GLUtils.texImage2D(GLES20.GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, MyGLRenderer.loadImage(imgFolder+"/posx.png"), 0);
-        GLUtils.texImage2D(GLES20.GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, MyGLRenderer.loadImage(imgFolder+"/posy.png"), 0);
-        GLUtils.texImage2D(GLES20.GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0,  MyGLRenderer.loadImage(imgFolder+"/posz.png"), 0);
-        GLES20.glTexParameteri ( GLES20.GL_TEXTURE_CUBE_MAP, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST );
-        GLES20.glTexParameteri ( GLES20.GL_TEXTURE_CUBE_MAP, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST );
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, MyGLRenderer.loadImage(imgFolder + "/negx.png"), 0);
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, MyGLRenderer.loadImage(imgFolder + "/negy.png"), 0);
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, MyGLRenderer.loadImage(imgFolder + "/negz.png"), 0);
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, MyGLRenderer.loadImage(imgFolder + "/posx.png"), 0);
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, MyGLRenderer.loadImage(imgFolder + "/posy.png"), 0);
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, MyGLRenderer.loadImage(imgFolder + "/posz.png"), 0);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_CUBE_MAP, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_CUBE_MAP, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
 
         // GLES20.glBindTexture(GLES20.GL_TEXTURE_CUBE_MAP, 1);
+    }
+
+    public SkyBox(String imgFolder) {
+        this(imgFolder, 1.0f);
     }
 
     public void draw(float[] projMatrix,
@@ -279,7 +296,6 @@ public class SkyBox {
         GLES20.glUniform1i(mSampleHandle, 4);
 
 
-
         // attributes
         mPositionHandle = GLES20.glGetAttribLocation(mProgram, "aPosition");
         mNormalHandle = GLES20.glGetAttribLocation(mProgram, "aNormal");
@@ -306,7 +322,6 @@ public class SkyBox {
                 VERTEX_STRIDE, mTextureBuffer);
 
 
-
         // Draw the cube
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertices.length / 3);
 //        GLES20.glDrawArrays(GLES20.GL_LINE_LOOP, 0, vertices.length / 3);
@@ -319,11 +334,12 @@ public class SkyBox {
 
 
     }
-    public int[] getCubeTex(){
+
+    public int[] getCubeTex() {
         return cubeTex;
     }
 
-    public BoxCollision getCollision(){
+    public BoxCollision getCollision() {
         return boxCollision;
     }
 }
