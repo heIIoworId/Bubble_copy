@@ -11,6 +11,7 @@ import android.opengl.Matrix;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
@@ -46,6 +47,11 @@ public class MainActivity extends Activity  {
         // Prevent android being dark
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+        // Make it as full screen
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         // Create a GLSurfaceView instance and set it
         // as the ContentView for this Activity
         mGLView = new MyGLSurfaceView(this);
@@ -58,13 +64,37 @@ public class MainActivity extends Activity  {
         buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
         buttonLayout.setGravity(Gravity.CENTER);
 
-        ToggleButton myButton1 = new ToggleButton(this);
-        ToggleButton myButton2 = new ToggleButton(this);
+        final ToggleButton myButton1 = new ToggleButton(this);
+        myButton1.setBackgroundColor(0);
+        final ToggleButton myButton2 = new ToggleButton(this);
+        myButton2.setBackgroundColor(0);
 
         // FIXME NEEDED TO BE RUN VIA A THREAD
-        String duration = "" + GameEnv.getInstance().getDuration();
-        setButtonText(myButton1, duration);
-        setButtonText(myButton2, "Button 2");
+        Thread t = new Thread(){
+            @Override
+            public void run() {
+                try {
+                    while (!isInterrupted()) {
+                        Thread.sleep(1000);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                // update TextView here!
+                                String duration = "" + GameEnv.getInstance().getDuration() + " secs";
+                                setButtonText(myButton1, duration);
+                                String itemNum = "" + GameEnv.getInstance().numOfAchievedItems + "/" +
+                                        GameEnv.getInstance().numOfTotalItems;
+                                setButtonText(myButton2, itemNum);
+                            }
+                        });
+                    }
+                } catch (InterruptedException e) {
+                }
+            }
+        };
+        t.start();
+        setButtonText(myButton1, "Button 1");
+        setButtonText(myButton2, "Button 2asdadasdasdasds");
 
         buttonLayout.addView(myButton1);
         buttonLayout.addView(myButton2);
