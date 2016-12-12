@@ -148,9 +148,12 @@ public class GameEnv {
         traceColor = new float[]{0.9f, 0f, 0f};
     }
 
-    public static long getDuration() {
-        long duration;
-        duration = System.currentTimeMillis() - startTime;
+    public static int getDuration() {
+        int duration;
+        long temp;
+        temp = System.currentTimeMillis() - startTime;
+        temp = temp/1000;
+        duration = (int) Math.ceil(temp);
         return duration;
     }
 

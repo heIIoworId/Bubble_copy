@@ -37,6 +37,7 @@ import kr.ac.kaist.vclab.bubble.physics.Particle;
 import kr.ac.kaist.vclab.bubble.physics.Spring;
 import kr.ac.kaist.vclab.bubble.physics.PhysicalWorld;
 import kr.ac.kaist.vclab.bubble.utils.GeomOperator;
+import kr.ac.kaist.vclab.bubble.utils.MatOperator;
 import kr.ac.kaist.vclab.bubble.utils.VecOperator;
 
 /**
@@ -289,13 +290,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // CLEAR COLOR & DEPTH BUFFERS
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
-        // CALC VIEW MATRIX
-        Matrix.setIdentityM(mViewMatrix, 0);
-        Matrix.multiplyMM(mTempMatrix, 0, mViewRotationMatrix, 0, mViewMatrix, 0);
-        System.arraycopy(mTempMatrix, 0, mViewMatrix, 0, 16);
-        Matrix.multiplyMM(mTempMatrix, 0, mViewTranslationMatrix, 0, mViewMatrix, 0);
-        System.arraycopy(mTempMatrix, 0, mViewMatrix, 0, 16);
-
         // UPDATE VIEW MATRIX TO FOLLOW BUBBLE
         if (GameEnv.getInstance().traceFlag) {
             updateView();
@@ -378,16 +372,13 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         normalMatrix(mSeaNormalMatrix, 0, mSeaModelViewMatrix, 0);
         normalMatrix(mSkyboxNormalMatrix, 0, mSkyboxModelViewMatrix, 0);
 
-        //UPDATE WORLD AND VERTICES OF SPHERE
-        if(Env.getInstance().micStatus == 1){
-            mBlower.setBlowingDir(mViewMatrix);
-        }
         checkMove();
         mPhysicalWorld.applyForce();
         float updatedVertices[] = GeomOperator.genVertices(mPhysicalWorld.getParticles());
         mBubble.setVertices(updatedVertices);
         //FIXME SG (UPDATE NORMALS OF SPHERE)
 
+        //FIXME SG TESTING...
         // DRAW
         // ... gl_depth_test (depth test)
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
@@ -567,33 +558,44 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
             change_translation[i]*= GameEnv.getInstance().distOfBubbleAndCamera;
             eye[i] += change_translation[i];
         }
+
         float[] look = new float[]{
                 mBubbleTranslationMatrix[12],
                 mBubbleTranslationMatrix[13],
                 mBubbleTranslationMatrix[14]};
 
         float[] up = new float[4] ;
-
         float[] temp = new float[]{0,1,0,0};
         Matrix.multiplyMV(up, 0, mViewRotationMatrix, 0 ,temp, 0);
+//        up = new float[]{0,1,0,0};
         Matrix.setLookAtM(mViewMatrix, 0,
                 eye[0], eye[1], eye[2],
                 look[0], look[1], look[2],
                 up[0], up[1], up[2]);
+
+        //UPDATE WORLD AND VERTICES OF SPHERE
+        if(Env.getInstance().micStatus == 1) {
+            mBlower.setBlowingDirByVector(new float[]{mBubbleTranslationMatrix[12] - eye[0],
+                    mBubbleTranslationMatrix[13] - eye[1],
+                    mBubbleTranslationMatrix[14] - eye[2]});
+        }
+        System.arraycopy(MatOperator.matLinear(mViewRotationMatrix),0, mViewRotationMatrix,0, 16);
     }
 
     void checkMove(){
         mBubbleCore.getCollision().move(mBubbleModelMatrix);
-        float x = mBubbleTranslationMatrix[12];
-        float z = mBubbleTranslationMatrix[14];
-        float r = mBubbleCore.getCollision().getRadius();
+        mBubbleCore.getCollision().scaleRadius(GameEnv.getScaleOfBubble());
+
+        float bubbleX = mBubbleTranslationMatrix[12];
+        float bubbleZ = mBubbleTranslationMatrix[14];
+        float bubbleR = mBubbleCore.getCollision().getRadius();
         TriangleCollision[] collisions = mMap.getCollisions();
 
         int dimX = (int) (mapSizeX / mapUnitLength);
         int dimZ = (int) (mapSizeZ / mapUnitLength);
 
-        for(int i=(int)Math.max((x-r + mapSizeX/2)/mapUnitLength, 0); i<Math.min((x+r + mapSizeX/2)/mapUnitLength, dimX); i++) {
-            for (int j=(int)Math.max((z-r + mapSizeZ/2)/mapUnitLength, 0); j<Math.min((z+r + mapSizeZ/2)/mapUnitLength, dimZ); j++) {
+        for(int i=(int)Math.max((bubbleX - bubbleR - mMapTranslationMatrix[12])/mapUnitLength, 0); i<Math.min((bubbleX + bubbleR - mMapTranslationMatrix[12])/mapUnitLength, dimX); i++) {
+            for (int j=(int)Math.max((bubbleZ - bubbleR - mMapTranslationMatrix[14])/mapUnitLength, 0); j<Math.min((bubbleZ + bubbleR - mMapTranslationMatrix[14])/mapUnitLength, dimZ); j++) {
                 TriangleCollision collision = collisions[i * dimZ * 2 + j * 2];
                 collision.move(mMapModelMatrix);
                 if(Intersect.intersect(mBubbleCore.getCollision(), collision)){

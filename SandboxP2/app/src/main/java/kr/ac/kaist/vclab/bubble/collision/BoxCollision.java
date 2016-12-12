@@ -2,6 +2,7 @@ package kr.ac.kaist.vclab.bubble.collision;
 
 import android.opengl.Matrix;
 
+import kr.ac.kaist.vclab.bubble.utils.MatOperator;
 import kr.ac.kaist.vclab.bubble.utils.VecOperator;
 
 /**
@@ -48,7 +49,7 @@ public class BoxCollision extends Collision {
 
     @Override
     public void move(float[] transformation) {
-        float[] linear = VecOperator.matLinear(transformation);
+        float[] linear = MatOperator.matLinear(transformation);
         Matrix.multiplyMV(center, 0, transformation, 0, originalCenter, 0);
         Matrix.multiplyMM(axes, 0, linear, 0, originAxis, 0);
 

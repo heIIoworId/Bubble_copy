@@ -42,9 +42,6 @@ public class MyGLSurfaceView extends GLSurfaceView {
         }
     }
 
-    public MyGLRenderer getmRenderer() {
-        return mRenderer;
-    }
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
@@ -105,27 +102,14 @@ public class MyGLSurfaceView extends GLSurfaceView {
         return true;
     }
 
-    public void rotateByGyroSensor(float gyroX, float gyroY, float gyroZ) {
 
-        float[] rotate = new float[16];
+    public void doRotate(float[] rotateMatrix){
         float [] temp = new float[16];
-
-        Matrix.setIdentityM(rotate, 0);
-
-        float scale = GameEnv.getInstance().gyroScale;
-
-        GameEnv.getInstance().gyroValue[1] += -gyroY * scale;
-        Matrix.rotateM(rotate, 0, -gyroY * scale, 0, 1, 0);
-        Matrix.multiplyMM(temp, 0 , rotate, 0,mRenderer.mViewRotationMatrix, 0);
-        System.arraycopy(temp,0, mRenderer.mViewRotationMatrix,0, 16);
-
-        GameEnv.getInstance().gyroValue[0] += -gyroX * scale;
-        Matrix.rotateM(rotate, 0, -gyroX * scale, 1, 0, 0);
-        Matrix.multiplyMM(temp, 0 , mRenderer.mViewRotationMatrix, 0, rotate, 0);
-
-        //System.out.println(GameEnv.getInstance().gyroValue[0] + " " + GameEnv.getInstance().gyroValue[1]);
-        System.arraycopy(temp,0, mRenderer.mViewRotationMatrix,0, 16);
-
+//        float [] temp2 = new float[16];
+//        Matrix.setIdentityM(temp2, 0);
+//        Matrix.multiplyMM(temp, 0 ,temp2, 0, rotateMatrix, 0);
+        Matrix.multiplyMM(temp, 0 , mRenderer.mViewRotationMatrix, 0 ,rotateMatrix, 0);
+        System.arraycopy(temp,0, mRenderer.mViewRotationMatrix, 0, 16);
         requestRender();
     }
 }
