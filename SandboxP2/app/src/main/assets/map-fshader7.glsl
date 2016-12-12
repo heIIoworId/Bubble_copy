@@ -2,7 +2,7 @@ precision mediump float;
 
 uniform vec3 uLight, uLight2, uColor;
 uniform sampler2D uTextureUnit; // texture
-// uniform sampler2D uTextureNormalUnit; // normal map of the texture
+uniform sampler2D uTextureNormalUnit; // normal map of the texture
 
 varying vec3 vNormal;
 varying vec3 wNormal;
@@ -15,6 +15,9 @@ void main() {
     vec3 tolight2 = normalize(uLight2 - vPosition);
     vec3 normal = normalize(vNormal);
     float scale = 0.2;
+
+    // normal mapping
+    normal = texture2D(uTextureNormalUnit, vTextureCoor).rgb * 2.0 - 1.0;
 
     // diffuse
     float diffuse = max(0.0, dot(normal, tolight));
@@ -34,17 +37,8 @@ void main() {
         specular = pow(pow(specAngle, shininess), 8.0);
     }
 
-    // tri-planar mapping
-    vec3 blending = abs(wNormal);
-    blending = normalize(max(blending, 0.00001));
-    float b = (blending.x + blending.y + blending.z);
-    blending /= vec3(b, b, b);
-
-    // normal (bump) mapping
-    vec4 xaxis = texture2D(uTextureUnit, wPosition.yz * scale);
-    vec4 yaxis = texture2D(uTextureUnit, wPosition.xz * scale);
-    vec4 zaxis = texture2D(uTextureUnit, wPosition.xy * scale);
-    vec4 tex = xaxis * blending.x + yaxis * blending.y + zaxis * blending.z;
+    // texture
+    vec4 tex = texture2D(uTextureUnit, vTextureCoor);
 
     // color = texture + diffuse + blinn-phong
     vec3 intensity = tex.xyz * diffuse * lambertian + specular * specColor;
