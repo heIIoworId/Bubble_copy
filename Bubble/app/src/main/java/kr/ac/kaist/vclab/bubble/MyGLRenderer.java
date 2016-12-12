@@ -378,50 +378,51 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mBubble.setVertices(updatedVertices);
         //FIXME SG (UPDATE NORMALS OF SPHERE)
 
+        //FIXME SG TESTING...
         // DRAW
-        // ... gl_depth_test (depth test)
-        GLES20.glEnable(GLES20.GL_DEPTH_TEST);
-
-        // ... gl_cull_face (culling)
-        GLES20.glEnable(GLES20.GL_CULL_FACE);
-        mSkyBox.draw(mProjMatrix, mSkyboxModelViewMatrix, mSkyboxNormalMatrix, mLight, mLight2);
-
-        // MAP - NOT TRANSPARENT
-        if ((!enableHintFlag) || (!mapBlendFlag)) {
-            mMap.draw(mProjMatrix, mMapModelViewMatrix, mMapNormalMatrix, mMapModelMatrix, mLight, mLight2);
-        }
-
-        mLava.draw(mProjMatrix, mLavaModelViewMatrix, mLavaNormalMatrix, mLight, mLight2);
-
-        mBubbleCore.updateTraceVertices();
-        // CHECK COLLISION BETWEEN BUBBLE AND ITEMS
-        mBubbleCore.itemCollisionDetect();
-        //FIXME SG TEST OUT (IT CAUSES ERRORS)
-//        mBubbleCore.drawTrace(mProjMatrix, mBubbleCoreModelViewMatrix, mBubbleCoreNormalMatrix,
-//                mLight, mLight2);
-        for(int i = 0; i<GameEnv.getInstance().numOfTotalItems; i++){
-            // DRAW ONLY UN-HITTED ITEM
-            if(!mItems.get(i).isHitted) {
-                mItems.get(i).draw(mProjMatrix, mItemModelViewMatrix[i], mItemNormalMatrix[i], mLight, mLight2);
-            }
-        }
-
-        // ... gl_blend (alpha blending)
-        GLES20.glEnable(GLES20.GL_BLEND);
-        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
-
-        // MAP - TRANSPARENT
-        if (enableHintFlag && mapBlendFlag) {
-            mMap.draw(mProjMatrix, mMapModelViewMatrix, mMapNormalMatrix, mMapModelMatrix, mLight, mLight2);
-        }
-
-        mSea.draw(mProjMatrix, mSeaModelViewMatrix, mSeaNormalMatrix, mLight, mLight2, curTime);
-
-        mBubble.draw(mProjMatrix, mBubbleModelViewMatrix, mBubbleModelMatrix,
-                mViewMatrix, mBubbleNormalMatrix, mLight, mLight2,
-                mCamera, mSkyBox.getCubeTex());
-        // FIXME CAN'T SEE SEA
-        GLES20.glDisable(GLES20.GL_BLEND);
+//        // ... gl_depth_test (depth test)
+//        GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+//
+//        // ... gl_cull_face (culling)
+//        GLES20.glEnable(GLES20.GL_CULL_FACE);
+//        mSkyBox.draw(mProjMatrix, mSkyboxModelViewMatrix, mSkyboxNormalMatrix, mLight, mLight2);
+//
+//        // MAP - NOT TRANSPARENT
+//        if ((!enableHintFlag) || (!mapBlendFlag)) {
+//            mMap.draw(mProjMatrix, mMapModelViewMatrix, mMapNormalMatrix, mMapModelMatrix, mLight, mLight2);
+//        }
+//
+//        mLava.draw(mProjMatrix, mLavaModelViewMatrix, mLavaNormalMatrix, mLight, mLight2);
+//
+//        mBubbleCore.updateTraceVertices();
+//        // CHECK COLLISION BETWEEN BUBBLE AND ITEMS
+//        mBubbleCore.itemCollisionDetect();
+//        //FIXME SG TEST OUT (IT CAUSES ERRORS)
+////        mBubbleCore.drawTrace(mProjMatrix, mBubbleCoreModelViewMatrix, mBubbleCoreNormalMatrix,
+////                mLight, mLight2);
+//        for(int i = 0; i<GameEnv.getInstance().numOfTotalItems; i++){
+//            // DRAW ONLY UN-HITTED ITEM
+//            if(!mItems.get(i).isHitted) {
+//                mItems.get(i).draw(mProjMatrix, mItemModelViewMatrix[i], mItemNormalMatrix[i], mLight, mLight2);
+//            }
+//        }
+//
+//        // ... gl_blend (alpha blending)
+//        GLES20.glEnable(GLES20.GL_BLEND);
+//        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+//
+//        // MAP - TRANSPARENT
+//        if (enableHintFlag && mapBlendFlag) {
+//            mMap.draw(mProjMatrix, mMapModelViewMatrix, mMapNormalMatrix, mMapModelMatrix, mLight, mLight2);
+//        }
+//
+//        mSea.draw(mProjMatrix, mSeaModelViewMatrix, mSeaNormalMatrix, mLight, mLight2, curTime);
+//
+//        mBubble.draw(mProjMatrix, mBubbleModelViewMatrix, mBubbleModelMatrix,
+//                mViewMatrix, mBubbleNormalMatrix, mLight, mLight2,
+//                mCamera, mSkyBox.getCubeTex());
+//        // FIXME CAN'T SEE SEA
+//        GLES20.glDisable(GLES20.GL_BLEND);
     }
 
     @Override
