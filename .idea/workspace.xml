@@ -1,31 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c7bb732b-0bff-4c4a-b962-053bd4b4fee7" name="Default" comment="Fix Camera">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Bubble/app/src/main/assets/lake/negx.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Bubble/app/src/main/assets/lake/negy.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Bubble/app/src/main/assets/lake/negz.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Bubble/app/src/main/assets/lake/posx.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Bubble/app/src/main/assets/lake/posy.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Bubble/app/src/main/assets/lake/posz.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Bubble/app/src/main/res/drawable/backgroud.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Bubble/app/src/main/res/drawable/bubble.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Bubble/app/src/main/res/mipmap-hdpi/bubble.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Bubble/app/src/main/res/mipmap-mdpi/bubble.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Bubble/app/src/main/res/mipmap-xhdpi/bubble.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Bubble/app/src/main/res/mipmap-xxhdpi/bubble.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Bubble/app/src/main/res/mipmap-xxxhdpi/bubble.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/activities/StartActivity.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Bubble/app/src/main/res/layout/activity_start.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Bubble/app/src/main/res/values-v21/styles.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Bubble/app/src/main/res/values-w820dp/dimens.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Bubble/app/src/main/res/values/dimens.xml" />
+    <list default="true" id="c7bb732b-0bff-4c4a-b962-053bd4b4fee7" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Bubble/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/Bubble/app/src/main/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Bubble/app/src/main/assets/bubble-fshader.glsl" afterPath="$PROJECT_DIR$/Bubble/app/src/main/assets/bubble-fshader.glsl" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Bubble/app/src/main/assets/bubblecore-fshader.glsl" afterPath="$PROJECT_DIR$/Bubble/app/src/main/assets/bubblecore-fshader.glsl" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/MyGLRenderer.java" afterPath="$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/MyGLRenderer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/environment/GameEnv.java" afterPath="$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/environment/GameEnv.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/models/SeaRectangle.java" afterPath="$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/models/SeaRectangle.java" />
     </list>
     <ignored path="kaist_cs482_2016_team4.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -38,7 +17,7 @@
   </component>
   <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
   <component name="CreatePatchCommitExecutor">
-    <option name="PATCH_PATH" value="" />
+    <option name="PATCH_PATH" value="C:\Users\Jongmin\AndroidStudioProjects\434\kaist_cs482_2016_team4" />
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FavoritesManager">
@@ -59,10 +38,17 @@
       <file leaf-file-name="MyGLRenderer.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/MyGLRenderer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="182">
-              <caret line="217" column="9" selection-start-line="217" selection-start-column="9" selection-end-line="217" selection-end-column="9" />
+            <state relative-caret-position="19">
+              <caret line="227" column="0" selection-start-line="227" selection-start-column="0" selection-end-line="227" selection-end-column="0" />
               <folding />
             </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="negx.png" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Bubble/app/src/main/assets/lake/negx.png">
+          <provider selected="true" editor-type-id="images">
+            <state />
           </provider>
         </entry>
       </file>
@@ -156,10 +142,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
-    <option name="width" value="1870" />
-    <option name="height" value="1096" />
+    <option name="x" value="55" />
+    <option name="y" value="29" />
+    <option name="width" value="1681" />
+    <option name="height" value="993" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -186,12 +172,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
-      <pane id="Scratches" />
-      <pane id="AndroidView">
-        <subPane />
-      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -348,13 +328,53 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kaist_cs482_2016_team4" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kaist_cs482_2016_team4" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Bubble" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="assets" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lake" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
+      <pane id="AndroidView">
+        <subPane />
+      </pane>
+      <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
-    <property name="settings.editor.selected.configurable" value="android.sdk-updates" />
+    <property name="settings.editor.selected.configurable" value="vcs.Git" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth0" value="61" />
@@ -530,11 +550,18 @@
       <option name="project" value="LOCAL" />
       <updated>1481540584405</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Fix Camera">
+      <created>1481547341109</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1481547341109</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1870" height="1096" extended-state="6" />
+    <frame x="55" y="29" width="1681" height="993" extended-state="0" />
     <editor active="false" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -542,14 +569,14 @@
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32799146" sideWeight="0.51146287" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3685474" sideWeight="0.5143031" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32799146" sideWeight="0.48853713" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3685474" sideWeight="0.48569688" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22816594" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25441265" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -579,24 +606,16 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Fix" />
     <MESSAGE value="Add Collision" />
-    <MESSAGE value="Fix Camera" />
     <MESSAGE value="minor changes" />
     <MESSAGE value="My update" />
-    <option name="LAST_COMMIT_MESSAGE" value="My update" />
+    <MESSAGE value="Fix Camera" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix Camera" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/MyGLRenderer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="532">
-          <caret line="58" column="25" selection-start-line="58" selection-start-column="25" selection-end-line="58" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/physics/World.java" />
     <entry file="file://$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/generators/ItemGenerator.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -894,10 +913,15 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Bubble/app/src/main/assets/lake/negx.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/MyGLRenderer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="182">
-          <caret line="217" column="9" selection-start-line="217" selection-start-column="9" selection-end-line="217" selection-end-column="9" />
+        <state relative-caret-position="19">
+          <caret line="227" column="0" selection-start-line="227" selection-start-column="0" selection-end-line="227" selection-end-column="0" />
           <folding />
         </state>
       </provider>

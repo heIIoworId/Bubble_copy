@@ -8,6 +8,7 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 import kr.ac.kaist.vclab.bubble.MyGLRenderer;
+import kr.ac.kaist.vclab.bubble.collision.TriangleCollision;
 
 /**
  * Created by avantgarde on 2016-11-07.
@@ -43,6 +44,7 @@ public class SeaRectangle {
     private static float[] normals;
     private static float[] textureCoors;
 
+    private TriangleCollision[] triangleCollisions;
     private float[] move = new float[]{10.0f, 2.0f};
     float[] color = {0.0f, 0.0f, 1.0f};
 
@@ -75,6 +77,14 @@ public class SeaRectangle {
                 1.0f, 1.0f, 0.0f,
                 1.0f, 0.0f, 0.0f
         };
+
+        triangleCollisions = new TriangleCollision[2];
+        triangleCollisions[0] = new TriangleCollision(new float[]{0.0f, 0.0f, 0.0f},
+                new float[]{0.0f, 0.0f, sizeZ},
+                new float[]{sizeX, 0.0f, sizeZ});
+        triangleCollisions[1] = new TriangleCollision(new float[]{0.0f, 0.0f, 0.0f},
+                new float[]{sizeX, 0.0f, sizeZ},
+                new float[]{sizeX, 0.0f, 0});
 
         ByteBuffer byteBuf1 = ByteBuffer.allocateDirect(vertices.length * 4);
         byteBuf1.order(ByteOrder.nativeOrder());
@@ -177,5 +187,8 @@ public class SeaRectangle {
         GLES20.glDisableVertexAttribArray(mPositionHandle);
         GLES20.glDisableVertexAttribArray(mNormalHandle);
         GLES20.glDisableVertexAttribArray(mTextureCoorHandle);
+    }
+    public TriangleCollision[] getCollision(){
+        return triangleCollisions;
     }
 }

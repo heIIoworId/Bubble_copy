@@ -624,15 +624,26 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                 TriangleCollision collision = collisions[i * dimZ * 2 + j * 2];
                 collision.move(mMapModelMatrix);
                 if (Intersect.intersect(mBubbleCore.getCollision(), collision)) {
+                    System.out.println("Map Collide!");
                     GameEnv.getInstance().collisionFlag = 1;
                     return;
                 }
                 collision = collisions[i * dimZ * 2 + j * 2 + 1];
                 collision.move(mMapModelMatrix);
                 if (Intersect.intersect(mBubbleCore.getCollision(), collision)) {
+                    System.out.println("Map Collide!");
                     GameEnv.getInstance().collisionFlag = 1;
                     return;
                 }
+            }
+        }
+        TriangleCollision[] seaCollsiions = mSea.getCollision();
+        for (int i=0; i<2; i++){
+            seaCollsiions[i].move(mSeaModelMatrix);
+            if(Intersect.intersect(mBubbleCore.getCollision(), seaCollsiions[i])){
+                System.out.println("Sea Collide!");
+                GameEnv.getInstance().collisionFlag = 1;
+                return;
             }
         }
     }
