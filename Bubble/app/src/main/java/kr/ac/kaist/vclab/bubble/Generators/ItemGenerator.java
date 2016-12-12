@@ -12,6 +12,7 @@ public class ItemGenerator {
     private float radius;
     private float minDist;
     private float heightOffset;
+    private float margin;
 
     // params from mMapGenerator
     private float unit;
@@ -20,16 +21,18 @@ public class ItemGenerator {
     private int dimZ;
 
     public ItemGenerator(
-            int count,
-            float radius,
-            float minDist,
-            float heightOffset,
+            int count, // num. of items
+            float radius, // items' radius
+            float minDist, // min. distance between item and wall (recommended : minDist >= radius * 2)
+            float heightOffset, // items' height are between (min. safe height) ~ (min. safe height) + heightOffset
+            float margin, // items are generated within [margin * mapSizeX ~ (1 - margin) * mapSizeX, margin * mapSizeZ ~ (1 - margin) * mapSizeZ]
             MapGenerator mMapGenerator) {
         // from arguments
         this.count = count;
         this.radius = radius;
         this.minDist = minDist;
         this.heightOffset = heightOffset;
+        this.margin = margin;
 
         // from MapGenerator instance
         this.unit = mMapGenerator.unit;
@@ -46,8 +49,8 @@ public class ItemGenerator {
         int search = (int) (minDist / unit);
 
         for (int index = 0; index < count; index++) {
-            int i = dimX / 8 + mRandomX.nextInt((dimX * 6) / 8);
-            int j = dimZ / 8 + mRandomZ.nextInt((dimZ * 6) / 8);
+            int i = (int) (dimX * margin) + mRandomX.nextInt((int) (dimX * (1.0f - margin * 2.0f)));
+            int j = (int) (dimZ * margin) + mRandomZ.nextInt((int) (dimZ * (1.0f - margin * 2.0f)));
 
             // set x, z coors
             posList[index][0] = unit * i;
