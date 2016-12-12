@@ -93,8 +93,6 @@ public class MainActivity extends Activity  {
             }
         };
         t.start();
-        setButtonText(myButton1, "Button 1");
-        setButtonText(myButton2, "Button 2asdadasdasdasds");
 
         buttonLayout.addView(myButton1);
         buttonLayout.addView(myButton2);
@@ -111,8 +109,6 @@ public class MainActivity extends Activity  {
         layout.addView(buttonLayout, buttonParams);
         layout.addView(mGLView, glParams);
         setContentView(layout);
-
-
     }
 
     private void setButtonText(ToggleButton button, String text) {
