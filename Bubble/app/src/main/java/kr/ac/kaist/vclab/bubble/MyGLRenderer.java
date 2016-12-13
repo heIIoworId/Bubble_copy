@@ -322,12 +322,14 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
             activity.startActivity(intent);
             //Finish the MainActivity to prevent the return on the MainActivity by backpress.
             activity.finish();
+            return;
         }
         else if (status == 1){
             Intent intent = new Intent(activity, GameClearActivity.class);
             activity.startActivity(intent);
             //Finish the MainActivity to prevent the return on the MainActivity by backpress.
             activity.finish();
+            return;
         }
 
         // CLEAR COLOR & DEPTH BUFFERS

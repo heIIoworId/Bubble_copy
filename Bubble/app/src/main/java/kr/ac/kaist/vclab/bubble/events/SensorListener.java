@@ -34,7 +34,6 @@ public class SensorListener implements SensorEventListener {
 
         SoundHandler.getInstance().start();
         timestamp = 0;
-
     }
 
     private void getGyroVector(float[] gyroValues,

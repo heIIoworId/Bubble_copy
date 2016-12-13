@@ -70,7 +70,7 @@ public class GameEnv {
     public int traceOffset;
 
     // WORLD INFO
-    public static float[] gravity = new float[]{0f, -0.0006f, 0f};
+    public static float[] gravity = new float[]{0f, -0.0009f, 0f};
 
     private static GameEnv ourInstance = new GameEnv();
 
@@ -119,7 +119,7 @@ public class GameEnv {
 
         // ITEM INFO
         numOfAchievedItems = 0;
-        numOfTotalItems = 30;
+        numOfTotalItems = 15;
         radiusOfItem = 0.5f;
         levelOfItem = 1;
         colorOfItem = new float[]{0f, 0f, 0.9f};
@@ -131,7 +131,7 @@ public class GameEnv {
         initialScaleOfBubble = 0.4f;
         scaleOfBubble = initialScaleOfBubble;
         minScaleOfBubble = 0.15f;
-        shrinkRatio = 0.9998f;
+        shrinkRatio = 0.99f;
         levelOfBubble = 3;
         dampingOfInnerBubble = 1.0f;
         distOfBubbleAndCamera = 1.6f;
