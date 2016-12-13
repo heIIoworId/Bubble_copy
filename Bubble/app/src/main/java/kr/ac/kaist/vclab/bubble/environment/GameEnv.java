@@ -144,6 +144,73 @@ public class GameEnv {
         traceColor = new float[]{0.9f, 0f, 0f};
     }
 
+    public void init(){
+        // FLAG
+        collisionFlag = 0;
+        traceFlag = true;
+
+        // VIEWPORT
+        minViewDist = 1.0f; // near
+        maxViewDist = 400.0f; // far
+
+        // GYRO INFO
+        gyroScale = 1.5f;
+        gyroValue = new float[]{0, 0, 0};
+        gyroLimit = 80f;
+        gyroAngleLimit = 0.9f;
+
+        // SKYBOX INFO
+        imgFolder = "lake";
+        skySize = 200.0f;
+
+        // MAP INFO
+        mapSizeX = 80.0f;
+        mapSizeY = 20.0f;
+        mapSizeZ = 80.0f;
+        mapUnitLength = 1.5f;
+        mapMaxHeight = 20.0f;
+        mapMinHeight = -10.0f;
+        mapComplexity = 5.0f;
+
+        // LAVA INFO
+        lavaSizeX = 200.0f;
+        lavaSizeZ = 200.0f;
+        lavaHeight = -80.0f;
+
+        // TIME INFO
+        startTime = System.currentTimeMillis();
+
+        // SUCCESS INFO
+        successStatus = 0; // -1: FAIL, 0: NOTHING, 1: SUCCESS
+
+        // ITEM INFO
+        numOfAchievedItems = 0;
+        numOfTotalItems = 30;
+        radiusOfItem = 0.5f;
+        levelOfItem = 1;
+        colorOfItem = new float[]{0f, 0f, 0.9f};
+
+        // BUBBLE INFO
+        initialLocationOfBubble = new float[]{0, 15.0f, 0};
+        radiusOfBubble = 1.2f;
+        colorOfBubble = new float[]{0.3f, 0.8f, 0.9f};
+        initialScaleOfBubble = 0.4f;
+        scaleOfBubble = initialScaleOfBubble;
+        minScaleOfBubble = 0.15f;
+        shrinkRatio = 0.9998f;
+        levelOfBubble = 3;
+        dampingOfInnerBubble = 1.0f;
+        distOfBubbleAndCamera = 1.6f;
+        bubbleDetectionRadius = 2f;
+
+        // BUBBLE CORE INFO
+        lengthOfTrace = 300; // 3의 배수여야함
+        traceOffset = 60; // 3의 배수여야함
+        dampingOfBubbleCore = 0.96f;
+        traceColor = new float[]{0.9f, 0f, 0f};
+
+    }
+
     public static int getDuration() {
         int duration;
         long temp;

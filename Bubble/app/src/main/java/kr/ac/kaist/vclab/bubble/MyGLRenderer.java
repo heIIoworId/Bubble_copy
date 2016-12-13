@@ -1,5 +1,6 @@
 package kr.ac.kaist.vclab.bubble;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
@@ -18,6 +19,8 @@ import java.util.Arrays;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import kr.ac.kaist.vclab.bubble.activities.GameClearActivity;
+import kr.ac.kaist.vclab.bubble.activities.GameOverActivity;
 import kr.ac.kaist.vclab.bubble.activities.MainActivity;
 import kr.ac.kaist.vclab.bubble.collision.Intersect;
 import kr.ac.kaist.vclab.bubble.collision.TriangleCollision;
@@ -149,6 +152,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private float[] mProjMatrix = new float[16];
     private float[] mTempMatrix = new float[16];
 
+    private MainActivity activity;
     @Override
     // CALLED WHEN SURFACE IS CREATED AT FIRST.
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
@@ -312,6 +316,19 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     public void onDrawFrame(GL10 unused) {
 
         float curTime = (System.currentTimeMillis() - GameEnv.getInstance().startTime) / 1000000.0f;
+        int status = GameEnv.getGameStatus();
+        if(status == -1 ){
+            Intent intent = new Intent(activity, GameOverActivity.class);
+            activity.startActivity(intent);
+            //Finish the MainActivity to prevent the return on the MainActivity by backpress.
+            activity.finish();
+        }
+        else if (status == 1){
+            Intent intent = new Intent(activity, GameClearActivity.class);
+            activity.startActivity(intent);
+            //Finish the MainActivity to prevent the return on the MainActivity by backpress.
+            activity.finish();
+        }
 
         // CLEAR COLOR & DEPTH BUFFERS
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
@@ -646,5 +663,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                 return;
             }
         }
+    }
+    public void setActivity(MainActivity activity){
+        this.activity = activity;
     }
 }

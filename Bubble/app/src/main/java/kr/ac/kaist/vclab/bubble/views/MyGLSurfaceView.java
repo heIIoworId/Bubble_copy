@@ -6,6 +6,7 @@ import android.opengl.Matrix;
 import android.view.MotionEvent;
 
 import kr.ac.kaist.vclab.bubble.MyGLRenderer;
+import kr.ac.kaist.vclab.bubble.activities.MainActivity;
 import kr.ac.kaist.vclab.bubble.environment.Env;
 import kr.ac.kaist.vclab.bubble.environment.GameEnv;
 import kr.ac.kaist.vclab.bubble.utils.MatOperator;
@@ -25,6 +26,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
     private float[] temp2 = new float[16];
 
     public int mode;
+    private MainActivity activity;
 
     public MyGLSurfaceView(Context context) {
         super(context);
@@ -114,5 +116,10 @@ public class MyGLSurfaceView extends GLSurfaceView {
         Matrix.multiplyMM(temp, 0, mRenderer.mViewRotationMatrix, 0, rotateMatrix, 0);
         System.arraycopy(temp, 0, mRenderer.mViewRotationMatrix, 0, 16);
         requestRender();
+    }
+
+    public void setActivity(MainActivity activity){
+        this.activity = activity;
+        this.mRenderer.setActivity(activity);
     }
 }

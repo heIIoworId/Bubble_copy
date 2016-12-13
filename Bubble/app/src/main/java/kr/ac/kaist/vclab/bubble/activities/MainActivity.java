@@ -43,7 +43,7 @@ public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         MainActivity.context = getApplicationContext();
-
+        GameEnv.getInstance().init();
         // Prevent android being dark
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -56,6 +56,7 @@ public class MainActivity extends Activity {
         // as the ContentView for this Activity
         mGLView = new MyGLSurfaceView(this);
         mSensorListener = new SensorListener(this);
+        mGLView.setActivity(MainActivity.this);
 
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
