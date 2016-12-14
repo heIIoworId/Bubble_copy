@@ -622,6 +622,16 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                     mBubbleTranslationMatrix[14] - eye[2]});
         }
         System.arraycopy(MatOperator.matLinear(mViewRotationMatrix), 0, mViewRotationMatrix, 0, 16);
+
+        float bubbleX = mBubbleTranslationMatrix[12];
+        float bubbleZ = mBubbleTranslationMatrix[14];
+        float bubbleR = GameEnv.getInstance().radiusOfBubble;
+        if(bubbleX + bubbleR < -mapSizeX/2.0f || bubbleX - bubbleR > mapSizeX/2.0f ||
+                bubbleZ + bubbleR < - mapSizeZ/2.0f || bubbleZ - bubbleR > mapSizeZ/2.0f){
+            mBlower.reverseBlowingDir();
+        }
+
+
     }
 
     void checkMove() {

@@ -3,13 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="c7bb732b-0bff-4c4a-b962-053bd4b4fee7" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Bubble/app/src/main/assets/cubemap-fshader.glsl" afterPath="$PROJECT_DIR$/Bubble/app/src/main/assets/cubemap-fshader.glsl" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Bubble/app/src/main/assets/cubemap-vshader.glsl" afterPath="$PROJECT_DIR$/Bubble/app/src/main/assets/cubemap-vshader.glsl" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Bubble/.idea/misc.xml" afterPath="$PROJECT_DIR$/Bubble/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/MyGLRenderer.java" afterPath="$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/MyGLRenderer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/events/SensorListener.java" afterPath="$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/events/SensorListener.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/models/BubbleSphere.java" afterPath="$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/models/BubbleSphere.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/models/SkyBox.java" afterPath="$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/models/SkyBox.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/models/Sphere.java" afterPath="$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/models/Sphere.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/physics/Blower.java" afterPath="$PROJECT_DIR$/Bubble/app/src/main/java/kr/ac/kaist/vclab/bubble/physics/Blower.java" />
     </list>
     <ignored path="kaist_cs482_2016_team4.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -161,9 +157,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
-      <pane id="Scratches" />
-      <pane id="Scope" />
       <pane id="AndroidView">
         <subPane />
       </pane>
@@ -579,6 +572,9 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -794,7 +790,14 @@
       <option name="project" value="LOCAL" />
       <updated>1481687206976</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Repair Recorder + SkyBox Rendering">
+      <created>1481687665509</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1481687665509</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -850,7 +853,8 @@
     <MESSAGE value="New Activities" />
     <MESSAGE value="Rule Activity" />
     <MESSAGE value="Repair Recorder" />
-    <option name="LAST_COMMIT_MESSAGE" value="Repair Recorder" />
+    <MESSAGE value="Repair Recorder + SkyBox Rendering" />
+    <option name="LAST_COMMIT_MESSAGE" value="Repair Recorder + SkyBox Rendering" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />

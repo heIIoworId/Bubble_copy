@@ -57,4 +57,10 @@ public class Blower {
         float blowForce[] = VecOperator.scale(blowingDir, amplitude);
         bubbleCore.applyForce(blowForce);
     }
+
+    public void reverseBlowingDir(){
+        blowingDir[0] = - blowingDir[0];
+        blowingDir[1] = - blowingDir[2];
+        blowingDir[2] = - blowingDir[2];
+    }
 }
