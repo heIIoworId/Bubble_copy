@@ -85,7 +85,7 @@ public class SensorListener implements SensorEventListener {
     }
 
     public void onPause() {
-        mSensorManager.unregisterListener(this);
         SoundHandler.getInstance().stop();
+        mSensorManager.unregisterListener(this);
     }
 }

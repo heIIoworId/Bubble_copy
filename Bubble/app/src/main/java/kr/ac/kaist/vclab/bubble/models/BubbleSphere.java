@@ -116,7 +116,7 @@ public class BubbleSphere {
                      int[] cubeTex) {
 
         GLES20.glUseProgram(mProgram);
-        GLES20.glActiveTexture(GLES20.GL_TEXTURE3);
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE4);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_CUBE_MAP, cubeTex[0]);
 
         // uniforms
@@ -141,7 +141,7 @@ public class BubbleSphere {
         GLES20.glUniform3fv(mLightHandle, 1, light, 0);
         GLES20.glUniform3fv(mLight2Handle, 1, light2, 0);
         GLES20.glUniform3fv(mCameraHandle, 1, camera, 0);
-        GLES20.glUniform1i(mEnvHandle, 1);
+        GLES20.glUniform1i(mEnvHandle, 4);
 
         // attributes
         mPositionHandle = GLES20.glGetAttribLocation(mProgram, "aPosition");

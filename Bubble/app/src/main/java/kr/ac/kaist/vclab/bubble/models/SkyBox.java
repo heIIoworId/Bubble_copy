@@ -9,6 +9,7 @@ import java.nio.FloatBuffer;
 
 import kr.ac.kaist.vclab.bubble.MyGLRenderer;
 import kr.ac.kaist.vclab.bubble.collision.BoxCollision;
+import kr.ac.kaist.vclab.bubble.utils.SystemHelper;
 
 /**
  * Created by sjjeon on 16. 9. 20.
@@ -19,13 +20,11 @@ public class SkyBox {
     private final int mProgram;
     private FloatBuffer mVertexBuffer;
     private FloatBuffer mNormalBuffer;
-    private FloatBuffer mTextureBuffer;
 
 
     // attribute handles
     private int mPositionHandle;
     private int mNormalHandle;
-    private int mTextureHandle;
 
     // uniform handles
     private int mProjMatrixHandle;
@@ -42,6 +41,55 @@ public class SkyBox {
     private static final int VERTEX_STRIDE = COORDS_PER_VERTEX * 4;
 
     private BoxCollision boxCollision = new BoxCollision(new float[]{1, 0, 0}, new float[]{0, 1, 0}, new float[]{0, 0, 1});
+    private static float basic_vertices[] = {
+            // Front face
+            -1.0f, -1.0f, 1.0f,
+            -1.0f, 1.0f, 1.0f,
+            1.0f, 1.0f, 1.0f,
+            1.0f, -1.0f, 1.0f,
+            -1.0f, -1.0f, 1.0f,
+            1.0f, 1.0f, 1.0f,
+
+            // Right face
+            1.0f, -1.0f, 1.0f,
+            1.0f, 1.0f, 1.0f,
+            1.0f, 1.0f, -1.0f,
+            1.0f, -1.0f, -1.0f,
+            1.0f, -1.0f, 1.0f,
+            1.0f, 1.0f, -1.0f,
+
+            // Back face
+            1.0f, -1.0f, -1.0f,
+            1.0f, 1.0f, -1.0f,
+            -1.0f, 1.0f, -1.0f,
+            -1.0f, -1.0f, -1.0f,
+            1.0f, -1.0f, -1.0f,
+            -1.0f, 1.0f, -1.0f,
+
+            // Left face
+            -1.0f, -1.0f, -1.0f,
+            -1.0f, 1.0f, -1.0f,
+            -1.0f, 1.0f, 1.0f,
+            -1.0f, -1.0f, 1.0f,
+            -1.0f, -1.0f, -1.0f,
+            -1.0f, 1.0f, 1.0f,
+
+            // Top face
+            -1.0f, 1.0f, 1.0f,
+            -1.0f, 1.0f, -1.0f,
+            1.0f, 1.0f, -1.0f,
+            1.0f, 1.0f, 1.0f,
+            -1.0f, 1.0f, 1.0f,
+            1.0f, 1.0f, -1.0f,
+
+            // Bottom face
+            1.0f, -1.0f, 1.0f,
+            1.0f, -1.0f, -1.0f,
+            -1.0f, -1.0f, -1.0f,
+            -1.0f, -1.0f, 1.0f,
+            1.0f, -1.0f, 1.0f,
+            -1.0f, -1.0f, -1.0f,
+    };
     private static float vertices[] = {
             // Front face
             -1.0f, -1.0f, 1.0f,
@@ -143,57 +191,6 @@ public class SkyBox {
     };
 
 
-    private static float texcoord[] = {
-            // Front face
-            0.0f, 1.0f, 0.0f,
-            0.0f, 0.0f, 0.0f,
-            1.0f, 1.0f, 0.0f,
-            0.0f, 0.0f, 0.0f,
-            1.0f, 0.0f, 0.0f,
-            1.0f, 1.0f, 0.0f,
-
-            // Right face
-            0.0f, 1.0f, 0.0f,
-            0.0f, 0.0f, 0.0f,
-            1.0f, 1.0f, 0.0f,
-            0.0f, 0.0f, 0.0f,
-            1.0f, 0.0f, 0.0f,
-            1.0f, 1.0f, 0.0f,
-
-            // Back face
-            0.0f, 1.0f, 0.0f,
-            0.0f, 0.0f, 0.0f,
-            1.0f, 1.0f, 0.0f,
-            0.0f, 0.0f, 0.0f,
-            1.0f, 0.0f, 0.0f,
-            1.0f, 1.0f, 0.0f,
-
-            // Left face
-            0.0f, 1.0f, 0.0f,
-            0.0f, 0.0f, 0.0f,
-            1.0f, 1.0f, 0.0f,
-            0.0f, 0.0f, 0.0f,
-            1.0f, 0.0f, 0.0f,
-            1.0f, 1.0f, 0.0f,
-
-            // Top face
-            0.0f, 1.0f, 0.0f,
-            0.0f, 0.0f, 0.0f,
-            1.0f, 1.0f, 0.0f,
-            0.0f, 0.0f, 0.0f,
-            1.0f, 0.0f, 0.0f,
-            1.0f, 1.0f, 0.0f,
-
-            // Bottom face
-            0.0f, 1.0f, 0.0f,
-            0.0f, 0.0f, 0.0f,
-            1.0f, 1.0f, 0.0f,
-            0.0f, 0.0f, 0.0f,
-            1.0f, 0.0f, 0.0f,
-            1.0f, 1.0f, 0.0f,
-
-    };
-
     float color[] = {0.2f, 0.709803922f, 0.898039216f};
     private int[] cubeTex = new int[1];
 
@@ -206,9 +203,11 @@ public class SkyBox {
 
         // re-scale vertices
         for (int i = 0; i < vertices.length; i++) {
-            vertices[i] *= size;
+            vertices[i] = basic_vertices[i] * size;
         }
 
+        System.out.println(vertices[0] + " " + vertices[1] + " " + vertices[2]);
+        System.out.println(vertices[vertices.length-3] + " " +vertices[vertices.length-2] + " " +vertices[vertices.length-1]);
         // re-scale collision
         // boxCollision.scaleAxes(new float[]{size, size, size, 1.0f});
 
@@ -222,12 +221,6 @@ public class SkyBox {
         mNormalBuffer = byteBuf.asFloatBuffer();
         mNormalBuffer.put(normals);
         mNormalBuffer.position(0);
-
-        byteBuf = ByteBuffer.allocateDirect(texcoord.length * 4);
-        byteBuf.order(ByteOrder.nativeOrder());
-        mTextureBuffer = byteBuf.asFloatBuffer();
-        mTextureBuffer.put(texcoord);
-        mTextureBuffer.position(0);
 
         // prepare shaders and OpenGL program
         int vertexShader = MyGLRenderer.loadShaderFromFile(
@@ -256,7 +249,7 @@ public class SkyBox {
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_CUBE_MAP, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_CUBE_MAP, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
 
-        // GLES20.glBindTexture(GLES20.GL_TEXTURE_CUBE_MAP, 1);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_CUBE_MAP, 1);
     }
 
     public SkyBox(String imgFolder) {
@@ -272,7 +265,7 @@ public class SkyBox {
         GLES20.glUseProgram(mProgram);
         // uniforms
 
-        GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE4);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_CUBE_MAP, cubeTex[0]);
 
 
@@ -298,11 +291,9 @@ public class SkyBox {
         // attributes
         mPositionHandle = GLES20.glGetAttribLocation(mProgram, "aPosition");
         mNormalHandle = GLES20.glGetAttribLocation(mProgram, "aNormal");
-        mTextureHandle = GLES20.glGetAttribLocation(mProgram, "aTex_Coord");
 
         GLES20.glEnableVertexAttribArray(mPositionHandle);
         GLES20.glEnableVertexAttribArray(mNormalHandle);
-        GLES20.glEnableVertexAttribArray(mTextureHandle);
 
         GLES20.glVertexAttribPointer(
                 mPositionHandle, COORDS_PER_VERTEX,
@@ -313,13 +304,6 @@ public class SkyBox {
                 mNormalHandle, COORDS_PER_VERTEX,
                 GLES20.GL_FLOAT, false,
                 VERTEX_STRIDE, mNormalBuffer);
-        // mTexture.setTexture();
-
-        GLES20.glVertexAttribPointer(
-                mTextureHandle, COORDS_PER_VERTEX,
-                GLES20.GL_FLOAT, false,
-                VERTEX_STRIDE, mTextureBuffer);
-
 
         // Draw the cube
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertices.length / 3);
@@ -327,7 +311,6 @@ public class SkyBox {
 
         GLES20.glDisableVertexAttribArray(mPositionHandle);
         GLES20.glDisableVertexAttribArray(mNormalHandle);
-        GLES20.glDisableVertexAttribArray(mTextureHandle);
 
         // 텍스쳐 관련 내용
 

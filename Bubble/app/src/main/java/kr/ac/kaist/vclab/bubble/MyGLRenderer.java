@@ -409,10 +409,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         // CALC SKYBOX MODELMATRIX
         Matrix.setIdentityM(mSkyboxModelMatrix, 0);
-        Matrix.multiplyMM(mTempMatrix, 0, mSkyboxRotationMatrix, 0, mSkyboxModelMatrix, 0);
-        System.arraycopy(mTempMatrix, 0, mSkyboxModelMatrix, 0, 16);
-        Matrix.multiplyMM(mTempMatrix, 0, mSkyboxTranslationMatrix, 0, mSkyboxModelMatrix, 0);
-        System.arraycopy(mTempMatrix, 0, mSkyboxModelMatrix, 0, 16);
         Matrix.multiplyMM(mSkyboxModelViewMatrix, 0, mViewMatrix, 0, mSkyboxModelMatrix, 0);
         normalMatrix(mSkyboxNormalMatrix, 0, mSkyboxModelViewMatrix, 0);
 
@@ -429,6 +425,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         // ... gl_cull_face (culling)
         GLES20.glEnable(GLES20.GL_CULL_FACE);
+
+
         mSkyBox.draw(mProjMatrix, mSkyboxModelViewMatrix, mSkyboxNormalMatrix, mLight, mLight2);
 
         // MAP - NOT TRANSPARENT

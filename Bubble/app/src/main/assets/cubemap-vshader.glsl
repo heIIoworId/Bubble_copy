@@ -6,11 +6,9 @@ uniform mat4 uNormalMatrix;
 
 attribute vec3 aPosition;
 attribute vec3 aNormal;
-attribute vec2 aTex_Coord;
 
 varying vec3 vNormal;
 varying vec3 vPosition;
-varying vec2 vTex_Coord;
 varying vec3 RefractDir;
 
 
