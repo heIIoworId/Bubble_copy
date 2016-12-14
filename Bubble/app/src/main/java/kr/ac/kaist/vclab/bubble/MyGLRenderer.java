@@ -319,6 +319,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         int status = GameEnv.getGameStatus();
         if(status == -1 ){
             Intent intent = new Intent(activity, GameOverActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             activity.startActivity(intent);
             //Finish the MainActivity to prevent the return on the MainActivity by backpress.
             activity.finish();

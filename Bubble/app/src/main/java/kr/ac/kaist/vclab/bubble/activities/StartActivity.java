@@ -35,6 +35,7 @@ public class StartActivity extends Activity  implements View.OnClickListener{
     }
     public void onClick(View v) {
         Intent intent = new Intent(this, RuleActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
     }
