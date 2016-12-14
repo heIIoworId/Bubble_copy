@@ -9,8 +9,10 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 import kr.ac.kaist.vclab.bubble.R;
+import kr.ac.kaist.vclab.bubble.events.BackPressCloseHandler;
 
 public class GameOverActivity extends Activity implements View.OnClickListener{
+    private BackPressCloseHandler backPressCloseHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,10 +28,16 @@ public class GameOverActivity extends Activity implements View.OnClickListener{
         Button button;
         button = (Button) findViewById(R.id.over_restart_button);
         button.setOnClickListener(this);
+        backPressCloseHandler = new BackPressCloseHandler(this);
+
     }
     public void onClick(View v) {
-        Intent intent = new Intent(this, StartActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
     }
+    public void onBackPressed() {
+        backPressCloseHandler.onBackPressed();
+    }
+
 }

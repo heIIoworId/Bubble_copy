@@ -34,7 +34,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.GameClearActivity" />
-        <activity android:name=".activities.GameOverActivity"></activity>
+        <activity android:name=".activities.GameOverActivity" />
+        <activity android:name=".activities.RuleActivity"></activity>
     </application>
 
 </manifest>

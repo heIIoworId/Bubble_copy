@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_over"
+    android:id="@+id/activity_rule"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingTop="96dp"
     android:orientation="vertical"
-    android:background="@drawable/gameover"
+    android:background="@drawable/rule"
     android:paddingBottom="20dp">
 
     <TextView
@@ -24,8 +24,8 @@
         android:textColor="@color/colorWhite"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:text="AGAIN?"
+        android:text="--Let's Blow!--"
         android:background="@color/colorInvisible"
         android:layout_gravity="center"
-        android:id="@+id/over_restart_button" />
+        android:id="@+id/rule_start_button" />
 </LinearLayout>

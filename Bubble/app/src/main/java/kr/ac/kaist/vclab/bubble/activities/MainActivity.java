@@ -22,6 +22,7 @@ import java.text.DecimalFormat;
 import java.util.Arrays;
 
 import kr.ac.kaist.vclab.bubble.environment.GameEnv;
+import kr.ac.kaist.vclab.bubble.events.BackPressCloseHandler;
 import kr.ac.kaist.vclab.bubble.events.GyroHandler;
 import kr.ac.kaist.vclab.bubble.events.SensorListener;
 import kr.ac.kaist.vclab.bubble.events.SoundHandler;
@@ -37,6 +38,7 @@ public class MainActivity extends Activity {
     public static Context context;
     public static MyGLSurfaceView mGLView;
     public static SensorListener mSensorListener;
+    private BackPressCloseHandler backPressCloseHandler;
 
 
     @Override
@@ -111,6 +113,8 @@ public class MainActivity extends Activity {
         layout.addView(buttonLayout, buttonParams);
         layout.addView(mGLView, glParams);
         setContentView(layout);
+        backPressCloseHandler = new BackPressCloseHandler(this);
+
     }
 
     private void setButtonText(ToggleButton button, String text) {
@@ -153,5 +157,9 @@ public class MainActivity extends Activity {
     @Override
     public void onStop() {
         super.onStop();
+    }
+
+    public void onBackPressed() {
+        backPressCloseHandler.onBackPressed();
     }
 }
