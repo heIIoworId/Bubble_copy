@@ -1,4 +1,4 @@
-package kr.ac.kaist.vclab.bubble.collision;
+package kr.ac.kaist.vclab.bubble.Collision;
 
 import android.opengl.Matrix;
 
@@ -20,7 +20,7 @@ public class BoxCollision extends Collision {
     public BoxCollision(float[] axis1, float[] axis2, float[] axis3) {
         originalCenter = new float[]{0, 0, 0, 1};
         center = new float[]{0, 0, 0, 1};
-        //System.out.println("hiiii");
+
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 if (i == 3) {

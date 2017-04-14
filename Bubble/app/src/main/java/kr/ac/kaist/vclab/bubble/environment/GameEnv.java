@@ -185,7 +185,7 @@ public class GameEnv {
 
         // ITEM INFO
         numOfAchievedItems = 0;
-        numOfTotalItems = 30;
+        numOfTotalItems = 15;
         radiusOfItem = 0.5f;
         levelOfItem = 1;
         colorOfItem = new float[]{0f, 0f, 0.9f};

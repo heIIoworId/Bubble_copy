@@ -9,8 +9,8 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 import kr.ac.kaist.vclab.bubble.MyGLRenderer;
-import kr.ac.kaist.vclab.bubble.collision.TriangleCollision;
-import kr.ac.kaist.vclab.bubble.generators.MapGenerator;
+import kr.ac.kaist.vclab.bubble.Collision.TriangleCollision;
+import kr.ac.kaist.vclab.bubble.Generators.MapGenerator;
 
 /**
  * Created by avantgarde on 2016-11-02.

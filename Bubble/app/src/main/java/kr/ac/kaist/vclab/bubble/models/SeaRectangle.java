@@ -8,7 +8,7 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 import kr.ac.kaist.vclab.bubble.MyGLRenderer;
-import kr.ac.kaist.vclab.bubble.collision.TriangleCollision;
+import kr.ac.kaist.vclab.bubble.Collision.TriangleCollision;
 
 /**
  * Created by avantgarde on 2016-11-07.
@@ -47,8 +47,6 @@ public class SeaRectangle {
     private TriangleCollision[] triangleCollisions;
     private float[] move = new float[]{10.0f, 2.0f};
     float[] color = {0.0f, 0.0f, 1.0f};
-
-
 
     public SeaRectangle(float sizeX, float sizeZ) {
         vertices = new float[]{

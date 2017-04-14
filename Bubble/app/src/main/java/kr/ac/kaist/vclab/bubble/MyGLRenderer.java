@@ -22,11 +22,11 @@ import javax.microedition.khronos.opengles.GL10;
 import kr.ac.kaist.vclab.bubble.activities.GameClearActivity;
 import kr.ac.kaist.vclab.bubble.activities.GameOverActivity;
 import kr.ac.kaist.vclab.bubble.activities.MainActivity;
-import kr.ac.kaist.vclab.bubble.collision.Intersect;
-import kr.ac.kaist.vclab.bubble.collision.TriangleCollision;
+import kr.ac.kaist.vclab.bubble.Collision.Intersect;
+import kr.ac.kaist.vclab.bubble.Collision.TriangleCollision;
 import kr.ac.kaist.vclab.bubble.environment.Env;
 import kr.ac.kaist.vclab.bubble.environment.GameEnv;
-import kr.ac.kaist.vclab.bubble.generators.ItemGenerator;
+import kr.ac.kaist.vclab.bubble.Generators.ItemGenerator;
 import kr.ac.kaist.vclab.bubble.models.BubbleCore;
 import kr.ac.kaist.vclab.bubble.models.BubbleSphere;
 import kr.ac.kaist.vclab.bubble.models.Item;
@@ -652,14 +652,12 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                 TriangleCollision collision = collisions[i * dimZ * 2 + j * 2];
                 collision.move(mMapModelMatrix);
                 if (Intersect.intersect(mBubbleCore.getCollision(), collision)) {
-                    System.out.println("Map Collide!");
                     GameEnv.getInstance().collisionFlag = 1;
                     return;
                 }
                 collision = collisions[i * dimZ * 2 + j * 2 + 1];
                 collision.move(mMapModelMatrix);
                 if (Intersect.intersect(mBubbleCore.getCollision(), collision)) {
-                    System.out.println("Map Collide!");
                     GameEnv.getInstance().collisionFlag = 1;
                     return;
                 }
@@ -669,7 +667,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         for (int i=0; i<2; i++){
             seaCollsiions[i].move(mSeaModelMatrix);
             if(Intersect.intersect(mBubbleCore.getCollision(), seaCollsiions[i])){
-                System.out.println("Sea Collide!");
                 GameEnv.getInstance().collisionFlag = 1;
                 return;
             }

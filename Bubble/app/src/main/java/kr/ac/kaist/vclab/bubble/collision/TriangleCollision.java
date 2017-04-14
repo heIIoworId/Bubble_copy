@@ -1,4 +1,4 @@
-package kr.ac.kaist.vclab.bubble.collision;
+package kr.ac.kaist.vclab.bubble.Collision;
 
 import android.opengl.Matrix;
 
@@ -18,7 +18,7 @@ public class TriangleCollision extends Collision {
     public TriangleCollision(float[] a, float[] b, float[] c) {
         originalCenter = new float[]{0, 0, 0, 1};
         center = new float[]{0, 0, 0, 1};
-        //System.out.println("hiiii");
+
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 if (i == 3) {

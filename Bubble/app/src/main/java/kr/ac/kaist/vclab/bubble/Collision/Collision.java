@@ -1,4 +1,4 @@
-package kr.ac.kaist.vclab.bubble.collision;
+package kr.ac.kaist.vclab.bubble.Collision;
 
 import android.opengl.Matrix;
 

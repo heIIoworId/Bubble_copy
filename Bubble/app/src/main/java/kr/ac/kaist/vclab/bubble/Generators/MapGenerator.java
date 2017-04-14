@@ -1,11 +1,11 @@
-package kr.ac.kaist.vclab.bubble.generators;
+package kr.ac.kaist.vclab.bubble.Generators;
 
 import android.opengl.GLES20;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import kr.ac.kaist.vclab.bubble.collision.TriangleCollision;
+import kr.ac.kaist.vclab.bubble.Collision.TriangleCollision;
 import kr.ac.kaist.vclab.bubble.PerlinNoise;
 import kr.ac.kaist.vclab.bubble.utils.VecOperator;
 

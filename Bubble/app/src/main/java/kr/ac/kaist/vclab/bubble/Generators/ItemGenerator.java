@@ -1,4 +1,4 @@
-package kr.ac.kaist.vclab.bubble.generators;
+package kr.ac.kaist.vclab.bubble.Generators;
 
 import java.util.Random;
 

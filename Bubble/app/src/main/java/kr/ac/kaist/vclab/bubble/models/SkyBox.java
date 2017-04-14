@@ -8,7 +8,7 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 import kr.ac.kaist.vclab.bubble.MyGLRenderer;
-import kr.ac.kaist.vclab.bubble.collision.BoxCollision;
+import kr.ac.kaist.vclab.bubble.Collision.BoxCollision;
 import kr.ac.kaist.vclab.bubble.utils.SystemHelper;
 
 /**

@@ -19,15 +19,15 @@ void main() {
     // vec3 intensity = uColor * diffuse;
 
     // texture
+    vec2 movingTexture = vTextureCoor + uTime;
+    if(movingTexture.x >= 1.0){
+        movingTexture.x -= 1.0;
+    }
+    if(movingTexture.y >= 1.0){
+        movingTexture.y -= 1.0;
+    }
 
-    vec2 hello = vTextureCoor + uTime;
-    if(hello.x >= 1.0f){
-        hello.x -= 1.0f;
-    }
-    if(hello.y >= 1.0f){
-        hello.y -= 1.0f;
-    }
-    vec4 textureColor = texture2D(uTextureUnit, hello);
+    vec4 textureColor = texture2D(uTextureUnit, movingTexture);
     vec3 intensity = textureColor.xyz * diffuse;
 
     // haze
@@ -35,4 +35,5 @@ void main() {
     float ratio = 1.0 + vPosition.z/87.0;
 
     gl_FragColor = ratio * vec4(intensity, 0.7) + (1.0 - ratio) * haze;
+
 }
